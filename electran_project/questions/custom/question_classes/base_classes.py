@@ -25,26 +25,28 @@ class BinaryHexBase(QuestionBase):
     def binary_to_hex(binary_num):
         return hex(int(binary_num, 2))
 
-    @staticmethod
-    def is_valid_hex(hex_num):
+    def is_valid_hex(self, hex_num):
         if not hex_num or type(hex_num) != str:
-            return {'result': False, 'message': 'the answer field must be filled'}
+            self.wrong_format_message = 'The answer field must be filled in. Please try again'
+            return False, 'field'
         else:
             try:
                 int(hex_num, 16)
             except ValueError:
-                return {'result': False, 'message': 'the answer did not have a correct binary format'}
+                self.wrong_format_message = 'Your answer did not have a correct binary format. Please try again'
+                return False, 'format'
             else:
-                return {'result': True, 'message': ''}
+                return True, 'format'
 
-    @staticmethod
-    def is_valid_binary(binary_num):
+    def is_valid_binary(self, binary_num):
         if not binary_num or type(binary_num) != str:
-            return {'result': False, 'message': 'the answer field must be filled'}
+            self.wrong_format_message = 'The answer field must be filled in. Please try again'
+            return False, 'field'
         else:
             try:
                 int(binary_num, 2)
             except ValueError:
-                return {'result': False, 'message': 'the answer did not have a correct binary format'}
+                self.wrong_format_message = 'Your answer did not have a correct binary format. Please try again'
+                return False, 'format'
             else:
-                return {'result': True, 'message': ''}
+                return True, 'format'

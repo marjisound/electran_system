@@ -27,9 +27,9 @@ class Question(BinaryHexBase):
                 formatted_answer = formatted_answer[2:]
 
             if formatted_answer == correct_answer:
-                True
+                return True
             else:
-                False
+                return False
         else:
             raise TypeError('student answer must be of type string')
 
@@ -38,5 +38,12 @@ class Question(BinaryHexBase):
         :type hex_num: hex number string
         :rtype: dict
         """
-        return self.is_valid_hex(hex_num)
+        is_valid, message_type = self.is_valid_hex(hex_num)
+        if not is_valid:
+            if message_type == 'format':
+                self.wrong_format_message = 'Your answer did not have a correct hexadecimal format. Please try again'
+            else:
+                self.wrong_format_message = 'The answer field must be filled in. Please try again'
+
+        return is_valid
 
