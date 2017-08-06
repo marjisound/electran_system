@@ -1,0 +1,216 @@
+/************* generic*******************/
+
+.no-padding {
+    padding: 0;
+}
+
+/*********** end of generic**************/
+.qus-cat-checkbox {
+    margin: 0;
+}
+
+.top-navigation-container {
+  width: 90%;
+}
+
+#top-nav-logout {
+  float: right;
+}
+
+.semester-question-sub-list {
+  margin-top: 10px;
+  margin-bottom: 20px;
+  list-style-type: none;
+}
+
+.sem-qus-semester-list-container {
+  margin-bottom: 20px;
+}
+.qus-sem-date-container {
+  display: inline-block;
+  margin-right: 10px;
+  margin-left: 20px;
+}
+
+.question-date-label{
+  display: inline-block;
+  float: left;
+  padding: 5px;
+}
+
+.question-date-input {
+  width: 20%;
+  float: left;
+}
+
+.question-visible-label {
+  padding: 5px;
+}
+
+.qus-sem-question-title {
+  margin-bottom: 10px;
+}
+
+/*********** Reset Password *********/
+.electran-login-panel .electran-info-h4 {
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+/*********** Login *********/
+
+#loginFullPage {
+    z-index: -1;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0px;
+    background: url("../images/formula.jpg") no-repeat center center fixed;
+    background-size: cover;
+}
+
+.electran-login-panel {
+    margin-top: 60px;
+}
+
+.electran-login-title {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 40px !important;
+    text-transform: uppercase;
+}
+
+.electran-login-btn{
+    margin-bottom: 12px;
+}
+
+/*********** Messages *********/
+
+.electran-messages-list {
+    padding-left: 0;
+}
+.electran-messages-list li {
+    list-style-type: none;
+}
+
+/*********** Menu *********/
+#wrapper {
+  padding-left: 250px;
+  transition: all 0.4s ease 0s;
+}
+
+#sidebar-wrapper {
+  margin-left: -250px;
+  top: 51px;
+  left: 250px;
+  width: 250px;
+  background: #000;
+  position: fixed;
+  height: 100%;
+  overflow-y: auto;
+  z-index: 1000;
+  transition: all 0.4s ease 0s;
+}
+
+#wrapper.active {
+  padding-left: 0;
+}
+
+#wrapper.active #sidebar-wrapper {
+  left: 0;
+}
+
+#page-content-wrapper {
+  width: 100%;
+  padding-top: 70px;
+  transition: all 0.4s ease 0s;
+}
+
+.sidebar-nav {
+  position: absolute;
+  top: 0;
+  width: 250px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.sidebar-nav li {
+  line-height: 40px;
+  text-indent: 20px;
+}
+
+.sidebar-nav li a {
+  color: #999999;
+  display: block;
+  text-decoration: none;
+}
+
+.sidebar-nav li a span:before {
+  position: absolute;
+  left: 0;
+  color: #41484c;
+  text-align: center;
+  width: 20px;
+  line-height: 18px;
+}
+
+.sidebar-nav li a:hover,
+.sidebar-nav li.active {
+  color: #fff;
+  background: rgba(255,255,255,0.2);
+  text-decoration: none;
+}
+
+.sidebar-nav li a:active,
+.sidebar-nav li a:focus {
+  text-decoration: none;
+}
+
+.sidebar-nav > .sidebar-brand {
+  height: 65px;
+  line-height: 60px;
+  font-size: 18px;
+}
+
+.sidebar-nav > .sidebar-brand a {
+  color: #999999;
+}
+
+.sidebar-nav > .sidebar-brand a:hover {
+  color: #fff;
+  background: none;
+}
+
+#menu-toggle {
+    text-decoration: none;
+    float: left;
+    color: #fff;
+    padding-right: 15px;
+}
+
+@media (max-width:767px) {
+
+#wrapper {
+  padding-left: 0;
+}
+
+#sidebar-wrapper {
+  left: 0;
+}
+
+#wrapper.active {
+  position: relative;
+  left: 250px;
+}
+
+#wrapper.active #sidebar-wrapper {
+  left: 250px;
+  width: 250px;
+  transition: all 0.4s ease 0s;
+}
+
+#menu-toggle {
+  display: inline-block;
+}
+}
