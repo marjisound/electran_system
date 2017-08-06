@@ -1,0 +1,35 @@
+{% extends "custom_base.html" %}
+
+{% block content %}
+<div class="jumbotron">
+  <h3>Welcome to Electran Assessment System</h3>
+  <div class="panel-group" id="accordion">
+    {% if que_cat %}
+    {% for item in que_cat %}
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h4 class="panel-title">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{forloop.counter}}">
+              {{item.cat.cat_title}}
+            </a>
+          </h4>
+        </div>
+        <div id="collapse{{forloop.counter}}" class="panel-collapse collapse in">
+          <div class="panel-body">
+            <ol>
+              {% for question in item.qus %}
+                  <li><a href="{% url 'questions:all_questions' slug=question.slug %}">{{question.question_title}}</a></li>
+              {% endfor %}
+            </ol>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+    {% endif %}
+
+  </div>
+</div>
+
+
+
+{% endblock content %}

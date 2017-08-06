@@ -1,0 +1,26 @@
+{% extends "custom_base.html" %}
+
+{% block content %}
+<form class="" method="POST">
+  <div class="fieldWrapper">
+    {{ form.semester.errors }}
+    <label for="{{ form.semester.id_for_label }}">Semester:</label>
+    {{ form.semester }}
+  </div>
+  <div class="fieldWrapper">
+     {{ form.question.errors }}
+     {% for key, value in form.question.field.choices %}
+       <label for="id_feature_{{ key }}">
+       <input type="checkbox" id="id_feature_{{ key }}" value="{{key}}" name="question">
+       {{value}}
+       </label>
+     {% endfor %}
+  </div>
+  <input type="submit" name="" value="submit">
+</form>
+
+
+
+
+
+{% endblock content %}

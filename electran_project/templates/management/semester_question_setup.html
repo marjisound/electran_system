@@ -1,0 +1,82 @@
+{% extends "custom_base.html" %}
+
+{% block content %}
+<div class="">
+  <a href="{% url 'management:semester_list' %}">Back to semester list</a>
+  <form class="" method="post">
+  {% csrf_token %}
+  <div class="row">
+    <div class="">
+      <div class="col-md-4 col-md-offset-4 sem-qus-semester-list-container">
+        <h3>Semester: <span>{{semester}}</span></h3>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+      <div>
+        <label class="checkbox-inline">Check All</label>
+        <input type="checkbox" name="check-all-questions" id="checkAllQuestions">
+      </div>
+
+  </div>
+  <div class="row">
+    <div class="panel-group" id="accordion">
+      {% if que_cat %}
+      {% for item in que_cat %}
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h4 class="panel-title pull-left">
+              <input class="catCheckAll" value="{{forloop.counter}}" type="checkbox">
+              <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{forloop.counter}}">
+                {{item.cat.cat_title}}
+              </a>
+            </h4>
+            <div class="clearfix"></div>
+          </div>
+          <div id="collapse{{forloop.counter}}" class="panel-collapse collapse in">
+            <div class="panel-body">
+              <ol>
+                {% for question in item.qus %}
+                  <li class="semester-question-sub-list">
+                    <div class="qus-sem-question-title">
+                      <input {{question.checked}} data-catid="{{forloop.parentloop.counter}}"
+                             type="checkbox" value="{{question.id}}" name="chk_question">
+                      <label class="checkbox-inline">{{question.question_title}}</label>
+
+                    </div>
+                    <div>
+                        <div class="question-date-label"><label class="" for="date_question_{{question.id}}">Deadline: </label></div>
+                        <div class="input-group date question-date-input" id="date_question_container_{{ question.id }}">
+
+                            <input type="text" class="form-control" value="{{question.deadline|date:"Y-m-d H:i"}}"
+                                   name="date_question_{{question.id}}" id="date_question_{{question.id}}" readonly>
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-th"></span>
+                            </span>
+                        </div>
+
+                        <div class="qus-sem-date-container">
+                          <label class="question-visible-label" for="visible_question{{question.id}}">Visible</label>
+                          <input type="checkbox" name="visible_question_{{question.id}}" value="True"
+                                 {{ question.visible }} id="visible_question{{question.id}}">
+                        </div>
+                    </div>
+
+                  </li>
+                {% endfor %}
+              </ol>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+      {% endif %}
+
+    </div>
+  </div>
+  <input type="submit" class="btn btn-primary" value="submit">
+  </form>
+</div>
+
+
+
+{% endblock content %}
