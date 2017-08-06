@@ -24,7 +24,7 @@ def all_questions(request, slug=None):
             program_random_value = request.session.__getitem__('program_random_value')
             user_random_value = question_instance.generate_user_random_display(program_random_value)
             is_valid = question_instance.is_valid(student_answer)
-            if is_valid['result']:
+            if is_valid:
                 expected_answer = question_instance.expected_answer(program_random_value)
                 test_answer = question_instance.test_answer(student_answer, expected_answer)
                 if test_answer:
@@ -36,7 +36,7 @@ def all_questions(request, slug=None):
                            'answer': student_answer,
                            'correct_answer': expected_answer,
                            'is_form': False,
-                           'result': test_answer['result']}
+                           'result': test_answer}
                 return create_http_response(request, question_class_name, context)
 
             else:
