@@ -31,6 +31,7 @@ class BinaryHexBase(QuestionBase):
             return False, 'field'
         else:
             try:
+                hex_num = hex_num.replace(' ', '')
                 int(hex_num, 16)
             except ValueError:
                 self.wrong_format_message = 'Your answer did not have a correct binary format. Please try again'
@@ -44,6 +45,7 @@ class BinaryHexBase(QuestionBase):
             return False, 'field'
         else:
             try:
+                binary_num = binary_num.replace(' ', '')
                 int(binary_num, 2)
             except ValueError:
                 self.wrong_format_message = 'Your answer did not have a correct binary format. Please try again'
