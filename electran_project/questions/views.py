@@ -8,7 +8,6 @@ import os
 
 # @login_required()
 def all_questions(request, slug=None):
-    pass
     try:
         class_exist = Question.objects.get(slug__exact=slug)
     except ObjectDoesNotExist:

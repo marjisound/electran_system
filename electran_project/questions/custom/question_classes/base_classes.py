@@ -18,6 +18,27 @@ class BinaryHexBase(QuestionBase):
     """Common base class for all binary/hex questions"""
 
     @staticmethod
+    def delete_binary_identifier(value):
+        if value.startswith('0b') or value.startswith('0B'):
+            return value[2:]
+        else:
+            return value
+
+    @staticmethod
+    def delete_hex_identifier(value):
+        if value.startswith('0x') or value.startswith('0X'):
+            return value[2:]
+        else:
+            return value
+
+    @staticmethod
+    def delete_octal_identifier(value):
+        if value.startswith('0o') or value.startswith('0O'):
+            return value[2:]
+        else:
+            return value
+
+    @staticmethod
     def hex_to_binary(hex_num):
         return bin(int(hex_num, 16))
 
@@ -49,6 +70,20 @@ class BinaryHexBase(QuestionBase):
                 int(binary_num, 2)
             except ValueError:
                 self.wrong_format_message = 'Your answer did not have a correct binary format. Please try again'
+                return False, 'format'
+            else:
+                return True, 'format'
+
+    def is_valid_oct(self, octal_num):
+        if not octal_num or type(octal_num) != str:
+            self.wrong_format_message = 'The answer field must be filled in. Please try again'
+            return False, 'field'
+        else:
+            try:
+                binary_num = octal_num.replace(' ', '')
+                int(binary_num, 8)
+            except ValueError:
+                self.wrong_format_message = 'Your answer did not have a correct octal format. Please try again'
                 return False, 'format'
             else:
                 return True, 'format'
