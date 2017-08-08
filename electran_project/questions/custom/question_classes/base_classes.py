@@ -87,3 +87,26 @@ class BinaryHexBase(QuestionBase):
                 return False, 'format'
             else:
                 return True, 'format'
+
+
+class MipsInstructionsBase(QuestionBase):
+
+    RTYPE_OP = 0
+    RTYPE_SHAMT = 0
+
+    RTYPE_VALUES = {
+        'sll': 0x00,
+        'srl': 0x02,
+        'jr': 0x08,
+        'add': 0x20,
+        'addu': 0x21,
+        'sub': 0x22,
+        'subu': 0x23,
+        'and': 0x24,
+        'or': 0x25,
+        'xor': 0x26,
+        'nor': 0x27,
+        'slt': 0x2a,
+        'sltu': 0x2b
+    }
+    MIPS_INS_TYPES = {'R': RTYPE_VALUES, 'I': 1, 'J': 1}
