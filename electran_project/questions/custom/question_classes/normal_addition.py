@@ -12,13 +12,13 @@ class Question(BinaryHexBase):
             self.base = 2
             random_value1 = bin(value['random1'])
             random_value1 = self.delete_binary_identifier(random_value1)
-            while len(random_value1) != 8:
+            while len(random_value1) < 8:
                 random_value1 = '0' + random_value1
             random_value1 = ' '.join([random_value1[i:i + 4] for i in range(0, len(random_value1), 4)])
 
             random_value2 = bin(value['random2'])
             random_value2 = self.delete_binary_identifier(random_value2)
-            while len(random_value2) != 8:
+            while len(random_value2) < 8:
                 random_value2 = '0' + random_value2
             random_value2 = ' '.join([random_value2[i:i + 4] for i in range(0, len(random_value2), 4)])
 

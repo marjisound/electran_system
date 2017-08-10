@@ -24,6 +24,9 @@ class Question(BinaryHexBase):
             expected = expected[2:]
         return expected
 
+    def expected_answer_display_format(self, value):
+        return '0x' + value
+
     def test_answer(self, student_answer, correct_answer):
         if type(student_answer) == str:
             formatted_answer = student_answer.replace(' ', '')

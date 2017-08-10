@@ -6,7 +6,7 @@ import codecs
 class Question(BinaryHexBase):
 
     def generate_user_random_display(self, value):
-        return {'random1': value['random1']}
+        return {'random1': '0x' + value['random1']}
 
     def generate_random(self):
         random_value = codecs.encode(os.urandom(4), 'hex').decode()
@@ -18,10 +18,14 @@ class Question(BinaryHexBase):
             expected = expected[2:]
         return expected
 
+    def expected_answer_display_format(self, value):
+        return self.spacing_binary_numbers(value, 32)
+
     def test_answer(self, student_answer, correct_answer):
         if type(student_answer) == str:
-            formatted_answer = student_answer.replace(' ', '')
-            if formatted_answer.startswith('0b') or formatted_answer.startswith('0B'):
+            answer_lower = student_answer.lower()
+            formatted_answer = answer_lower.replace(' ', '')
+            if formatted_answer.startswith('0b'):
                 formatted_answer = formatted_answer[2:]
 
             if formatted_answer == correct_answer:
