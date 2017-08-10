@@ -1,3 +1,6 @@
+import random
+
+
 class QuestionBase:
     """Common base class for all questions"""
     wrong_answer_message = 'Wrong Answer'
@@ -13,9 +16,27 @@ class QuestionBase:
     def test_answer(self):
         return False
 
+    def expected_answer_display_format(self, value):
+        return value
+
+    def generate_user_random_display(self, value):
+        return value
+
+    @staticmethod
+    def remove_list_from_list(parent_list, removing_list):
+        for item in removing_list:
+            if item in parent_list:
+                parent_list.remove(item)
+
 
 class BinaryHexBase(QuestionBase):
     """Common base class for all binary/hex questions"""
+
+    POWER_DICT = {
+        'K': 10,
+        'M': 20,
+        'G': 30
+    }
 
     @staticmethod
     def delete_binary_identifier(value):
@@ -88,6 +109,13 @@ class BinaryHexBase(QuestionBase):
             else:
                 return True, 'format'
 
+    @staticmethod
+    def spacing_binary_numbers(value, bit_num):
+        formatted_value = value.replace(' ', '')
+        while len(formatted_value) < bit_num:
+            formatted_value = '0' + formatted_value
+        return ' '.join([value[i:i + 4] for i in range(0, len(value), 4)])
+
 
 class MipsInstructionsBase(QuestionBase):
 
@@ -109,4 +137,29 @@ class MipsInstructionsBase(QuestionBase):
         'slt': 0x2a,
         'sltu': 0x2b
     }
-    MIPS_INS_TYPES = {'R': RTYPE_VALUES, 'I': 1, 'J': 1}
+
+    ITYPE_VALUES = {
+        'addi': 0x8,
+        'addiu': 0x9,
+        'andi': 0xc,
+        'beq': 0x4,
+        'bne': 0x5,
+        'lbu': 0x24,
+        'lhu': 0x25,
+        'll': 0x30,
+        'lui': 0xf,
+        'lw': 0x23,
+        'ori': 0xd,
+        'slti': 0xa,
+        'sltiu': 0xb,
+        'sb': 0x28,
+        'sc': 0x38,
+        'sh': 0x29,
+        'sw': 0x2b
+    }
+
+    JTYPE_VALUES = {
+        'j': 0x2,
+        'jal': 0x3
+    }
+    MIPS_INS_TYPES = {'R': RTYPE_VALUES, 'I': ITYPE_VALUES, 'J': JTYPE_VALUES}

@@ -1,13 +1,16 @@
 {% extends "custom_base.html" %}
-
+{% load crispy_forms_tags %}
 {% block content %}
   <div class="jumbotron">
+
     <h3>Please create a semester here:</h3>
-    <form method="post">
-      {{form.as_p}}
-      {% csrf_token %}
-      <input class="btn btn-primary" type="submit" name="" value="Submit">
-    </form>
+    <div class="col-md-4 no-padding">
+        <form method="post">
+          {{ form|crispy }}
+          {% csrf_token %}
+          <input class="btn btn-primary" type="submit" name="" value="Submit">
+        </form>
+    </div>
 
   </div>
 {% endblock %}

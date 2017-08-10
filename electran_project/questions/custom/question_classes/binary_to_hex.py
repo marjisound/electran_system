@@ -5,20 +5,20 @@ import random
 class Question(BinaryHexBase):
 
     def generate_user_random_display(self, value):
-        return {'random1': value['random1']}
+        random_value = ' '.join([value['random1'][i:i + 4] for i in range(0, len(value['random1']), 4)])
+        return {'random1': random_value}
 
     def generate_random(self):
         random_int = random.randint(30000000, 267108880)
-        random_value = '{:0<28b}'.format(random_int)
-        random_value = ' '.join([random_value[i:i+4] for i in range(0, len(random_value), 4)])
+        random_value = '{:0>28b}'.format(random_int)
         return {'random1': random_value}
 
     def expected_answer(self, value):
-        trimmed_value = value['random1'].replace(' ', '')
-        expected = self.binary_to_hex(trimmed_value)
-        if expected.startswith('0x') or expected.startswith('0X'):
-            expected = expected[2:]
+        expected = self.binary_to_hex(value['random1'])[2:]
         return expected
+
+    def expected_answer_display_format(self, value):
+        return '0x' + value
 
     def test_answer(self, student_answer, correct_answer):
         if type(student_answer) == str:

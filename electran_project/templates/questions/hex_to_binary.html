@@ -23,9 +23,11 @@
         <h3>{{ random_value.random1 }}</h3>
         <div class="col-md-6 no-padding">
             <div>
-                <p>Your answer was: {{ answer }}</p>
+                <p>Your answer was:</p>
+                <div>{{ answer }}</div>
                 {% if not result %}
-                <p>But the correct answer was: {{ correct_answer }}</p>
+                    <p>But the correct answer was:</p>
+                    <div>{{ correct_answer }}</div>
                 {% endif %}
             </div>
         </div>

@@ -1,0 +1,37 @@
+{% extends "custom_base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+    <div class="col-md-10">
+        {% if is_form %}
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <h2>Sequence of power of two in K, M, G (with extra addition)</h2>
+                <p>Below is the sum of a sequence of power terms, where each term
+                    is a different power from the range of i values shown in brackets.
+                    Express the sum in binary K, M or G: </p>
+                <h3>[2^ (i={{ random_value.random1 }}---->i={{ random_value.random2 }})] + 2^{{ random_value.random1 }}</h3>
+                <div class="col-md-4 no-padding">
+                    <div class="form-group">
+                        <label for="answer">Answer:</label>
+                        <input type="text" class="form-control" id="answer" name="answer">
+                    </div>
+                    <input type="submit" class="btn btn-primary" value="submit" name="submit">
+                </div>
+            </form>
+        {% else %}
+            <h2>Sequence of power of two in K, M, G</h2>
+            <p>Below is the sum of a sequence of power terms, where each term
+                is a different power from the range of i values shown in brackets.
+                Express the sum in binary K, M or G: </p>
+            <h3>2^ (i={{ random_value.random1 }}---->i={{ random_value.random2 }})</h3>
+            <div class="col-md-6 no-padding">
+                <p>Your answer was: {{ answer }}</p>
+                {% if not result %}
+                <p>But the correct answer was: {{ correct_answer }}</p>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+
+{% endblock %}

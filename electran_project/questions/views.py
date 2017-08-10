@@ -25,6 +25,7 @@ def all_questions(request, slug=None):
             is_valid = question_instance.is_valid(student_answer)
             if is_valid:
                 expected_answer = question_instance.expected_answer(program_random_value)
+                display_expected_answer = question_instance.expected_answer_display_format(expected_answer)
                 test_answer = question_instance.test_answer(student_answer, expected_answer)
                 if test_answer:
                     messages.success(request, question_instance.correct_answer_message)
@@ -33,7 +34,7 @@ def all_questions(request, slug=None):
 
                 context = {'random_value': user_random_value,
                            'answer': student_answer,
-                           'correct_answer': expected_answer,
+                           'correct_answer': display_expected_answer,
                            'is_form': False,
                            'result': test_answer}
                 return create_http_response(request, question_class_name, context)

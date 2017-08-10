@@ -135,7 +135,7 @@ def add_users_to_semester(request):
 
             for key, value in mandatory_titles.items():
                 if value not in user_titles_array:
-                    message.append(' ' + value + ',')
+                    message = message + (' ' + value + ',')
                     excel_titles.append(value)
 
             if len(excel_titles) == 0:
