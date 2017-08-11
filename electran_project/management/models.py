@@ -15,7 +15,7 @@ class QuestionCategory(models.Model):
     order = models.PositiveIntegerField()
 
     def __str__(self):
-        return self.cat_title
+        return str(self.order) + '-' + self.cat_title
 
 
 class Question(models.Model):

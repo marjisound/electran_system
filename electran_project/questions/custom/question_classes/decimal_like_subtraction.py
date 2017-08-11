@@ -9,31 +9,22 @@ class Question(BinaryHexBase):
         self.sign = None
 
     def generate_user_random_display(self, value):
-        random_value1 = value['random1']
-        random_value2 = value['random2']
+        random_value1 = str(value['random1'])
+        random_value2 = str(value['random2'])
 
         if value['base'] == 2:
-            singed_value = int(random_value1, 2) - int(random_value2, 2)
-            self.sign = singed_value >= 0
             self.base = 2
-            while len(random_value1) < 8:
-                random_value1 = '0' + random_value1
+            random_value1 = '{:0>8}'.format(random_value1[2:])
+            random_value2 = '{:0>8}'.format(random_value2[2:])
             random_value1 = ' '.join([random_value1[i:i + 4] for i in range(0, len(random_value1), 4)])
-
-            while len(random_value2) < 8:
-                random_value2 = '0' + random_value2
             random_value2 = ' '.join([random_value2[i:i + 4] for i in range(0, len(random_value2), 4)])
 
         elif value['base'] == 8:
-            singed_value = int(random_value1, 8) - int(random_value2, 8)
-            self.sign = singed_value >= 0
             self.base = 8
         elif value['base'] == 16:
-            singed_value = int(random_value1, 16) - int(random_value2, 16)
-            self.sign = singed_value >= 0
             self.base = 16
 
-        user_random_value = '0' + random_value1 + ' - 0' + random_value2
+        user_random_value = random_value1 + ' - ' + random_value2
         return {'random1': user_random_value, 'base': value['base']}
 
     def generate_random(self):
@@ -45,50 +36,49 @@ class Question(BinaryHexBase):
             random_value1 = bin(random.randint(70, 256))
             random_value2 = bin(random.randint(70, 256))
 
-            random_value1 = self.delete_binary_identifier(random_value1)
-            random_value2 = self.delete_binary_identifier(random_value2)
-
         elif random_base == 8:
             random_value1 = oct(random.randint(16777216, 134217727))
             random_value2 = oct(random.randint(16777216, 134217727))
 
-            random_value1 = self.delete_octal_identifier(random_value1)
-            random_value2 = self.delete_octal_identifier(random_value2)
-
         elif random_base == 16:
             random_value1 = hex(random.randint(268435456, 4294967295))
             random_value2 = hex(random.randint(268435456, 4294967295))
-
-            random_value1 = self.delete_hex_identifier(random_value1)
-            random_value2 = self.delete_hex_identifier(random_value2)
 
         return {'random1': random_value1, 'random2': random_value2, 'base': random_base}
 
     def expected_answer(self, value):
 
         if value['base'] == 2:
-            lst_int = list(map(int, value['random2']))
-            complemented_int = list(map(lambda x: 1 - x, lst_int))
-            complemented_str = ''.join(list(map(str, complemented_int)))
-
-            expected = bin(int(value['random1'], 2) + int(complemented_str, 2) + 1)
+            expected = bin(int(value['random1'][2:], 2) - int(value['random2'][2:], 2))
             expected = self.delete_binary_identifier(expected)
 
         elif value['base'] == 8:
-            lst_int = list(map(lambda x: int(x, 8), value['random2']))
-            complemented_int = list(map(lambda x: hex(7 - x)[2:], lst_int))
-            complemented_str = ''.join(list(map(str, complemented_int)))
-
-            expected = oct(int(value['random1'], 8) + int(complemented_str, 8) + 1)
+            expected = oct(int(value['random1'][2:], 8) - int(value['random2'][2:], 8))
             expected = self.delete_octal_identifier(expected)
 
         elif value['base'] == 16:
-            lst_int = list(map(lambda x: int(x, 16), value['random2']))
-            complemented_int = list(map(lambda x: hex(15 - x)[2:], lst_int))
-            complemented_str = ''.join(list(map(str, complemented_int)))
-
-            expected = hex(int(value['random1'], 16) + int(complemented_str, 16) + 1)
+            expected = hex(int(value['random1'][2:], 16) - int(value['random2'][2:], 16))
             expected = self.delete_hex_identifier(expected)
+
+        return expected
+
+    def expected_answer_display_format(self, value):
+        if self.base == 2:
+            modulo_value = len(value) % 4
+            separate_value = value[:modulo_value]
+            rest_of_value = value[modulo_value:]
+            result = ' '.join([rest_of_value[i:i + 4] for i in range(0, len(rest_of_value), 4)])
+            expected = separate_value + ' ' + result
+        elif self.base == 8:
+            if value.startswith('-'):
+                expected = '-0o' + value[1:]
+            else:
+                expected = '0o' + value
+        elif self.base == 16:
+            if value.startswith('-'):
+                expected = '-0x' + value[1:]
+            else:
+                expected = '0x' + value
 
         return expected
 
@@ -97,14 +87,10 @@ class Question(BinaryHexBase):
             formatted_answer = student_answer.replace(' ', '')
             if self.base == 2:
                 formatted_answer = self.delete_binary_identifier(formatted_answer)
-                formatted_answer = self.remove_negative_signed_bits(formatted_answer, correct_answer, '1')
-
             elif self.base == 8:
                 formatted_answer = self.delete_octal_identifier(formatted_answer)
-                formatted_answer = self.remove_negative_signed_bits(formatted_answer, correct_answer, '7')
             elif self.base == 16:
                 formatted_answer = self.delete_hex_identifier(formatted_answer)
-                formatted_answer = self.remove_negative_signed_bits(formatted_answer, correct_answer, 'f')
 
             if formatted_answer == correct_answer:
                 return True

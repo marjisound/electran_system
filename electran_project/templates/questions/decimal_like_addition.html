@@ -6,9 +6,10 @@
         {% if is_form %}
             <form method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
-                <h2>2's complement</h2>
-                <p>Give the (2's complement) binary representation of the following 8 bit binary number:</p>
-                <h3>{{ random_value.random1 }}</h3>
+                <h2>Decimal-like Binary/Octal/Hex Addition</h2>
+                <p>Calculate the result of the following operation in the
+                    specified base the same way you do decimal addition:</p>
+                <h3>{{ random_value.random1 }} + {{ random_value.random2 }} (In base {{ random_value.base }})</h3>
                 <div class="col-md-4 no-padding">
                     <div class="form-group">
                         <label for="answer">Answer:</label>
@@ -18,9 +19,10 @@
                 </div>
             </form>
         {% else %}
-            <h2>B2's complement</h2>
-            <p>Give the 8-bit (2's complement) binary representation of the following 8-bit binary number:</p>
-            <h3>{{ random_value.random1 }}</h3>
+            <h2>Decimal-like Binary/Octal/Hex Addition</h2>
+                <p>Calculate the result of the following operation in the
+                    specified base the same way you do decimal addition:</p>
+                <h3>{{ random_value.random1 }} + {{ random_value.random2 }} (In base {{ random_value.base }})</h3>
             <div class="col-md-6 no-padding">
                 <p>Your answer was: {{ answer }}</p>
                 {% if not result %}

@@ -10,10 +10,10 @@ class QuestionBase:
     def generate_random(self):
         return None
 
-    def expected_answer(self):
+    def expected_answer(self, value):
         return None
 
-    def test_answer(self):
+    def test_answer(self, student_answer, correct_answer):
         return False
 
     def expected_answer_display_format(self, value):
@@ -42,6 +42,9 @@ class BinaryHexBase(QuestionBase):
     def delete_binary_identifier(value):
         if value.startswith('0b') or value.startswith('0B'):
             return value[2:]
+        elif value.startswith('-0b') or value.startswith('-0B'):
+            formatted_value = value[3:]
+            return '-' + formatted_value
         else:
             return value
 
@@ -49,6 +52,9 @@ class BinaryHexBase(QuestionBase):
     def delete_hex_identifier(value):
         if value.startswith('0x') or value.startswith('0X'):
             return value[2:]
+        elif value.startswith('-0x') or value.startswith('-0X'):
+            formatted_value = value[3:]
+            return '-' + formatted_value
         else:
             return value
 
@@ -56,6 +62,9 @@ class BinaryHexBase(QuestionBase):
     def delete_octal_identifier(value):
         if value.startswith('0o') or value.startswith('0O'):
             return value[2:]
+        elif value.startswith('-0o') or value.startswith('-0O'):
+            formatted_value = value[3:]
+            return '-' + formatted_value
         else:
             return value
 
@@ -110,11 +119,27 @@ class BinaryHexBase(QuestionBase):
                 return True, 'format'
 
     @staticmethod
-    def spacing_binary_numbers(value, bit_num):
-        formatted_value = value.replace(' ', '')
-        while len(formatted_value) < bit_num:
-            formatted_value = '0' + formatted_value
-        return ' '.join([value[i:i + 4] for i in range(0, len(value), 4)])
+    def spacing_binary_numbers(value):
+        modulo_value = len(value) % 4
+        separate_value = value[:modulo_value]
+        rest_of_value = value[modulo_value:]
+        result = ' '.join([rest_of_value[i:i + 4] for i in range(0, len(rest_of_value), 4)])
+        if separate_value:
+            result = separate_value + ' ' + result
+        return result
+
+    @staticmethod
+    def make_specific_number_of_bits(value, bit_length):
+        result = value
+        overflow = False
+        if len(value) > bit_length:
+            extra = len(value) - bit_length
+            result = value[extra:]
+            overflow = True
+        elif len(value) < 8:
+            format_str = '{:0>' + str(bit_length) + '}'
+            result = format_str.format(value)
+        return result, overflow
 
 
 class MipsInstructionsBase(QuestionBase):
