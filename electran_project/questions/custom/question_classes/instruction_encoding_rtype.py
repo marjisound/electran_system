@@ -44,6 +44,11 @@ class Question(MipsInstructionsBase, BinaryHexBase):
 
         return expected
 
+    def expected_answer_display_format(self, value):
+        expected = value[:6] + ' ' + value[6:11] + ' ' + value[11:16] \
+                   + ' ' + value[16:21] + ' ' + value[21:26] + ' ' + value[26:]
+        return expected
+
     def test_answer(self, student_answer, correct_answer):
         if type(student_answer) == str:
             formatted_answer = student_answer.replace(' ', '')

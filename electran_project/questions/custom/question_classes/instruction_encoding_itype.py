@@ -8,7 +8,7 @@ class Question(MipsInstructionsBase, BinaryHexBase):
 
         user_random_value = {'rs': str(value['rs']), 'rt': str(value['rt']),
                              'instruction_type': value['instruction_type'], 'instruction_format': 'R',
-                             'offset': str(hex(value['offset']))}
+                             'offset': hex(value['offset'])}
 
         return user_random_value
 
