@@ -38,8 +38,7 @@ class Question(BinaryHexBase):
             random_value2 = hex(value['random2'])
             random_value2 = self.delete_hex_identifier(random_value2)
 
-        user_random_value = '0' + random_value1 + ' + 0' + random_value2
-        return {'random1': user_random_value, 'base': value['base']}
+        return {'random1': random_value1, 'random2': random_value2, 'base': value['base']}
 
     def generate_random(self):
         random_value1 = ''
@@ -65,21 +64,33 @@ class Question(BinaryHexBase):
         if value['base'] == 2:
             expected = bin(expected)
             formatted_expected = self.delete_binary_identifier(expected)
-            formatted_expected = '0' + formatted_expected
         elif value['base'] == 8:
             expected = oct(expected)
             formatted_expected = self.delete_octal_identifier(expected)
-            formatted_expected = '0' + formatted_expected
         elif value['base'] == 16:
             expected = hex(expected)
             formatted_expected = self.delete_hex_identifier(expected)
-            formatted_expected = '0' + formatted_expected
 
         return formatted_expected
+
+    def expected_answer_display_format(self, value):
+        result = value
+        if self.base == 2:
+            modulo_value = len(value) % 4
+            separate_value = value[:modulo_value]
+            rest_of_value = value[modulo_value:]
+            result = ' '.join([rest_of_value[i:i + 4] for i in range(0, len(rest_of_value), 4)])
+            result = separate_value + ' ' + result
+        elif self.base == 8:
+            result = '0o' + value
+        elif self.base == 16:
+            result = '0x' + value
+        return result
 
     def test_answer(self, student_answer, correct_answer):
         if type(student_answer) == str:
             formatted_answer = student_answer.replace(' ', '')
+            formatted_answer = formatted_answer.lower()
             formatted_answer = self.delete_binary_identifier(formatted_answer)
             formatted_answer = self.delete_binary_identifier(formatted_answer)
             formatted_answer = self.delete_binary_identifier(formatted_answer)

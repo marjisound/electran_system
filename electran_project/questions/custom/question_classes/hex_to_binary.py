@@ -19,7 +19,8 @@ class Question(BinaryHexBase):
         return expected
 
     def expected_answer_display_format(self, value):
-        return self.spacing_binary_numbers(value, 32)
+        value = '{:0>32}'.format(value)
+        return self.spacing_binary_numbers(value)
 
     def test_answer(self, student_answer, correct_answer):
         if type(student_answer) == str:

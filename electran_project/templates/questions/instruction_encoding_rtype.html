@@ -6,7 +6,7 @@
         {% if is_form %}
             <form method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
-                <h2>encodingQu</h2>
+                <h2>Instruction encoding R-Type</h2>
                 <p>Convert the following MIPS instruction into its machine code in binary:</p>
                 <h3>{{ random_value.instruction_type }} ${{ random_value.rd }} ${{ random_value.rs }} ${{ random_value.rt }}</h3>
                 <div class="col-md-7 no-padding">
@@ -18,10 +18,10 @@
                 </div>
             </form>
         {% else %}
-            <h2>encodingQu</h2>
+            <h2>Instruction encoding R-Type</h2>
             <p>Convert the following MIPS instruction into its machine code in binary:</p>
-            <h3>{{ random_value.random1 }}</h3>
-            <div class="col-md-7 no-padding">
+            <h3>{{ random_value.instruction_type }} ${{ random_value.rd }} ${{ random_value.rs }} ${{ random_value.rt }}</h3>
+            <div class="col-md-10 no-padding">
                 <p>Your answer was: {{ answer }}</p>
                 {% if not result %}
                 <p>But the correct answer was: {{ correct_answer }}</p>

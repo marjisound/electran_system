@@ -5,38 +5,44 @@ import random
 class Question(BinaryHexBase):
 
     def generate_user_random_display(self, value):
-        random_value = value['random1']
-        formatted_random_value = ' '.join([random_value[i:i + 4] for i in range(0, len(random_value), 4)])
+        formatted_random_value = ' '.join([value['random1'][i:i + 4] for i in range(0, len(value['random1']), 4)])
         return {'random1': formatted_random_value}
 
     def generate_random(self):
         random_int = random.randint(70, 256)
-        random_value = bin(random_int)
-        if random_value.startswith('0b'):
-            random_value = random_value[2:]
-        while len(random_value) != 8:
-            random_value = '0' + random_value
+        random_value = '{:0>8}'.format(bin(random_int)[2:])
         return {'random1': random_value}
 
     def expected_answer(self, value):
         trimmed_value = value['random1'].replace(' ', '')
+        length = len(trimmed_value)
+        if length > 8:
+            extra_bit = length - 8
+            trimmed_value = trimmed_value[extra_bit:]
         int_value = int(trimmed_value, 2)
         expected = bin(int_value - (1 << 8))
         if expected.startswith('0b') or expected.startswith('0B'):
             expected = expected[2:]
         elif expected.startswith('-0b') or expected.startswith('-0B'):
             expected = expected[3:]
+        expected = '{:0>8}'.format(expected)
         return expected
+
+    def expected_answer_display_format(self, value):
+        modulo_value = len(value) % 4
+        separate_value = value[:modulo_value]
+        rest_of_value = value[modulo_value:]
+        result = ' '.join([rest_of_value[i:i + 4] for i in range(0, len(rest_of_value), 4)])
+        result = separate_value + ' ' + result
+        return result
 
     def test_answer(self, student_answer, correct_answer):
         if type(student_answer) == str:
             formatted_answer = student_answer.replace(' ', '')
-            if formatted_answer.startswith('0b') or formatted_answer.startswith('0B'):
+            formatted_answer = formatted_answer.lower()
+            if formatted_answer.startswith('0b'):
                 formatted_answer = formatted_answer[2:]
-            if formatted_answer.startswith('-0b') or formatted_answer.startswith('-0B'):
-                formatted_answer = formatted_answer[3:]
-            while formatted_answer.startswith('0'):
-                formatted_answer = formatted_answer[1:]
+            # To Do: does the answer need to be exactly 8 bits?????
 
             if formatted_answer == correct_answer:
                 return True
@@ -47,7 +53,7 @@ class Question(BinaryHexBase):
 
     def is_valid(self, binary_num):
         """
-        :type hex_num: hex number string
+        :type binary_num: binary number string
         :rtype: dict
         """
         is_valid, message_type = self.is_valid_binary(binary_num)

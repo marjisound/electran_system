@@ -19,7 +19,17 @@ def all_questions(request, slug=None):
         question_instance = question_class()
 
         if request.method == 'POST':
-            student_answer = request.POST.get('answer')
+            if hasattr(question_instance, 'ANSWER_TYPE'):
+                if question_instance.ANSWER_TYPE == 'multiple':
+                    student_answer = {}
+                    for item in range(1, question_instance.ANSWER_NUMS + 1):
+                        prop_name = 'answer' + str(item)
+                        student_answer[prop_name] = request.POST.get(prop_name)
+                else:
+                    student_answer = request.POST.get('answer')
+            else:
+                student_answer = request.POST.get('answer')
+
             program_random_value = request.session.__getitem__('program_random_value')
             user_random_value = question_instance.generate_user_random_display(program_random_value)
             is_valid = question_instance.is_valid(student_answer)
