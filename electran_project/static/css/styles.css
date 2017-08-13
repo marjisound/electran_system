@@ -4,7 +4,88 @@
     padding: 0;
 }
 
+.no-left-padding {
+    padding-left: 0;
+}
+
+.no-right-padding {
+    padding-right: 0;
+}
+
 /*********** end of generic**************/
+
+/*********** question content**************/
+
+.register-memory-container {
+    font-size: 13px;
+}
+
+.register-memory-container .col-lg-2 {
+    padding-bottom: 20px;
+    padding-top: 10px;
+    background-color: #a9bcb2;
+    border: 3px solid #ffffff;
+}
+
+.register-memory-container label{
+    margin-bottom: 0;
+    margin-top: 10px;
+}
+
+.register-memory-container  .form-control {
+    height: 25px;
+}
+
+.register-table {
+    background-color: #d5dcd9;
+    color: #000000;
+    font-size: 11px;
+}
+
+.register-table>tbody>tr>td:not(:first-child){
+    border-left: 1px solid #b9b8b8;
+}
+
+.register-table>tbody>tr>td {
+    border-top: 1px solid #b9b8b8;
+}
+
+
+.register-table .register-number-cell {
+    width: 20px;
+}
+
+.register-table .register-value-cell {
+    width: 50px;
+}
+
+.register-table caption {
+    background-color: #d5dcd9;
+    padding-left: 20px;
+    font-weight: bold;
+}
+
+.register-table-title {
+    margin-right: 20px;
+}
+
+.electran-submit-btn {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    background-color: #212b26;
+    border-color: #6d8a7b;
+}
+.electran-submit-btn:hover {
+    background-color: #6d8a7b;
+    border-color: #6d8a7b;
+}
+
+.electran-submit-btn:active  {
+    background-color: #6d8a7b !important;
+    border-color: #6d8a7b !important;
+    transform: translate(2px,2px);
+}
+/*********** end of question content**************/
 .qus-cat-checkbox {
     margin: 0;
 }

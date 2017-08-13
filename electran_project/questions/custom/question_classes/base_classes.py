@@ -148,9 +148,6 @@ class MipsInstructionsBase(QuestionBase):
     RTYPE_SHAMT = 0
 
     RTYPE_VALUES = {
-        'sll': 0x00,
-        'srl': 0x02,
-        'jr': 0x08,
         'add': 0x20,
         'addu': 0x21,
         'sub': 0x22,
@@ -161,6 +158,13 @@ class MipsInstructionsBase(QuestionBase):
         'nor': 0x27,
         'slt': 0x2a,
         'sltu': 0x2b
+    }
+
+    RTYPE_SHIFT_VALUES = {
+        'sll': 0x00,
+        'srl': 0x02,
+        'sra': 0x03,
+        'jr': 0x08,
     }
 
     ITYPE_VALUES = {
@@ -188,3 +192,109 @@ class MipsInstructionsBase(QuestionBase):
         'jal': 0x3
     }
     MIPS_INS_TYPES = {'R': RTYPE_VALUES, 'I': ITYPE_VALUES, 'J': JTYPE_VALUES}
+
+    MEMORY_LOCATION_STARTING_POINT = 268435456  # this is 0x10000000
+
+    @staticmethod
+    def add_rtype(value):
+        return value['val1'] + value['val2']
+
+    @staticmethod
+    def addu_rtype(value):
+        result = value['val1'] + value['val2']
+        return result
+
+    @staticmethod
+    def sub_rtype(value):
+        result = value['val1'] - value['val2']
+        return result
+
+    @staticmethod
+    def subu_rtype(value):
+        result = value['val1'] - value['val2']
+        return result
+
+    @staticmethod
+    def and_rtype(value):
+        result = value['val1'] & value['val2']
+        return result
+
+    @staticmethod
+    def or_rtype(value):
+        result = value['val1'] | value['val2']
+        return result
+
+    @staticmethod
+    def xor_rtype(value):
+        result = value['val1'] ^ value['val2']
+        return result
+
+    @staticmethod
+    def nor_rtype(value):
+        result = ~ (value['val1'] | value['val2'])
+        return result
+
+    @staticmethod
+    def slt_rtype(value):
+        result = 1 if value['val1'] < value['val2'] else 0
+        return result
+
+    @staticmethod
+    def sltu_rtype(value):
+        result = 1 if value['val1'] < value['val2'] else 0
+        return result
+
+    RTYPE_CALCULATIONS = {
+        'add': add_rtype,
+        'addu': addu_rtype,
+        'sub': 0x22,
+        'subu': 0x23,
+        'and': 0x24,
+        'or': 0x25,
+        'xor': 0x26,
+        'nor': 0x27,
+        'slt': 0x2a,
+        'sltu': 0x2b
+    }
+
+
+
+
+    REGISTER_VALUES = {
+        '0': 0x00000000,
+        '1': 0x00f70000,
+        '2': 0x0299cc4a,
+        '3': 0x0000d700,
+        '4': 0x000007f0,
+        '5': 0x05086c4c,
+        '6': 0x0000da00,
+        '7': 0x0000c722,
+        '8': 0xef000088,
+        '9': 0x0000aa00,
+        '10': 0x00670000,
+        '11': 0x00000001,
+        '12': 0x00004700,
+        '13': 0x006d0000,
+        '14': 0x0600009e,
+        '15': 0x00000b00,
+        '16': 0x001a0000,
+        '17': 0x3e0000e4,
+        '18': 0x00006700,
+        '19': 0x00010000,
+        '20': 0xf600004b,
+        '21': 0x0000e400,
+        '22': 0x00d70000,
+        '23': 0x0001487b,
+        '24': 0x00009f00,
+        '25': 0x00ea0000,
+        '26': 0x500000c5,
+        '27': 0x39100000,
+        '28': 0x00890000,
+        '29': 0x160000f6,
+        '30': 0x00000f00,
+        '31': 0x00e90000
+    }
+
+    PC_VALUE = 113983136
+
+
