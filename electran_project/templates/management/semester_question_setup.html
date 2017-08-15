@@ -27,6 +27,21 @@
           <div class="panel-heading">
             <h4 class="panel-title pull-left">
               <input class="catCheckAll" value="{{forloop.counter}}" type="checkbox">
+
+{#               <input type="text" class="form-control" value="{{question.deadline|date:"Y-m-d H:i"}}"#}
+{#               name="date_question_{{question.id}}" id="date_question_{{question.id}}"#}
+{#               data-cat-id-date="{{forloop.parentloop.counter}}" readonly>#}
+              <div class="input-group date question-date-input" id="date_category_container_{{ forloop.counter }}">
+                  <input type="text" class="form-control catDateAll" value=""  id="category_date_{{forloop.counter}}" readonly>
+                  <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-th"></span>
+                  </span>
+              </div>
+              <button id="category_date_btn_{{ forloop.counter }}" data-category-btn="{{ forloop.counter }}">
+                  Apply to all
+              </button>
+
+
               <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{forloop.counter}}">
                 {{item.cat.cat_title}}
               </a>
@@ -49,7 +64,9 @@
                         <div class="input-group date question-date-input" id="date_question_container_{{ question.id }}">
 
                             <input type="text" class="form-control" value="{{question.deadline|date:"Y-m-d H:i"}}"
-                                   name="date_question_{{question.id}}" id="date_question_{{question.id}}" readonly>
+                                   name="date_question_{{question.id}}" id="date_question_{{question.id}}"
+                                   data-cat-id-date="{{forloop.parentloop.counter}}" readonly>
+
                             <span class="input-group-addon">
                                 <span class="glyphicon glyphicon-th"></span>
                             </span>
