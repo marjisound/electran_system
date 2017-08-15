@@ -7,7 +7,9 @@
             <form method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
                 <h2>Instruction decoding R-Type</h2>
-                <p>Convert the following MIPS instruction in binary into its human readable form:</p>
+                <p>Convert the following MIPS instruction in binary into its human readable form:
+                    (In case of shift amount, show that in hex format without any leading 0. e.g. 0x9)
+                </p>
                 <h3>{{ random_value }}</h3>
                 <div class="col-md-7 no-padding">
                     <div class="form-group">
@@ -19,7 +21,9 @@
             </form>
         {% else %}
             <h2>Instruction decoding R-Type</h2>
-            <p>Convert the following MIPS instruction in binary into its human readable form:</p>
+            <p>Convert the following MIPS instruction in binary into its human readable form:
+                (In case of shift amount, show that in hex format without any leading 0. e.g. 0x9)
+            </p>
             <h3>{{ random_value }}</h3>
             <div class="col-md-10 no-padding">
                 <p>Your answer was: {{ answer }}</p>
