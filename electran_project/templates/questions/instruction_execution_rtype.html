@@ -17,14 +17,14 @@
                         <div class="col-lg-2 col-sm-4">
                             <label for="register_file">Register File:</label>
                             <select class="form-control" id="register_file" name="answer_register">
-                                <option>Unchanged</option>
-                                <option>Written</option>
+                                <option value="unchanged">Unchanged</option>
+                                <option value="written">Written</option>
                             </select>
                             <label for="register_file">Register Number:</label>
                             <select class="form-control" id="register_file" name="answer_register_num">
                                     <option>None</option>
                                 {% for key in random_value.registers %}
-                                    <option>${{ key }}</option>
+                                    <option value="{{ key }}">${{ key }}</option>
                                 {% endfor %}
                             </select>
                             <label for="answer">Register new value:</label>
@@ -33,8 +33,8 @@
                         <div class="col-lg-2 col-sm-4">
                             <label for="register_file">PC (Program Counter):</label>
                             <select class="form-control" id="register_file" name="answer_pc">
-                                <option>Unchanged</option>
-                                <option>Written</option>
+                                <option value="unchanged">Unchanged</option>
+                                <option value="written">Written</option>
                             </select>
                             <label for="answer">PC new value:</label>
                             <input type="text" class="form-control" id="answer" name="answer_pc_value">
@@ -42,8 +42,8 @@
                         <div class="col-lg-2 col-sm-4">
                             <label for="register_file">Memory 0:</label>
                             <select class="form-control" id="register_file" name="answer_memory_0">
-                                <option>Unchanged</option>
-                                <option>Written</option>
+                                <option value="unchanged">Unchanged</option>
+                                <option value="written">Written</option>
                             </select>
                             <label for="register_file">Memory Address:</label>
                             <select class="form-control" id="register_file" name="answer_memory_0_address">
@@ -58,11 +58,11 @@
                     <div class="col-lg-2 col-sm-4">
                             <label for="register_file">Memory 1:</label>
                             <select class="form-control" id="register_file" name="answer_memory_1">
-                                <option>Unchanged</option>
-                                <option>Written</option>
+                                <option value="unchanged">Unchanged</option>
+                                <option value="written">Written</option>
                             </select>
                             <label for="register_file">Memory Address:</label>
-                            <select class="form-control" id="register_file" name="answer_memory_0_address">
+                            <select class="form-control" id="register_file" name="answer_memory_1_address">
                                 <option>None</option>
                                 {% for key in random_value.memory_locations %}
                                     <option>{{ key }}</option>
@@ -74,8 +74,8 @@
                         <div class="col-lg-2 col-sm-4">
                             <label for="register_file">Memory 2:</label>
                             <select class="form-control" id="register_file" name="answer_memory_2">
-                                <option>Unchanged</option>
-                                <option>Written</option>
+                                <option value="unchanged">Unchanged</option>
+                                <option value="written">Written</option>
                             </select>
                             <label for="register_file">Memory Address:</label>
                             <select class="form-control" id="register_file" name="answer_memory_2_address">
@@ -90,8 +90,8 @@
                         <div class="col-lg-2 col-sm-4">
                             <label for="register_file">Memory 3:</label>
                             <select class="form-control" id="register_file" name="answer_memory_3">
-                                <option>Unchanged</option>
-                                <option>Written</option>
+                                <option value="unchanged">Unchanged</option>
+                                <option value="written">Written</option>
                             </select>
                             <label for="register_file">Memory Address:</label>
                             <select class="form-control" id="register_file" name="answer_memory_3_address">

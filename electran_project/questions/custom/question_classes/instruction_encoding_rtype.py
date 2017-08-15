@@ -6,8 +6,23 @@ class Question(MipsInstructionsBase, BinaryHexBase):
 
     def generate_user_random_display(self, value):
 
-        user_random_value = {'rs': str(value['rs']), 'rt': str(value['rt']), 'rd': str(value['rd']),
-                             'instruction_type': value['instruction_type'], 'instruction_format': 'R'}
+        random_value = ''
+
+        if value['instruction_type'] in self.RTYPE_GROUPS['no_shift']:
+            random_value = '{0} ${1}, ${2}, ${3}'.format(value['instruction_type'],  value['rd'],
+                                                         value['rs'], value['rt'])
+
+        elif value['instruction_type'] in self.RTYPE_GROUPS['no_rs']:
+            random_value = '{0} ${1}, ${2}, {3}'.format(value['instruction_type'], value['rd'],
+                                                        value['rt'], hex(value['shift']))
+
+        elif value['instruction_type'] in self.RTYPE_GROUPS['no_rt_shift']:
+            random_value = '{0} ${1}, ${2}'.format(value['instruction_type'], value['rd'], value['rs'])
+
+        elif value['instruction_type'] in self.RTYPE_GROUPS['no_rt_rd_shift']:
+            random_value = '{0} ${1}'.format(value['instruction_type'], value['rs'])
+
+        user_random_value = {'instruction_format': 'R', 'random_value': random_value}
 
         return user_random_value
 
@@ -15,30 +30,29 @@ class Question(MipsInstructionsBase, BinaryHexBase):
         rs = random.randint(0, 31)
         rt = random.randint(0, 31)
         rd = random.randint(0, 31)
+        shift = 0
 
         instruction_type = random.choice([i for i, j in self.MIPS_INS_TYPES['R'].items()])
 
-        return {'rs': rs, 'rt': rt, 'rd': rd,
+        if instruction_type in self.RTYPE_GROUPS['no_rs']:
+            rs = 0
+            shift = random.randint(0, 31)
+        elif instruction_type in self.RTYPE_GROUPS['no_rt_shift']:
+            rt = 0
+        elif instruction_type in self.RTYPE_GROUPS['no_rt_rd_shift']:
+            rt = 0
+            rd = 0
+
+        return {'rs': rs, 'rt': rt, 'rd': rd, 'shift': shift,
                 'instruction_type': instruction_type, 'instruction_format': 'R'}
 
     def expected_answer(self, value):
         op_value = '000000'
-        shamt_value = '00000'
-        rs = bin(value['rs'])[2:]
-        while len(rs) < 5:
-            rs = '0' + rs
-
-        rt = bin(value['rt'])[2:]
-        while len(rt) < 5:
-            rt = '0' + rt
-
-        rd = bin(value['rd'])[2:]
-        while len(rd) < 5:
-            rd = '0' + rd
-
-        funct_value = bin(self.RTYPE_VALUES[value['instruction_type']])[2:]
-        while len(funct_value) < 6:
-            funct_value = '0' + funct_value
+        shamt_value = '{:0>5}'.format(bin(value['shift'])[2:])
+        rs = '{:0>5}'.format(bin(value['rs'])[2:])
+        rt = '{:0>5}'.format(bin(value['rt'])[2:])
+        rd = '{:0>5}'.format(bin(value['rd'])[2:])
+        funct_value = '{:0>6}'.format(bin(self.RTYPE_VALUES[value['instruction_type']])[2:])
 
         expected = op_value + rs + rt + rd + shamt_value + funct_value
 

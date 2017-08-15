@@ -25,9 +25,6 @@ def all_questions(request, slug=None):
                     for item in request.POST.keys():
                         if item.startswith('answer'):
                             student_answer[item] = request.POST.get(item)
-                    # for item in range(1, question_instance.ANSWER_NUMS + 1):
-                    #     prop_name = 'answer' + str(item)
-                    #     student_answer[prop_name] = request.POST.get(prop_name)
                 else:
                     student_answer = request.POST.get('answer')
             else:

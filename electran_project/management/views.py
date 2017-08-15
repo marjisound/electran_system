@@ -38,6 +38,7 @@ def get_questions(semesters=[]):
         questions_with_cats.append(qus_cat)
     return questions_with_cats
 
+
 @login_required()
 def homePage(request):
 
@@ -47,6 +48,7 @@ def homePage(request):
         'que_cat': questions_with_cats,
     }
     return render(request,template,context_dict)
+
 
 @login_required()
 def semester_create(request):

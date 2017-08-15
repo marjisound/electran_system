@@ -8,52 +8,39 @@ class Question(MipsInstructionsBase, BinaryHexBase):
     ANSWER_TYPE = 'multiple'
 
     def generate_user_random_display(self, value):
-
-        formatted_memory_locations = {}
-        formatted_registers = {}
-
-        for key, memory_value in value['memory_locations'].items():
-            formatted_memory_locations[hex(key)] = memory_value
-
-        for key, memory_value in value['registers'].items():
-            formatted_registers[key] = '{:0>8}'.format(hex(memory_value)[2:])
-
-        user_random_value = {'rs': str(value['rs']), 'rt': str(value['rt']), 'rd': str(value['rd']),
-                             'instruction_type': value['instruction_type'], 'instruction_format': 'R',
-                             'registers': formatted_registers, 'memory_locations': formatted_memory_locations,
-                             'pc': hex(self.PC_VALUE)}
-
-        return user_random_value
+        return value
 
     def generate_random(self):
-        rs = random.randint(0, 31)
-        rt = random.randint(0, 31)
-        rd = random.randint(0, 31)
+        rs = random.randint(1, 31)
+        rt = random.randint(1, 31)
+        rd = random.randint(1, 31)
 
         instruction_type = random.choice([i for i, j in self.MIPS_INS_TYPES['R'].items()])
 
-        register_dict = self.REGISTER_VALUES
+        register_dict = self.random_registers()
 
-        memory_dict = {}
-        fst_memory = self.MEMORY_LOCATION_STARTING_POINT
-        for i in range(32):
-            memory_dict[fst_memory+i] = codecs.encode(os.urandom(1), 'hex').decode()
+        memory_dict = self.random_memories()
 
-        return {'rs': rs, 'rt': rt, 'rd': rd, 'pc': self.PC_VALUE,
+        pc = '0x' + '{:0>8}'.format(codecs.encode(os.urandom(4), 'hex').decode())
+
+        return {'rs': rs, 'rt': rt, 'rd': rd, 'pc': self.PC_VALUE, 'pc': pc,
                 'instruction_type': instruction_type, 'instruction_format': 'R',
                 'registers': register_dict, 'memory_locations': memory_dict}
 
     def expected_answer(self, value):
         func_values = {
-            'val1': value['rs'],
-            'val2': value['rt']
+            'val1': int(value['registers'][str(value['rs'])], 16),
+            'val2': int(value['registers'][str(value['rt'])], 16)
         }
+
+        calculated = self.RTYPE_CALCULATIONS[value['instruction_type']](func_values)
+
         expected = {
             'answer_register': 'written',
             'answer_register_num': value['rd'],
-            'answer_register_value': self.RTYPE_CALCULATIONS[value['instruction_type']](func_values),
+            'answer_register_value': '{:0>8}'.format(hex(calculated)[2:]),
             'answer_pc': 'written',
-            'answer_pc_value': value['pc'] + 4,
+            'answer_pc_value': '{:0>8}'.format(hex(int(value['pc'], 16) + 4)[2:]),
             'answer_memory_0': 'unchanged',
             'answer_memory_0_address': None,
             'answer_memory_0_value': None,
@@ -71,10 +58,39 @@ class Question(MipsInstructionsBase, BinaryHexBase):
         return expected
 
     def expected_answer_display_format(self, value):
-        pass
+
+        return value
 
     def test_answer(self, student_answer, correct_answer):
-        pass
+        register_value = self.delete_hex_identifier(student_answer['answer_register_value'].lower())
+        pc_value = self.delete_hex_identifier(student_answer['answer_pc_value'].lower())
+        for key, value in student_answer.items():
+            if value == 'None' or value == '':
+                student_answer[key] = None
+        if (student_answer['answer_register'].lower() == correct_answer['answer_register'].lower() and
+                int(student_answer['answer_register_num']) == correct_answer['answer_register_num'] and
+                '{:0>8}'.format(register_value) == correct_answer['answer_register_value'].lower() and
+                student_answer['answer_pc'] == correct_answer['answer_pc'] and
+                '{:0>8}'.format(pc_value) == correct_answer['answer_pc_value'] and
+                student_answer['answer_memory_0'] == correct_answer['answer_memory_0'] and
+                student_answer['answer_memory_0_address'] == correct_answer['answer_memory_0_address'] and
+                student_answer['answer_memory_0_value'] == correct_answer['answer_memory_0_value'] and
+                student_answer['answer_memory_1'] == correct_answer['answer_memory_1'] and
+                student_answer['answer_memory_1_address'] == correct_answer['answer_memory_1_address'] and
+                student_answer['answer_memory_1_value'] == correct_answer['answer_memory_1_value'] and
+                student_answer['answer_memory_2'] == correct_answer['answer_memory_2'] and
+                student_answer['answer_memory_2_address'] == correct_answer['answer_memory_2_address'] and
+                student_answer['answer_memory_2_value'] == correct_answer['answer_memory_2_value'] and
+                student_answer['answer_memory_3'] == correct_answer['answer_memory_3'] and
+                student_answer['answer_memory_3_address'] == correct_answer['answer_memory_3_address'] and
+                student_answer['answer_memory_3_value'] == correct_answer['answer_memory_3_value']):
+
+            return True
+
+        if set(student_answer) == set(correct_answer):
+            return True
+        else:
+            return False
 
     def is_valid(self, answer):
         return True

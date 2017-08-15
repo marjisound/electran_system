@@ -10,7 +10,7 @@ class Question(MipsInstructionsBase, BinaryHexBase):
         rt = '{:0>5}'.format(bin(value['rt'])[2:])
         rd = '{:0>5}'.format(bin(value['rd'])[2:])
         op_value = '000000'
-        shamt_value = '00000'
+        shamt_value = '{:0>5}'.format(bin(value['shift'])[2:])
         funct_value = '{:0>6}'.format(bin(self.RTYPE_VALUES[value['instruction_type']])[2:])
 
         user_random_value = op_value + ' ' + rs + ' ' + rt + ' ' + rd + ' ' + shamt_value + ' ' + funct_value
@@ -21,15 +21,39 @@ class Question(MipsInstructionsBase, BinaryHexBase):
         rs = random.randint(0, 31)
         rt = random.randint(0, 31)
         rd = random.randint(0, 31)
+        shift = 0
 
         instruction_type = random.choice([i for i, j in self.MIPS_INS_TYPES['R'].items()])
 
-        return {'rs': rs, 'rt': rt, 'rd': rd,
+        if instruction_type in self.RTYPE_GROUPS['no_rs']:
+            rs = 0
+            shift = random.randint(0, 31)
+        elif instruction_type in self.RTYPE_GROUPS['no_rt_shift']:
+            rt = 0
+        elif instruction_type in self.RTYPE_GROUPS['no_rt_rd_shift']:
+            rt = 0
+            rd = 0
+
+        return {'rs': rs, 'rt': rt, 'rd': rd, 'shift': shift,
                 'instruction_type': instruction_type, 'instruction_format': 'R'}
 
     def expected_answer(self, value):
-        expected = value['instruction_type'] + ' $' + str(value['rd']) +\
-                   ', $' + str(value['rs']) + ', $' + str(value['rt'])
+        expected = ''
+
+        if value['instruction_type'] in self.RTYPE_GROUPS['no_shift']:
+            expected = '{0} ${1}, ${2}, ${3}'.format(value['instruction_type'],  value['rd'],
+                                                         value['rs'], value['rt'])
+
+        elif value['instruction_type'] in self.RTYPE_GROUPS['no_rs']:
+            expected = '{0} ${1}, ${2}, {3}'.format(value['instruction_type'], value['rd'],
+                                                    value['rt'], hex(value['shift']))
+
+        elif value['instruction_type'] in self.RTYPE_GROUPS['no_rt_shift']:
+            expected = '{0} ${1}, ${2}'.format(value['instruction_type'], value['rd'], value['rs'])
+
+        elif value['instruction_type'] in self.RTYPE_GROUPS['no_rt_rd_shift']:
+            expected = '{0} ${1}'.format(value['instruction_type'], value['rs'])
+
         return expected
 
     def test_answer(self, student_answer, correct_answer):
@@ -54,8 +78,8 @@ class Question(MipsInstructionsBase, BinaryHexBase):
             return False, 'field'
         else:
 
-            answer_list = answer.split('$')
-            if len(answer_list) != 4:
+            answer_list = answer.split(' ')
+            if answer_list[0] not in self.MIPS_INS_TYPES['R'] or '$' not in answer_list[1]:
                 self.wrong_format_message = ('Your answer did not have a correct R-Type ' 
                                              'instruction format. e.g. \"add $8, $1, $2\".Please try again')
                 return False

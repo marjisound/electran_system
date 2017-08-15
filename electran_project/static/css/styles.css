@@ -14,6 +14,12 @@
 
 /*********** end of generic**************/
 
+/*************  home page  **************/
+
+.home-question-item {
+    padding:7px;
+}
+
 /*********** question content**************/
 
 .register-memory-container {
@@ -91,7 +97,7 @@
 }
 
 .top-navigation-container {
-  width: 90%;
+  width: 80%;
 }
 
 #top-nav-logout {

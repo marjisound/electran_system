@@ -18,7 +18,7 @@
           <div class="panel-body">
             <ol>
               {% for question in item.qus %}
-                  <li><a href="{% url 'questions:all_questions' slug=question.slug %}">{{question.question_title}}</a></li>
+                  <li class="home-question-item"><a href="{% url 'questions:all_questions' slug=question.slug %}">{{question.question_title}}</a></li>
               {% endfor %}
             </ol>
           </div>

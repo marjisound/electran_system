@@ -1,4 +1,6 @@
 import random
+import codecs
+import os
 
 
 class QuestionBase:
@@ -157,34 +159,46 @@ class MipsInstructionsBase(QuestionBase):
         'xor': 0x26,
         'nor': 0x27,
         'slt': 0x2a,
-        'sltu': 0x2b
-    }
-
-    RTYPE_SHIFT_VALUES = {
+        'sltu': 0x2b,
         'sll': 0x00,
         'srl': 0x02,
         'sra': 0x03,
         'jr': 0x08,
+        'jalr': 0x09
+    }
+
+    RTYPE_GROUPS = {
+        'no_shift': ['add', 'addu', 'sub', 'subu', 'and', 'nor', 'or', 'slt', 'sltu'],
+        'no_rs': ['sll', 'srl', 'sra'],
+        'no_rt_shift': ['jalr'],
+        'no_rt_rd_shift': ['jr']
     }
 
     ITYPE_VALUES = {
         'addi': 0x8,
         'addiu': 0x9,
         'andi': 0xc,
-        'beq': 0x4,
-        'bne': 0x5,
-        'lbu': 0x24,
-        'lhu': 0x25,
-        'll': 0x30,
-        'lui': 0xf,
-        'lw': 0x23,
         'ori': 0xd,
         'slti': 0xa,
-        'sltiu': 0xb,
-        'sb': 0x28,
-        'sc': 0x38,
-        'sh': 0x29,
-        'sw': 0x2b
+        'sltui': 0xb,
+        'lw': 0x23,
+        'sw': 0x2b,
+        'lui': 0xf,
+        'beq': 0x4,
+        'bne': 0x5,
+        'bgez': 0x1,
+        'bgtz': 0x7,
+        'blez': 0x6,
+        'bltz': 0x1,
+
+    }
+
+    ITYPE_GROUPS = {
+        'rt_rs': ['addi', 'addiu', 'andi', 'ori', 'slti', 'sltui'],
+        'rs_end': ['lw', 'sw'],
+        'no_rs': ['lui'],
+        'rs_rt': ['beq', 'bne'],
+        'no_rt': ['bgez', 'bgtz', 'blez', 'bltz']
     }
 
     JTYPE_VALUES = {
@@ -245,56 +259,34 @@ class MipsInstructionsBase(QuestionBase):
         return result
 
     RTYPE_CALCULATIONS = {
-        'add': add_rtype,
-        'addu': addu_rtype,
-        'sub': 0x22,
-        'subu': 0x23,
-        'and': 0x24,
-        'or': 0x25,
-        'xor': 0x26,
-        'nor': 0x27,
-        'slt': 0x2a,
-        'sltu': 0x2b
-    }
-
-
-
-
-    REGISTER_VALUES = {
-        '0': 0x00000000,
-        '1': 0x00f70000,
-        '2': 0x0299cc4a,
-        '3': 0x0000d700,
-        '4': 0x000007f0,
-        '5': 0x05086c4c,
-        '6': 0x0000da00,
-        '7': 0x0000c722,
-        '8': 0xef000088,
-        '9': 0x0000aa00,
-        '10': 0x00670000,
-        '11': 0x00000001,
-        '12': 0x00004700,
-        '13': 0x006d0000,
-        '14': 0x0600009e,
-        '15': 0x00000b00,
-        '16': 0x001a0000,
-        '17': 0x3e0000e4,
-        '18': 0x00006700,
-        '19': 0x00010000,
-        '20': 0xf600004b,
-        '21': 0x0000e400,
-        '22': 0x00d70000,
-        '23': 0x0001487b,
-        '24': 0x00009f00,
-        '25': 0x00ea0000,
-        '26': 0x500000c5,
-        '27': 0x39100000,
-        '28': 0x00890000,
-        '29': 0x160000f6,
-        '30': 0x00000f00,
-        '31': 0x00e90000
+        'add': add_rtype.__func__,
+        'addu': addu_rtype.__func__,
+        'sub': sub_rtype.__func__,
+        'subu': subu_rtype.__func__,
+        'and': and_rtype.__func__,
+        'or': or_rtype.__func__,
+        'xor': xor_rtype.__func__,
+        'nor': nor_rtype.__func__,
+        'slt': slt_rtype.__func__,
+        'sltu': sltu_rtype.__func__
     }
 
     PC_VALUE = 113983136
 
+    @staticmethod
+    def random_registers():
+        register_dict = {}
+        for i in range(32):
+            pick_random = random.randint(2, 4)
+            random_hex = codecs.encode(os.urandom(pick_random), 'hex').decode()
+            register_dict[i] = '{:0>8}'.format(random_hex)
+        return register_dict
 
+    @staticmethod
+    def random_memories():
+        memory_dict = {}
+        fst_memory = 268435456
+        for i in range(32):
+            memory_dict[hex(fst_memory+i)[2:]] = codecs.encode(os.urandom(1), 'hex').decode()
+
+        return memory_dict
