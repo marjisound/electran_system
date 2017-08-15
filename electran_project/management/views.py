@@ -9,22 +9,25 @@ from django.views.generic import ListView
 from django.contrib.auth.decorators import login_required
 from .custom import validation
 from django.db import Error, IntegrityError
-from django.template import Context
-from django.template import Template
 
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
 
-def get_questions(semesters=[]):
+def get_questions(semesters=[], sem_id=None):
     categories = QuestionCategory.objects.order_by('order')
-    questions = Question.objects.order_by()
+
+    if sem_id:
+        questions = Question.objects.filter(questionsemester__semester__sem_is_active=True)
+    else:
+        questions = Question.objects.order_by()
 
     questions_with_cats = []
 
     for cat in categories:
         qus_cat = {'cat': cat, 'qus': []}
+        cat_has_qus = False
         for qus in questions:
             for sem in semesters:
                 if sem['question_id'] == qus.id:
@@ -33,17 +36,23 @@ def get_questions(semesters=[]):
                     if sem['question_visibility']:
                         qus.visible = 'checked'
             if qus.category.id == cat.id:
+                cat_has_qus = True
                 qus_cat['qus'].append(qus)
         qus_cat['qus'] = sorted(qus_cat['qus'], key=lambda x: x.order)
-        questions_with_cats.append(qus_cat)
+        if cat_has_qus:
+            questions_with_cats.append(qus_cat)
     return questions_with_cats
 
 
 @login_required()
 def homePage(request):
-
+    sem_id_list = list(Semester.objects.filter(sem_is_active__exact=True))
+    if len(sem_id_list) != 1:
+        questions_with_cats = []
+    else:
+        sem_id = sem_id_list[0].id
+        questions_with_cats = get_questions(sem_id=sem_id)
     template = 'management/index.html'
-    questions_with_cats = get_questions()
     context_dict = {
         'que_cat': questions_with_cats,
     }

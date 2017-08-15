@@ -15,7 +15,7 @@ class Question(MipsInstructionsBase, BinaryHexBase):
         rt = random.randint(1, 31)
         rd = random.randint(1, 31)
 
-        instruction_type = random.choice([i for i, j in self.MIPS_INS_TYPES['R'].items()])
+        instruction_type = random.choice(self.RTYPE_GROUPS['no_shift'])
 
         register_dict = self.random_registers()
 
@@ -85,9 +85,6 @@ class Question(MipsInstructionsBase, BinaryHexBase):
                 student_answer['answer_memory_3_address'] == correct_answer['answer_memory_3_address'] and
                 student_answer['answer_memory_3_value'] == correct_answer['answer_memory_3_value']):
 
-            return True
-
-        if set(student_answer) == set(correct_answer):
             return True
         else:
             return False

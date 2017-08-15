@@ -25,6 +25,7 @@ class Question(models.Model):
     question_help = models.CharField(max_length=200)
     question_create_date = models.DateField(default=timezone.now)
     slug = models.SlugField(unique=True, max_length=140, null=True, blank=True)
+    mark_max_value = models.PositiveIntegerField(default=1)
     order = models.PositiveIntegerField()
 
     def __str__(self):
@@ -64,6 +65,11 @@ class Semester(models.Model):
     def count_question(self):
         return self.questions.count()
 
+    def save(self, *args, **kwargs):
+        if self.sem_is_active:
+            Semester.objects.all().update(sem_is_active=False)
+        super(Semester, self).save(*args, **kwargs)
+
 
 class QuestionSemester(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
@@ -90,3 +96,21 @@ class UserSemester(models.Model):
 
     class Meta:
         unique_together = ('user', 'semester')
+
+
+class Mark(models.Model):
+    question_semester = models.ForeignKey(QuestionSemester, on_delete=models.CASCADE)
+    user_semester = models.ForeignKey(UserSemester, on_delete=models.CASCADE)
+    final_mark = models.PositiveIntegerField(null=True, blank=True)
+    mark_datetime = models.DateTimeField(null=True, blank=True)
+    click_datetime = models.DateTimeField(auto_now=True)
+    question_parameters = models.TextField()
+    user_answer = models.TextField()
+    correct_answer = models.TextField()
+
+    def __str__(self):
+        return str(self.user_semester) + '- question(' + str(self.question_semester) + ')'
+
+
+
+
