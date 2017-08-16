@@ -34,11 +34,12 @@
   				<a href="{% url 'home' %}">Electran</a>
               </div>
     			</div>
-    			<div id="navbar" class="collapse navbar-collapse">
+    			<div id="navbar" class="collapse navbar-collapse student-navbar">
     				<ul class="nav navbar-nav top-navigation-container">
     					<li class="active"><a href="{% url 'home' %}">Home</a></li>
     					<li><a href="#about">About</a></li>
                         <li id="top-nav-logout"><a href="{% url 'account_logout' %}">Logout</a></li>
+                        <li class="home-user-name">{{ user.first_name }}{{ user.last_name }}({{ user.get_username }})</li>
     				</ul>
     			</div><!--/.nav-collapse -->
     		</div>
@@ -60,11 +61,6 @@
                     <li>
                         <a href="{% url 'management:semester_list' %}">
                             <span class="fa fa-anchor solo">Semester List</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{% url 'management:upload_users' %}">
-                            <span class="fa fa-anchor solo">Upload Users</span>
                         </a>
                     </li>
                 </ul>

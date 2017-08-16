@@ -27,24 +27,18 @@
           <div class="panel-heading">
             <h4 class="panel-title pull-left">
               <input class="catCheckAll" value="{{forloop.counter}}" type="checkbox">
-
-{#               <input type="text" class="form-control" value="{{question.deadline|date:"Y-m-d H:i"}}"#}
-{#               name="date_question_{{question.id}}" id="date_question_{{question.id}}"#}
-{#               data-cat-id-date="{{forloop.parentloop.counter}}" readonly>#}
-              <div class="input-group date question-date-input" id="date_category_container_{{ forloop.counter }}">
+              <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{forloop.counter}}" class="cat-title-link">
+                {{item.cat.cat_title}}
+              </a>
+              <div class="input-group date category-date-input" id="date_category_container_{{ forloop.counter }}">
                   <input type="text" class="form-control catDateAll" value=""  id="category_date_{{forloop.counter}}" readonly>
                   <span class="input-group-addon">
                     <span class="glyphicon glyphicon-th"></span>
                   </span>
               </div>
-              <button id="category_date_btn_{{ forloop.counter }}" data-category-btn="{{ forloop.counter }}">
+              <button class="btn btn-primary electran-submit-btn cat-date-btn" id="category_date_btn_{{ forloop.counter }}" data-category-btn="{{ forloop.counter }}">
                   Apply to all
               </button>
-
-
-              <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{forloop.counter}}">
-                {{item.cat.cat_title}}
-              </a>
             </h4>
             <div class="clearfix"></div>
           </div>
@@ -55,8 +49,8 @@
                   <li class="semester-question-sub-list">
                     <div class="qus-sem-question-title">
                       <input {{question.checked}} data-catid="{{forloop.parentloop.counter}}"
-                             type="checkbox" value="{{question.id}}" name="chk_question">
-                      <label class="checkbox-inline">{{question.question_title}}</label>
+                             type="checkbox" value="{{question.id}}" name="chk_question" id="qusTitle{{ question.id }}">
+                      <label class="checkbox-inline" for="qusTitle{{ question.id }}">{{question.question_title}}</label>
 
                     </div>
                     <div>
@@ -90,7 +84,7 @@
 
     </div>
   </div>
-  <input type="submit" class="btn btn-primary" value="submit">
+  <input type="submit" class="btn btn-primary electran-submit-btn" value="submit">
   </form>
 </div>
 

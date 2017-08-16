@@ -18,6 +18,15 @@ TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates')
 
 LOGIN_URL = 'account/login/'
 
+# Global Vriables
+STUDENTS_MANDATORY_FIELDS = {
+    'first_name': 'First name',
+    'last_name': 'Surname',
+    'student_no': 'ID number',
+    'email': 'Email address',
+    'username': 'Username'
+}
+
 # Email setup
 EMAIL_HOST = 'mail.marjisound.com'
 EMAIL_HOST_USER = 'electran@marjisound.com'
@@ -166,7 +175,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/London'
 
 USE_I18N = True
 
