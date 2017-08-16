@@ -29,7 +29,7 @@ class Question(models.Model):
     order = models.PositiveIntegerField()
 
     def __str__(self):
-        return self.question_title + ' ' + str(self.order) + ' - ' + str(self.category)
+        return self.question_title + '-' + str(self.order)
 
     def _get_unique_slug(self):
         slug = slugify(self.question_class)
@@ -60,7 +60,7 @@ class Semester(models.Model):
     updated = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return str(self.sem_year) + ' (' + str(self.sem_month) + ')'
+        return str(self.sem_year) + '-' + str(self.sem_month)
 
     def count_question(self):
         return self.questions.count()
@@ -79,7 +79,7 @@ class QuestionSemester(models.Model):
     updated = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return str(self.semester) + ' - question(' + str(self.question) + ')'
+        return str(self.semester) + '-' + str(self.question)
 
     class Meta:
         unique_together = ('question', 'semester')
@@ -105,7 +105,7 @@ class Mark(models.Model):
     mark_datetime = models.DateTimeField(null=True, blank=True)
     click_datetime = models.DateTimeField(auto_now=True)
     question_parameters = models.TextField()
-    user_answer = models.TextField()
+    user_answer = models.TextField(null=True, blank=True)
     correct_answer = models.TextField()
 
     def __str__(self):

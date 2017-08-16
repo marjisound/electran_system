@@ -2,12 +2,52 @@
 {% load crispy_forms_tags %}
 {% block content %}
 
-    <div class="col-md-4">
-        <form method="POST" enctype="multipart/form-data">
+    <div class="">
+        <div class="col-md-8 col-md-offset-4 sem-qus-semester-list-container">
+            <h3>Semester: <span>{{semester}}</span></h3>
+        </div>
+        <form method="POST" enctype="multipart/form-data" class="col-md-12 user-upload-form">
             {% csrf_token %}
             {{ form|crispy }}
-            <input type="submit" class="btn btn-primary" value="submit" name="submit">
+            <input type="submit" class="btn btn-primary electran-submit-btn" value="submit" name="submit">
         </form>
+        <div class="col-md-12 semester-user-table-container">
+            <table class="table table-striped semester-user-table">
+                <caption><span class="register-table-title">List of Users in semester {{ semester }}</span></caption>
+                <thead>
+                    <tr>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Student Number</th>
+                    <th>Is Registered</th>
+                    <th>Edit user</th>
+                    <th>Edit user semester</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                {% for user in users %}
+                    <tr>
+                    <td>{{user.user.first_name}}</td>
+                    <td>{{user.user.last_name}}</td>
+                    <td>{{user.user.username}}</td>
+                    <td>{{user.user.email}}</td>
+                    <td>{{user.user.student_no}}</td>
+                    {% if user.is_registered_for_semester %}
+                        <td>Yes</td>
+                    {% else %}
+                        <td>No</td>
+                    {% endif %}
+
+                    <td><a target="_blank" href="/admin/custom_accounts/myuser/{{user.user.id}}/change/">Edit</a></td>
+                    <td><a target="_blank" href="/admin/management/usersemester/{{user.id}}/change/">Edit</a></td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
 
 {% endblock %}

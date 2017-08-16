@@ -279,7 +279,7 @@ class MipsInstructionsBase(QuestionBase):
         for i in range(32):
             pick_random = random.randint(2, 4)
             random_hex = codecs.encode(os.urandom(pick_random), 'hex').decode()
-            register_dict[i] = '{:0>8}'.format(random_hex)
+            register_dict[str(i)] = '{:0>8}'.format(random_hex)
         return register_dict
 
     @staticmethod

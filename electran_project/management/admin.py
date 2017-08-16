@@ -4,9 +4,8 @@ from .models import QuestionCategory, Question, Semester, QuestionSemester, User
 # Register your models here.
 admin.site.register(QuestionCategory)
 
-admin.site.register(Semester)
+
 admin.site.register(QuestionSemester)
-admin.site.register(UserSemester)
 
 
 class QuestionAdmin(admin.ModelAdmin):
@@ -19,3 +18,15 @@ class MarkAdmin(admin.ModelAdmin):
     list_filter = ('question_semester', 'user_semester')
 
 admin.site.register(Mark, MarkAdmin)
+
+
+class SemesterAdmin(admin.ModelAdmin):
+    list_filter = ('sem_is_active', 'sem_year', 'sem_month')
+
+admin.site.register(Semester, SemesterAdmin)
+
+
+class UserSemesterAdmin(admin.ModelAdmin):
+    list_filter = ('user', 'semester', 'is_registered_for_semester')
+
+admin.site.register(UserSemester, UserSemesterAdmin)
