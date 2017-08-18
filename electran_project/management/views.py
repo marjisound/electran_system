@@ -263,7 +263,7 @@ def create_specific_messages(request, user_creation_error, user_add_sem_error,
             len(sem_user_added)))
         str_existing_users = ''
         for user in already_existing_users:
-            str_existing_users += (user.user + ' ')
+            str_existing_users += (str(user.user) + ' ')
 
         if len(already_existing_users) == 1:
             messages.error(request, 'User {0} already existed in this semester'.format(str_existing_users))

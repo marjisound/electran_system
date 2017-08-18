@@ -16,6 +16,7 @@ class Question(MipsInstructionsBase, BinaryHexBase):
         rd = random.randint(1, 31)
 
         instruction_type = random.choice(self.RTYPE_GROUPS['no_shift'])
+        # instruction_type = 'addu'
 
         register_dict = self.random_registers()
 
@@ -33,12 +34,12 @@ class Question(MipsInstructionsBase, BinaryHexBase):
             'val2': int(value['registers'][str(value['rt'])], 16)
         }
 
-        calculated = self.RTYPE_CALCULATIONS[value['instruction_type']](func_values)
+        calculated, overflow = MipsInstructionsBase.RTYPE_CALCULATIONS[value['instruction_type']](func_values)
 
         expected = {
             'answer_register': 'written',
             'answer_register_num': value['rd'],
-            'answer_register_value': '{:0>8}'.format(hex(calculated)[2:]),
+            'answer_register_value': calculated,
             'answer_pc': 'written',
             'answer_pc_value': '{:0>8}'.format(hex(int(value['pc'], 16) + 4)[2:]),
             'answer_memory_0': 'unchanged',
@@ -53,12 +54,12 @@ class Question(MipsInstructionsBase, BinaryHexBase):
             'answer_memory_3': 'unchanged',
             'answer_memory_3_address': None,
             'answer_memory_3_value': None,
+            'answer_overflow': overflow
         }
 
         return expected
 
     def expected_answer_display_format(self, value):
-
         return value
 
     def test_answer(self, student_answer, correct_answer):
@@ -67,11 +68,19 @@ class Question(MipsInstructionsBase, BinaryHexBase):
         for key, value in student_answer.items():
             if value == 'None' or value == '':
                 student_answer[key] = None
+
+        # convert overflow value to boolean
+        if student_answer['answer_overflow'] == '1':
+            student_answer['answer_overflow'] = True
+        elif student_answer['answer_overflow'] == '0':
+            student_answer['answer_overflow'] = False
+            
         if (student_answer['answer_register'].lower() == correct_answer['answer_register'].lower() and
                 int(student_answer['answer_register_num']) == correct_answer['answer_register_num'] and
                 '{:0>8}'.format(register_value) == correct_answer['answer_register_value'].lower() and
                 student_answer['answer_pc'] == correct_answer['answer_pc'] and
                 '{:0>8}'.format(pc_value) == correct_answer['answer_pc_value'] and
+                student_answer['answer_overflow'] == correct_answer['answer_overflow'] and
                 student_answer['answer_memory_0'] == correct_answer['answer_memory_0'] and
                 student_answer['answer_memory_0_address'] == correct_answer['answer_memory_0_address'] and
                 student_answer['answer_memory_0_value'] == correct_answer['answer_memory_0_value'] and

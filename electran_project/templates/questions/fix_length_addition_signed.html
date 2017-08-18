@@ -1,0 +1,53 @@
+{% extends "custom_base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+    <div class="col-md-10">
+        {% if is_form %}
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <h2>Fixed length/Signed Addition</h2>
+                <p>Calculate the result of the following operation in the specified base. Be aware
+                    that the number of bits must be exactly
+                    {% if random_value.base is 2 %}
+                        8 bits
+                    {% else %}
+                        32 bits
+                    {% endif %}. Try to detect the overflow by the signed bit:</p>
+                <h3>{{ random_value.random1 }} (In base {{ random_value.base }})</h3>
+                <div class="col-md-4 no-padding">
+                    <div class="form-group">
+                        <label for="answer1">Answer:</label>
+                        <input type="text" class="form-control" id="answer1" name="answer1">
+                        <label for="answer2">Overflow:</label>
+                        <input type="checkbox" class="checkbox" id="answer2" name="answer2" value="1">
+                    </div>
+                    <input type="submit" class="btn btn-primary" value="submit" name="submit">
+                </div>
+            </form>
+        {% else %}
+                <h2>Fixed length/Signed Addition</h2>
+                <p>Calculate the result of the following operation in the specified base. Be aware
+                    that the number of bits is limited to
+                    {% if random_value.base is 2 %}
+                        8 bits
+                    {% else %}
+                        32 bits
+                    {% endif %}. Try to detect the overflow by the signed bit:</p>
+                <h3>{{ random_value.random1 }} (In base {{ random_value.base }})</h3>
+            <div class="col-md-6 no-padding">
+                <p>Your answer was: {{ answer.answer1 }}</p>
+                {% if answer.answer2 %}
+                    <span>with overflow</span>
+                {% endif %}
+                {% if not result %}
+                    <p>But the correct answer was: {{ correct_answer.value }}</p>
+                    {% if correct_answer.overflow %}
+                        <span>with overflow</span>
+                    {% endif %}
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+
+{% endblock %}

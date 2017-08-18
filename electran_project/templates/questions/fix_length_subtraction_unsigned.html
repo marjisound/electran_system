@@ -6,40 +6,35 @@
         {% if is_form %}
             <form method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
-                <h2>Fixed length Binary/Hex Subtraction</h2>
+                <h2>Fixed length/Unsigned Hex Subtraction</h2>
                 <p>Calculate the result of the following subtraction using complement for the second value in the specified base. Be aware
-                    of the overflow since the number of bits is limited to
+                    that the maximum number of bits is limited to
                     {% if random_value.base is 2 %}
                         8 bits
                     {% else %}
                         32 bits
-                    {% endif %}:</p>
+                    {% endif %} and since the subtraction is for unsigned values, no overflow detection occurs:</p>
                 <h3>{{ random_value.random1 }} (In base {{ random_value.base }})</h3>
                 <div class="col-md-4 no-padding">
                     <div class="form-group">
                         <label for="answer1">Answer:</label>
                         <input type="text" class="form-control" id="answer1" name="answer1">
-                        <label for="answer2">Overflow:</label>
-                        <input type="checkbox" class="checkbox" id="answer2" name="answer2" value="1">
                     </div>
                     <input type="submit" class="btn btn-primary" value="submit" name="submit">
                 </div>
             </form>
         {% else %}
-            <h2>Fixed length Binary/Hex Subtraction</h2>
+            <h2>Fixed length/Unsigned Hex Subtraction</h2>
             <p>Calculate the result of the following subtraction using complement for the second value in the specified base. Be aware
-                of the overflow since the number of bits is limited to
-                {% if random_value.base is 2 %}
-                    8 bits
-                {% else %}
-                    32 bits
-                {% endif %}:</p>
+                    that the maximum number of bits is limited to
+                    {% if random_value.base is 2 %}
+                        8 bits
+                    {% else %}
+                        32 bits
+                    {% endif %} and since the subtraction is for unsigned values, no overflow detection occurs:</p>
             <h3>{{ random_value.random1 }} (In base {{ random_value.base }})</h3>
             <div class="col-md-6 no-padding">
                 <p>Your answer was: {{ answer.answer1 }}</p>
-                {% if answer.answer2 %}
-                    <span>with overflow</span>
-                {% endif %}
                 {% if not result %}
                     <p>But the correct answer was: {{ correct_answer.value }}</p>
                     {% if correct_answer.overflow %}
