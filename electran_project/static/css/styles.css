@@ -12,6 +12,11 @@
     padding-right: 0;
 }
 
+.electran_font_sm {
+    font-size: 10px;
+    font-weight: normal;
+}
+
 body {
     font-family: Verdana,Helvetica,Arial,sans-serif;
 }
@@ -73,6 +78,10 @@ body {
     background-color: #d5dcd9;
     color: #000000;
     font-size: 11px;
+}
+
+.answer-table {
+    background-color: #f2dede;
 }
 
 .register-table>tbody>tr>td:not(:first-child){

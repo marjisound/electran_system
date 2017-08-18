@@ -52,15 +52,27 @@ class Question(BinaryHexBase):
         return {'random1': random_value1, 'random2': random_value2, 'base': random_base}
 
     def expected_answer(self, value):
+
         expected = value['random1'] + value['random2']
+        overflow = False
+        expected_bin = bin(expected)[2:]
         if value['base'] == 2:
-            expected = bin(expected)
-            formatted_expected = self.delete_binary_identifier(expected)
-            formatted_expected, overflow = self.make_specific_number_of_bits(formatted_expected, 8)
+            formatted_expected = self.make_specific_number_of_bits(expected_bin, 8)
+            val1_msb = '{:0>8}'.format(bin(value['random1'])[2:])[0]
+            val2_msb = '{:0>8}'.format(bin(value['random2'])[2:])[0]
+            if val1_msb == val2_msb:
+                if formatted_expected[0] != val1_msb:
+                    overflow = True
+
         elif value['base'] == 16:
-            expected = hex(expected)
-            formatted_expected = self.delete_hex_identifier(expected)
-            formatted_expected, overflow = self.make_specific_number_of_bits(formatted_expected, 8)
+            expected_hex = hex(expected)[2:]
+            formatted_expected = self.make_specific_number_of_bits(expected_hex, 8)
+            formatted_expected_bin = self.make_specific_number_of_bits(expected_bin, 32)
+            val1_msb = '{:0>32}'.format(bin(value['random1'])[2:])[0]
+            val2_msb = '{:0>32}'.format(bin(value['random2'])[2:])[0]
+            if val1_msb == val2_msb:
+                if formatted_expected_bin[0] != val1_msb:
+                    overflow = True
 
         return {'value': formatted_expected, 'overflow': overflow}
 
@@ -74,10 +86,12 @@ class Question(BinaryHexBase):
             formatted_answer = self.delete_binary_identifier(formatted_answer)
             formatted_answer = self.delete_hex_identifier(formatted_answer)
 
-            if not student_answer['answer2']:
-                student_answer['answer2'] = False
+            formatted_correct_answer = correct_answer['value'].replace(' ', '')
+            student_answer['answer2'] = False
+            if 'answer2' in student_answer:
+                student_answer['answer2'] = True
 
-            if formatted_answer == correct_answer['value'] and student_answer['answer2'] == correct_answer['overflow']:
+            if formatted_answer == formatted_correct_answer and student_answer['answer2'] == correct_answer['overflow']:
                 return True
             else:
                 return False

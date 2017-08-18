@@ -133,15 +133,13 @@ class BinaryHexBase(QuestionBase):
     @staticmethod
     def make_specific_number_of_bits(value, bit_length):
         result = value
-        overflow = False
         if len(value) > bit_length:
             extra = len(value) - bit_length
             result = value[extra:]
-            overflow = True
-        elif len(value) < 8:
+        elif len(value) < bit_length:
             format_str = '{:0>' + str(bit_length) + '}'
             result = format_str.format(value)
-        return result, overflow
+        return result
 
 
 class MipsInstructionsBase(QuestionBase):
@@ -210,53 +208,150 @@ class MipsInstructionsBase(QuestionBase):
     MEMORY_LOCATION_STARTING_POINT = 268435456  # this is 0x10000000
 
     @staticmethod
+    def make_specific_number_of_bits(value, bit_length):
+        result = value
+        if len(value) > bit_length:
+            extra = len(value) - bit_length
+            result = value[extra:]
+        elif len(value) < bit_length:
+            format_str = '{:0>' + str(bit_length) + '}'
+            result = format_str.format(value)
+        return result
+
+    @staticmethod
     def add_rtype(value):
-        return value['val1'] + value['val2']
+        """
+        :param value: dict {val1: int, val2: int}
+        :return: dict {result: str hex 8 digit, overflow: boolean}
+        """
+        # convert both values to binary
+        # get the most significant bit of both values
+        val1_msb = '{:0>32}'.format(bin(value['val1'])[2:])[0]
+        val2_msb = '{:0>32}'.format(bin(value['val2'])[2:])[0]
+
+        # adding 2 values in int format
+        result = value['val1'] + value['val2']
+        result_hex = MipsInstructionsBase.make_specific_number_of_bits(hex(result)[2:], 8)
+
+        # convert the result to binary and make it exactly 32 bits
+        result_bin = MipsInstructionsBase.make_specific_number_of_bits(bin(result)[2:], 32)
+
+        # check for overflow
+        if val1_msb == val2_msb:
+            if result_bin[0] != val1_msb:
+                return result_hex, True
+        return result_hex, False
 
     @staticmethod
     def addu_rtype(value):
+        """
+        :param value: dict {val1: int, val2: int}
+        :return: dict {result: str hex 8 digit, overflow: boolean}
+        """
+        # adding 2 values in int format
         result = value['val1'] + value['val2']
-        return result
+
+        # convert to hex and check the length
+        result_hex = MipsInstructionsBase.make_specific_number_of_bits(hex(result)[2:], 8)
+
+        return result_hex, None
+
 
     @staticmethod
     def sub_rtype(value):
-        result = value['val1'] - value['val2']
-        return result
+
+        value1_bin = '{:0>32}'.format(bin(value['val1'])[2:])
+        value2_bin = '{:0>32}'.format(bin(value['val2'])[2:])
+
+        val1_msb = value1_bin[0]
+        val2_msb = value2_bin[0]
+        overflow = False
+
+        # create a list of the value binary digits and
+        # complement every digit
+        # and create a string from the list of complemented digits
+        lst_int = list(map(int, value2_bin))
+        complemented_int = list(map(lambda x: 1 - x, lst_int))
+        complemented_str = ''.join(list(map(str, complemented_int)))
+
+        # adding two values in int format and add the result to 1
+        # then convert the result to binary
+        expected = value['val1'] + int(complemented_str, 2) + 1
+        formatted_expected = MipsInstructionsBase.make_specific_number_of_bits(hex(expected)[2:], 8)
+
+        expected_bin = MipsInstructionsBase.make_specific_number_of_bits(bin(expected)[2:], 32)
+
+        # check the overflow
+        if val1_msb != val2_msb:
+            if expected_bin[0] != val1_msb:
+                overflow = True
+
+        return formatted_expected, overflow
 
     @staticmethod
     def subu_rtype(value):
-        result = value['val1'] - value['val2']
-        return result
+        value2_bin = '{:0>32}'.format(bin(value['val2'])[2:])
+
+        # create a list of the value binary digits and
+        # complement every digit
+        # and create a string from the list of complemented digits
+        lst_int = list(map(int, value2_bin))
+        complemented_int = list(map(lambda x: 1 - x, lst_int))
+        complemented_str = ''.join(list(map(str, complemented_int)))
+
+        # adding two values in int format and add the result to 1
+        # then convert the result to binary
+        expected = value['val1'] + int(complemented_str, 2) + 1
+        formatted_expected = MipsInstructionsBase.make_specific_number_of_bits(hex(expected)[2:], 8)
+
+        return formatted_expected, None
 
     @staticmethod
     def and_rtype(value):
         result = value['val1'] & value['val2']
-        return result
+        result_hex = MipsInstructionsBase.make_specific_number_of_bits(hex(result)[2:], 8)
+        return result_hex, None
 
     @staticmethod
     def or_rtype(value):
         result = value['val1'] | value['val2']
-        return result
+        result_hex = MipsInstructionsBase.make_specific_number_of_bits(hex(result)[2:], 8)
+        return result_hex, None
 
     @staticmethod
     def xor_rtype(value):
         result = value['val1'] ^ value['val2']
-        return result
+        result_hex = MipsInstructionsBase.make_specific_number_of_bits(hex(result)[2:], 8)
+        return result_hex, None
 
     @staticmethod
     def nor_rtype(value):
         result = ~ (value['val1'] | value['val2'])
-        return result
+        result_hex = MipsInstructionsBase.make_specific_number_of_bits(hex(result)[2:], 8)
+        return result_hex, None
 
     @staticmethod
     def slt_rtype(value):
         result = 1 if value['val1'] < value['val2'] else 0
-        return result
+        result_hex = MipsInstructionsBase.make_specific_number_of_bits(result, 8)
+        return result_hex, None
 
     @staticmethod
     def sltu_rtype(value):
         result = 1 if value['val1'] < value['val2'] else 0
-        return result
+        result_hex = MipsInstructionsBase.make_specific_number_of_bits(result, 8)
+        return result_hex, None
+
+    @staticmethod
+    def sra_rtype(value):
+        bin_value = '{:0>32}'.format(bin(value['val1'])[2:])
+        most_significant_bit = bin_value[0]
+
+        shifted = bin(value['val1'] >> value['val2'])[2:]
+        prepared_sign = '{:' + str(most_significant_bit) + '>32}'
+        result = prepared_sign.format(shifted)
+        return result, None
+
 
     RTYPE_CALCULATIONS = {
         'add': add_rtype.__func__,
@@ -277,7 +372,8 @@ class MipsInstructionsBase(QuestionBase):
     def random_registers():
         register_dict = {}
         for i in range(32):
-            pick_random = random.randint(2, 4)
+            random_small = random.choice([2, 3])
+            pick_random = random.choice([random_small, 4, 4])
             random_hex = codecs.encode(os.urandom(pick_random), 'hex').decode()
             register_dict[str(i)] = '{:0>8}'.format(random_hex)
         return register_dict

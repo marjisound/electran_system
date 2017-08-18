@@ -38,40 +38,47 @@ class Question(BinaryHexBase):
         base_options = [2, 16]
         random_base = random.choice(base_options)
         if random_base == 2:
-            random_value1 = bin(random.randint(70, 256))
-            random_value2 = bin(random.randint(70, 256))
-            random_value1 = self.delete_binary_identifier(random_value1)
-            random_value2 = self.delete_binary_identifier(random_value2)
+            random_value1 = bin(random.randint(70, 256))[2:]
+            random_value2 = bin(random.randint(70, 256))[2:]
 
         elif random_base == 16:
-            random_value1 = hex(random.randint(16777216, 4294967295))
-            random_value2 = hex(random.randint(16777216, 4294967295))
-            random_value1 = self.delete_hex_identifier(random_value1)
-            random_value2 = self.delete_hex_identifier(random_value2)
+            random_value1 = hex(random.randint(16777216, 4294967295))[2:]
+            random_value2 = hex(random.randint(16777216, 4294967295))[2:]
 
         return {'random1': random_value1, 'random2': random_value2, 'base': random_base}
 
     def expected_answer(self, value):
 
         if value['base'] == 2:
+            # create a list of the value binary digits and
+            # complement every digit
+            # and create a string from the list of complemented digits
             lst_int = list(map(int, value['random2']))
             complemented_int = list(map(lambda x: 1 - x, lst_int))
             complemented_str = ''.join(list(map(str, complemented_int)))
 
-            expected = bin(int(value['random1'], 2) + int(complemented_str, 2) + 1)
-            expected = self.delete_binary_identifier(expected)
-            formatted_expected, overflow = self.make_specific_number_of_bits(expected, 8)
+            # adding two values in int format and add the result to 1
+            # then convert the result to binary
+            expected = bin(int(value['random1'], 2) + int(complemented_str, 2) + 1)[2:]
+            formatted_expected = self.make_specific_number_of_bits(expected, 8)
 
         elif value['base'] == 16:
+            # create a list of the value binary digits and
+            # complement every digit
+            # and create a string from the list of complemented digits
             lst_int = list(map(lambda x: int(x, 16), value['random2']))
             complemented_int = list(map(lambda x: hex(15 - x)[2:], lst_int))
             complemented_str = ''.join(list(map(str, complemented_int)))
 
-            expected = hex(int(value['random1'], 16) + int(complemented_str, 16) + 1)
-            expected = self.delete_hex_identifier(expected)
-            formatted_expected, overflow = self.make_specific_number_of_bits(expected, 8)
+            # adding two values in int format and add the result to 1
+            # then convert the result to binary
+            expected_bin = bin(int(value['random1'], 16) + int(complemented_str, 16) + 1)[2:]
+            expected_bin = self.make_specific_number_of_bits(expected_bin, 32)
 
-        return {'value': formatted_expected, 'overflow': overflow}
+            expected = hex(int(value['random1'], 16) + int(complemented_str, 16) + 1)[2:]
+            formatted_expected = self.make_specific_number_of_bits(expected, 8)
+
+        return {'value': formatted_expected}
 
     def test_answer(self, student_answer, correct_answer):
         if type(student_answer['answer1']) == str:
@@ -79,11 +86,7 @@ class Question(BinaryHexBase):
             formatted_answer = self.delete_binary_identifier(formatted_answer)
             formatted_answer = self.delete_hex_identifier(formatted_answer)
 
-            if not student_answer['answer2']:
-                student_answer['answer2'] = False
-
-            if formatted_answer == correct_answer['value'] and \
-                    (bool(int(student_answer['answer2'])) == correct_answer['overflow']):
+            if formatted_answer == correct_answer['value']:
                 return True
             else:
                 return False

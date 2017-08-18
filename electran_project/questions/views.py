@@ -79,11 +79,11 @@ def all_questions(request, slug=None):
         else:
             program_random_value = question_instance.generate_random()
             program_random_value_json = json.dumps(program_random_value)
-            expected_answer_json = json.dumps(question_instance.expected_answer(program_random_value))
-            mark_record = Mark(question_semester=question_semester[0],
-                               user_semester=user_semester,
-                               question_parameters=program_random_value_json,
-                               correct_answer=expected_answer_json)
+            # expected_answer_json = json.dumps(question_instance.expected_answer(program_random_value))
+            # mark_record = Mark(question_semester=question_semester[0],
+            #                    user_semester=user_semester,
+            #                    question_parameters=program_random_value_json,
+            #                    correct_answer=expected_answer_json)
             request.session.__setitem__('program_random_value', program_random_value)
             user_random_value = question_instance.generate_user_random_display(program_random_value)
 

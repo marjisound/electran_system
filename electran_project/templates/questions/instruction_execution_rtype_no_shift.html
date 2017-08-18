@@ -27,17 +27,27 @@
                                     <option value="{{ key }}">${{ key }}</option>
                                 {% endfor %}
                             </select>
-                            <label for="answer">Register new value:</label>
-                            <input type="text" class="form-control" id="answer" name="answer_register_value">
+                            <label for="answer_register_value">Register new value:</label>
+                            <input type="text" class="form-control" id="answer_register_value" name="answer_register_value">
                         </div>
                         <div class="col-lg-2 col-sm-4">
-                            <label for="register_file">PC (Program Counter):</label>
-                            <select class="form-control" id="register_file" name="answer_pc">
-                                <option value="unchanged">Unchanged</option>
-                                <option value="written">Written</option>
-                            </select>
-                            <label for="answer">PC new value:</label>
-                            <input type="text" class="form-control" id="answer" name="answer_pc_value">
+                            <div>
+                                <label for="register_file">PC <span class="electran_font_sm">(Program Counter):</span></label>
+                                <select class="form-control" id="register_file" name="answer_pc">
+                                    <option value="unchanged">Unchanged</option>
+                                    <option value="written">Written</option>
+                                </select>
+                                <label for="answer_pc_value">PC new value:</label>
+                                <input type="text" class="form-control" id="answer_pc_value" name="answer_pc_value">
+                            </div>
+                            <div>
+                                <label for="answer_overflow">Overflow</label>
+                                <select class="form-control" id="answer_overflow" name="answer_overflow" required>
+                                    <option selected value="">None</option>
+                                    <option value="1">Yes</option>
+                                    <option value="0">No</option>
+                                </select>
+                            </div>
                         </div>
                         <div class="col-lg-2 col-sm-4">
                             <label for="register_file">Memory 0:</label>
@@ -52,8 +62,8 @@
                                     <option>{{ key }}</option>
                                 {% endfor %}
                             </select>
-                            <label for="answer">Memory new value:</label>
-                            <input type="text" class="form-control" id="answer" name="answer_memory_0_value">
+                            <label for="answer_memory_0_value">Memory new value:</label>
+                            <input type="text" class="form-control" id="answer_memory_0_value" name="answer_memory_0_value">
                         </div>
                     <div class="col-lg-2 col-sm-4">
                             <label for="register_file">Memory 1:</label>
@@ -68,8 +78,8 @@
                                     <option>{{ key }}</option>
                                 {% endfor %}
                             </select>
-                            <label for="answer">Memory new value:</label>
-                            <input type="text" class="form-control" id="answer" name="answer_memory_1_value">
+                            <label for="answer_memory_1_value">Memory new value:</label>
+                            <input type="text" class="form-control" id="answer_memory_1_value" name="answer_memory_1_value">
                         </div>
                         <div class="col-lg-2 col-sm-4">
                             <label for="register_file">Memory 2:</label>
@@ -84,8 +94,8 @@
                                     <option>{{ key }}</option>
                                 {% endfor %}
                             </select>
-                            <label for="answer">Memory new value:</label>
-                            <input type="text" class="form-control" id="answer" name="answer_memory_2_value">
+                            <label for="answer_memory_2_value">Memory new value:</label>
+                            <input type="text" class="form-control" id="answer_memory_2_value" name="answer_memory_2_value">
                         </div>
                         <div class="col-lg-2 col-sm-4">
                             <label for="register_file">Memory 3:</label>
@@ -100,8 +110,8 @@
                                     <option>{{ key }}</option>
                                 {% endfor %}
                             </select>
-                            <label for="answer">Memory new value:</label>
-                            <input type="text" class="form-control" id="answer" name="answer_memory_3_value">
+                            <label for="answer_memory_3_value">Memory new value:</label>
+                            <input type="text" class="form-control" id="answer_memory_3_value" name="answer_memory_3_value">
                         </div>
                         <input type="submit" class="btn btn-primary electran-submit-btn" value="submit" name="submit">
                     </div>
@@ -115,9 +125,29 @@
                     addresses are changed and write in the new values - the memory is big-endian):-</p>
                 <h3>{{ random_value.instruction_type }} ${{ random_value.rd }} ${{ random_value.rs }} ${{ random_value.rt }}</h3>
             <div class="col-md-10 no-padding">
-                <p>Your answer was: {{ answer }}</p>
+                <div class="col-md-5 no-padding">
+                    <table class="table table-condensed register-table answer-table">
+                        <caption><span class="register-table-title">Your Answer</span></caption>
+                        {% for key, value in answer.items %}
+                        <tr>
+                            <td class="register-number-cell">${{ key }}</td>
+                            <td class="register-value-cell">{{ value }}</td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
                 {% if not result %}
-                <p>But the correct answer was: {{ correct_answer }}</p>
+                <div class="col-md-5 col-md-offset-1 no-padding">
+                    <table class="table table-condensed register-table answer-table">
+                        <caption><span class="register-table-title">Correct Answer</span></caption>
+                        {% for key, value in correct_answer.items %}
+                        <tr>
+                            <td class="register-number-cell">${{ key }}</td>
+                            <td class="register-value-cell">{{ value }}</td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
                 {% endif %}
             </div>
         {% endif %}
