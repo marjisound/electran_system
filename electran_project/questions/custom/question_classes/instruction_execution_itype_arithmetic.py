@@ -8,15 +8,16 @@ class Question(MipsInstructionsBase, BinaryHexBase):
     ANSWER_TYPE = 'multiple'
 
     def generate_user_random_display(self, value):
-        return value
+        new_value = value
+        new_value['immediate'] = hex(value['immediate'])
+        return new_value
 
     def generate_random(self):
         rs = random.randint(1, 31)
         rt = random.randint(1, 31)
-        rd = random.randint(1, 31)
+        immediate = random.randrange(65535)
 
         instruction_type = random.choice(self.RTYPE_GROUPS['no_shift'])
-        # instruction_type = 'addu'
 
         register_dict = self.random_registers()
 
@@ -24,14 +25,15 @@ class Question(MipsInstructionsBase, BinaryHexBase):
 
         pc = '0x' + '{:0>8}'.format(codecs.encode(os.urandom(4), 'hex').decode())
 
-        return {'rs': rs, 'rt': rt, 'rd': rd, 'pc': pc,
+        return {'rs': rs, 'rt': rt, 'immediate': immediate, 'pc': pc,
                 'instruction_type': instruction_type, 'instruction_format': 'R',
                 'registers': register_dict, 'memory_locations': memory_dict}
 
     def expected_answer(self, value):
+
         func_values = {
-            'val1': int(value['registers'][str(value['rs'])], 16),
-            'val2': int(value['registers'][str(value['rt'])], 16)
+            'val1': value['immediate'],
+            'val2': int(value['registers'][str(value['rs'])], 16)
         }
 
         calculated, overflow = MipsInstructionsBase.RTYPE_CALCULATIONS[value['instruction_type']](func_values)
@@ -74,25 +76,25 @@ class Question(MipsInstructionsBase, BinaryHexBase):
             student_answer['answer_overflow'] = True
         elif student_answer['answer_overflow'] == '0':
             student_answer['answer_overflow'] = False
-            
+
         if (student_answer['answer_register'].lower() == correct_answer['answer_register'].lower() and
-                int(student_answer['answer_register_num']) == correct_answer['answer_register_num'] and
-                '{:0>8}'.format(register_value) == correct_answer['answer_register_value'].lower() and
-                student_answer['answer_pc'] == correct_answer['answer_pc'] and
-                '{:0>8}'.format(pc_value) == correct_answer['answer_pc_value'] and
-                student_answer['answer_overflow'] == correct_answer['answer_overflow'] and
-                student_answer['answer_memory_0'] == correct_answer['answer_memory_0'] and
-                student_answer['answer_memory_0_address'] == correct_answer['answer_memory_0_address'] and
-                student_answer['answer_memory_0_value'] == correct_answer['answer_memory_0_value'] and
-                student_answer['answer_memory_1'] == correct_answer['answer_memory_1'] and
-                student_answer['answer_memory_1_address'] == correct_answer['answer_memory_1_address'] and
-                student_answer['answer_memory_1_value'] == correct_answer['answer_memory_1_value'] and
-                student_answer['answer_memory_2'] == correct_answer['answer_memory_2'] and
-                student_answer['answer_memory_2_address'] == correct_answer['answer_memory_2_address'] and
-                student_answer['answer_memory_2_value'] == correct_answer['answer_memory_2_value'] and
-                student_answer['answer_memory_3'] == correct_answer['answer_memory_3'] and
-                student_answer['answer_memory_3_address'] == correct_answer['answer_memory_3_address'] and
-                student_answer['answer_memory_3_value'] == correct_answer['answer_memory_3_value']):
+                    int(student_answer['answer_register_num']) == correct_answer['answer_register_num'] and
+                    '{:0>8}'.format(register_value) == correct_answer['answer_register_value'].lower() and
+                    student_answer['answer_pc'] == correct_answer['answer_pc'] and
+                    '{:0>8}'.format(pc_value) == correct_answer['answer_pc_value'] and
+                    student_answer['answer_overflow'] == correct_answer['answer_overflow'] and
+                    student_answer['answer_memory_0'] == correct_answer['answer_memory_0'] and
+                    student_answer['answer_memory_0_address'] == correct_answer['answer_memory_0_address'] and
+                    student_answer['answer_memory_0_value'] == correct_answer['answer_memory_0_value'] and
+                    student_answer['answer_memory_1'] == correct_answer['answer_memory_1'] and
+                    student_answer['answer_memory_1_address'] == correct_answer['answer_memory_1_address'] and
+                    student_answer['answer_memory_1_value'] == correct_answer['answer_memory_1_value'] and
+                    student_answer['answer_memory_2'] == correct_answer['answer_memory_2'] and
+                    student_answer['answer_memory_2_address'] == correct_answer['answer_memory_2_address'] and
+                    student_answer['answer_memory_2_value'] == correct_answer['answer_memory_2_value'] and
+                    student_answer['answer_memory_3'] == correct_answer['answer_memory_3'] and
+                    student_answer['answer_memory_3_address'] == correct_answer['answer_memory_3_address'] and
+                    student_answer['answer_memory_3_value'] == correct_answer['answer_memory_3_value']):
 
             return True
         else:
