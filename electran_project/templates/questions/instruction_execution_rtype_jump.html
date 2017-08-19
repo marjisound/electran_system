@@ -6,12 +6,17 @@
         {% if is_form %}
             <form method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
-                <h2>Instruction Execution R-Type</h2>
+                <h2>Instruction Execution R-Type jump</h2>
                 <p>Consider the MIPS instruction, the register contents and the block
                     of Memory below. Enter the changes that occur when the instruction
                     is fetched and executed (i.e. indicate what registers or memory
-                    addresses are changed and write in the new values - the memory is big-endian):-</p>
-                <h3>{{ random_value.instruction_type }} ${{ random_value.rd }} ${{ random_value.rs }} ${{ random_value.rt }}</h3>
+                    addresses are changed and write in the new values - the memory is big-endian):</p>
+                {% if random_value.instruction_type == 'jalr' %}
+                    <h3>{{ random_value.instruction_type }} ${{ random_value.rd }}, ${{ random_value.rs }}</h3>
+                {% else %}
+                    <h3>{{ random_value.instruction_type }} ${{ random_value.rs }}</h3>
+                {% endif %}
+
                 <div class="col-md-12 no-padding register-memory-container">
                     <div class="form-group">
                         <div class="col-lg-2 col-sm-4">
@@ -42,7 +47,7 @@
                             </div>
                             <div>
                                 <label for="answer_overflow">Overflow</label>
-                                <select class="form-control" id="answer_overflow" name="answer_overflow">
+                                <select class="form-control" id="answer_overflow" name="answer_overflow" required>
                                     <option selected value="None">None</option>
                                     <option value="1">Yes</option>
                                     <option value="0">No</option>
@@ -118,32 +123,37 @@
                 </div>
             </form>
         {% else %}
-            <h2>Instruction Execution R-Type</h2>
+            <div>
+                <a href="{% url 'home' %}">Back to questions</a>
+            </div>
+            <div class="retry-container">
+                <a href="{% url 'questions:all_questions' slug=slug %}">Retry the question</a>
+            </div>
+                <h2>Instruction Execution R-Type jump</h2>
                 <p>Consider the MIPS instruction, the register contents and the block
                     of Memory below. Enter the changes that occur when the instruction
                     is fetched and executed (i.e. indicate what registers or memory
-                    addresses are changed and write in the new values - the memory is big-endian):-</p>
-                <h3>{{ random_value.instruction_type }} ${{ random_value.rd }} ${{ random_value.rs }} ${{ random_value.rt }}</h3>
+                    addresses are changed and write in the new values - the memory is big-endian):</p>
+                {% if random_value.instruction_type == 'jalr' %}
+                    <h3>{{ random_value.instruction_type }} ${{ random_value.rd }}, ${{ random_value.rs }}</h3>
+                {% else %}
+                    <h3>{{ random_value.instruction_type }} ${{ random_value.rs }}</h3>
+                {% endif %}
             <div class="col-md-10 no-padding">
+                {% if not result %}
                 <div class="col-md-5 no-padding">
                     <table class="table table-condensed register-table answer-table">
-                        <caption><span class="register-table-title">Your Answer</span></caption>
-                        {% for key, value in answer.items %}
-                        <tr>
-                            <td class="register-number-cell">${{ key }}</td>
-                            <td class="register-value-cell">{{ value }}</td>
+                        <tr class="answer_table_title">
+                            <th>field</th>
+                            <th>Your answer</th>
+                            <th>Correct answer</th>
                         </tr>
-                        {% endfor %}
-                    </table>
-                </div>
-                {% if not result %}
-                <div class="col-md-5 col-md-offset-1 no-padding">
-                    <table class="table table-condensed register-table answer-table">
-                        <caption><span class="register-table-title">Correct Answer</span></caption>
-                        {% for key, value in correct_answer.items %}
+                        {% for key, value in display_correct %}
                         <tr>
-                            <td class="register-number-cell">${{ key }}</td>
-                            <td class="register-value-cell">{{ value }}</td>
+                            <td class="register-number-cell">{{ key }}</td>
+                            {% for answer in value %}
+                            <td class="register-value-cell">{{ answer }}</td>
+                            {% endfor %}
                         </tr>
                         {% endfor %}
                     </table>

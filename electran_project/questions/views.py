@@ -61,6 +61,7 @@ def all_questions(request, slug=None):
                 expected_answer = question_instance.expected_answer(program_random_value)
                 display_expected_answer = question_instance.expected_answer_display_format(expected_answer)
                 test_answer = question_instance.test_answer(student_answer, expected_answer)
+
                 if test_answer:
 
                     messages.success(request, question_instance.correct_answer_message)
@@ -71,7 +72,12 @@ def all_questions(request, slug=None):
                            'answer': student_answer,
                            'correct_answer': display_expected_answer,
                            'is_form': False,
-                           'result': test_answer}
+                           'result': test_answer,
+                           'slug': slug}
+
+                if hasattr(question_instance, 'display_correct'):
+                    context['display_correct'] = question_instance.display_correct
+
                 return create_http_response(request, question_class_name, context)
 
             else:

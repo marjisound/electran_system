@@ -25,6 +25,15 @@ class QuestionBase:
         return value
 
     @staticmethod
+    def compare_dictionaries(student, correct):
+        diff_list = []
+        shared_keys = set(student.keys()).intersection(correct.keys())
+        for key in shared_keys:
+            if student[key] != correct[key]:
+                diff_list.append((key, (student[key], correct[key])))
+        return diff_list
+
+    @staticmethod
     def remove_list_from_list(parent_list, removing_list):
         for item in removing_list:
             if item in parent_list:
@@ -169,7 +178,7 @@ class MipsInstructionsBase(QuestionBase):
         'no_shift': ['add', 'addu', 'sub', 'subu', 'and', 'nor', 'or', 'slt', 'sltu'],
         'no_rs': ['sll', 'srl', 'sra'],
         'no_rt_shift': ['jalr'],
-        'no_rt_rd_shift': ['jr']
+        'no_rt_rd_shift': ['jr'],
     }
 
     ITYPE_VALUES = {
@@ -332,7 +341,16 @@ class MipsInstructionsBase(QuestionBase):
 
     @staticmethod
     def slt_rtype(value):
-        result = 1 if value['val1'] < value['val2'] else 0
+        val1_msb = '{:0>32}'.format(bin(value['val1'])[2:])[0]
+        val2_msb = '{:0>32}'.format(bin(value['val2'])[2:])[0]
+
+        if val1_msb == val2_msb:
+            result = 1 if value['val1'] < value['val2'] else 0
+        elif val1_msb == '0':
+            result = 0
+        elif val1_msb == '1':
+            result = 1
+
         result_hex = MipsInstructionsBase.make_specific_number_of_bits(result, 8)
         return result_hex, None
 
@@ -343,15 +361,130 @@ class MipsInstructionsBase(QuestionBase):
         return result_hex, None
 
     @staticmethod
+    def sll_rtype(value):
+        result = value['val1'] << value['shift']
+        result_hex = MipsInstructionsBase.make_specific_number_of_bits(hex(result)[2:], 8)
+        return result_hex, None
+
+    @staticmethod
+    def srl_rtype(value):
+        result = value['val1'] >> value['shift']
+        result_hex = MipsInstructionsBase.make_specific_number_of_bits(hex(result)[2:], 8)
+        return result_hex, None
+
+    @staticmethod
     def sra_rtype(value):
         bin_value = '{:0>32}'.format(bin(value['val1'])[2:])
         most_significant_bit = bin_value[0]
 
-        shifted = bin(value['val1'] >> value['val2'])[2:]
+        shifted = bin(value['val1'] >> value['shift'])[2:]
         prepared_sign = '{:' + str(most_significant_bit) + '>32}'
         result = prepared_sign.format(shifted)
-        return result, None
+        result_hex = '{:0>8}'.format(hex(int(result, 2))[2:])
+        return result_hex, None
 
+    @staticmethod
+    def addi_itype(value):
+        """
+        :param value: dict {val1: int, val2: int}
+        :return: dict {result: str hex 8 digit, overflow: boolean}
+        """
+        immediate_bin = '{:0>16}'.format(bin(value['val2'])[2:])
+
+        # convert both values to binary
+        # get the most significant bit of both values
+        val1_msb = '{:0>32}'.format(bin(value['val1'])[2:])[0]
+        val2_msb = immediate_bin[0]
+
+        # extend the sign bit to get a 32 bit binary number
+        prepared_sign = '{:' + val2_msb + '>32}'
+        sign_extended_immediate_bin = prepared_sign.format(immediate_bin)
+
+        # adding 2 values in int format
+        result = value['val1'] + int(sign_extended_immediate_bin, 2)
+        result_hex = MipsInstructionsBase.make_specific_number_of_bits(hex(result)[2:], 8)
+
+        # convert the result to binary and make it exactly 32 bits
+        result_bin = MipsInstructionsBase.make_specific_number_of_bits(bin(result)[2:], 32)
+
+        # check for overflow
+        if val1_msb == val2_msb:
+            if result_bin[0] != val1_msb:
+                return result_hex, True
+        return result_hex, False
+
+    @staticmethod
+    def addiu_itype(value):
+        """
+        :param value: dict {val1: int, val2: int}
+        :return: dict {result: str hex 8 digit, overflow: boolean}
+        """
+        immediate_bin = '{:0>16}'.format(bin(value['val2'])[2:])
+        val2_msb = immediate_bin[0]
+
+        # extend the sign bit to get a 32 bit binary number
+        prepared_sign = '{:' + val2_msb + '>32}'
+        sign_extended_immediate_bin = prepared_sign.format(immediate_bin)
+
+        # adding 2 values in int format
+        result = value['val1'] + int(sign_extended_immediate_bin, 2)
+
+        # convert to hex and check the length
+        result_hex = MipsInstructionsBase.make_specific_number_of_bits(hex(result)[2:], 8)
+
+        return result_hex, None
+
+    @staticmethod
+    def slti_itype(value):
+        immediate_bin = '{:0>16}'.format(bin(value['val2'])[2:])
+
+        # convert both values to binary
+        # get the most significant bit of both values
+        val1_msb = '{:0>32}'.format(bin(value['val1'])[2:])[0]
+        val2_msb = immediate_bin[0]
+
+        # extend the sign bit to get a 32 bit binary number
+        prepared_sign = '{:' + val2_msb + '>32}'
+        sign_extended_immediate_bin = prepared_sign.format(immediate_bin)
+
+        if val1_msb == val2_msb:
+            result = 1 if value['val1'] < int(sign_extended_immediate_bin, 2) else 0
+        elif val1_msb == '0':
+            result = 0
+        elif val1_msb == '1':
+            result = 1
+
+        result_hex = MipsInstructionsBase.make_specific_number_of_bits(str(result), 8)
+        return result_hex, None
+
+    @staticmethod
+    def sltiu_itype(value):
+        immediate_bin = '{:0>16}'.format(bin(value['val2'])[2:])
+
+        # convert both values to binary
+        # get the most significant bit of both values
+        val2_msb = immediate_bin[0]
+
+        # extend the sign bit to get a 32 bit binary number
+        prepared_sign = '{:' + val2_msb + '>32}'
+        sign_extended_immediate_bin = prepared_sign.format(immediate_bin)
+
+        result = 1 if value['val1'] < int(sign_extended_immediate_bin, 2) else 0
+
+        result_hex = MipsInstructionsBase.make_specific_number_of_bits(str(result), 8)
+        return result_hex, None
+
+    @staticmethod
+    def andi_itype(value):
+        result = value['val1'] & value['val2']
+        result_hex = MipsInstructionsBase.make_specific_number_of_bits(hex(result)[2:], 8)
+        return result_hex, None
+
+    @staticmethod
+    def ori_itype(value):
+        result = value['val1'] | value['val2']
+        result_hex = MipsInstructionsBase.make_specific_number_of_bits(hex(result)[2:], 8)
+        return result_hex, None
 
     RTYPE_CALCULATIONS = {
         'add': add_rtype.__func__,
@@ -363,7 +496,21 @@ class MipsInstructionsBase(QuestionBase):
         'xor': xor_rtype.__func__,
         'nor': nor_rtype.__func__,
         'slt': slt_rtype.__func__,
-        'sltu': sltu_rtype.__func__
+        'sltu': sltu_rtype.__func__,
+        'sll': sll_rtype.__func__,
+        'srl': srl_rtype.__func__,
+        'sra': sra_rtype.__func__,
+        'jalr': sra_rtype.__func__,
+        'jr': sra_rtype.__func__,
+    }
+
+    ITYPE_CALCULATIONS = {
+        'addi': addi_itype.__func__,
+        'addiu': addiu_itype.__func__,
+        'ori': ori_itype.__func__,
+        'andi': andi_itype.__func__,
+        'slti': slti_itype.__func__,
+        'sltiu': sltiu_itype.__func__
     }
 
     PC_VALUE = 113983136
