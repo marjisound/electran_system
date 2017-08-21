@@ -15,7 +15,7 @@ admin.site.register(Question, QuestionAdmin)
 
 
 class MarkAdmin(admin.ModelAdmin):
-    list_filter = ('question_semester', 'user_semester')
+    list_filter = ('final_mark', 'user_answer', 'question_semester', 'user_semester')
 
 admin.site.register(Mark, MarkAdmin)
 
