@@ -106,10 +106,11 @@ class Mark(models.Model):
     click_datetime = models.DateTimeField(auto_now=True)
     question_parameters = models.TextField()
     user_answer = models.TextField(null=True, blank=True)
-    correct_answer = models.TextField()
+    correct_answer = models.TextField(null=True, blank=True)
 
     def __str__(self):
-        return str(self.user_semester) + '- question(' + str(self.question_semester) + ')'
+        return str(self.user_semester.user.first_name) + ' ' + str(self.user_semester.user.last_name) +\
+               '-' + str(self.question_semester)
 
 
 

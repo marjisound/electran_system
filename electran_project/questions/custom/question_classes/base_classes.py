@@ -202,7 +202,7 @@ class MipsInstructionsBase(QuestionBase):
 
     ITYPE_GROUPS = {
         'rt_rs': ['addi', 'addiu', 'andi', 'ori', 'slti', 'sltui'],
-        'rs_end': ['lw', 'sw'],
+        'load_store': ['lw', 'sw'],
         'no_rs': ['lui'],
         'rs_rt': ['beq', 'bne'],
         'no_rt': ['bgez', 'bgtz', 'blez', 'bltz']
@@ -510,7 +510,7 @@ class MipsInstructionsBase(QuestionBase):
         'ori': ori_itype.__func__,
         'andi': andi_itype.__func__,
         'slti': slti_itype.__func__,
-        'sltiu': sltiu_itype.__func__
+        'sltiu': sltiu_itype.__func__,
     }
 
     PC_VALUE = 113983136
@@ -528,7 +528,7 @@ class MipsInstructionsBase(QuestionBase):
     @staticmethod
     def random_memories():
         memory_dict = {}
-        fst_memory = 268435456
+        fst_memory = 0x10000000
         for i in range(32):
             memory_dict[hex(fst_memory+i)[2:]] = codecs.encode(os.urandom(1), 'hex').decode()
 

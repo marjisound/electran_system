@@ -1,0 +1,29 @@
+{% extends "custom_base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+    <div class="col-md-10">
+
+
+        <div class="jumbotron">
+            <div class="alert alert-danger">
+                {% if type == 'expire' %}
+                    <strong>Sorry</strong> Your time to answer this question expired
+                {% elif type == 'error' %}
+                    <strong>Sorry!</strong> Your answer could not be submited due to some system error.
+                {% endif %}
+            </div>
+            {% if slug %}
+            <div class="retry-container">
+                <a href="{% url 'questions:all_questions' slug=slug %}">Retry the question</a>
+            </div>
+            {% endif %}
+            <div>
+                <a href="{% url 'home' %}">Back to questions</a>
+            </div>
+        </div>
+
+
+    </div>
+
+{% endblock %}
