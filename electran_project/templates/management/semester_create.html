@@ -1,10 +1,10 @@
 {% extends "custom_base.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
-  <div class="jumbotron">
+  <div class="sem-create-panel">
 
     <h3>Please create a semester here:</h3>
-    <div class="col-md-4 no-padding">
+    <div class="sem-create-form">
         <form method="post">
           {{ form|crispy }}
           {% csrf_token %}

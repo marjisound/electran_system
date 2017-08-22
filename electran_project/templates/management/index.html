@@ -17,11 +17,31 @@
         </div>
         <div id="collapse{{forloop.counter}}" class="panel-collapse collapse in">
           <div class="panel-body">
-            <ol>
-              {% for question in item.qus %}
-                  <li class="home-question-item"><a href="{% url 'questions:all_questions' slug=question.slug %}">{{question.question_title}}</a></li>
-              {% endfor %}
-            </ol>
+            <table class="home-questions-table">
+                <thead>
+                    <tr>
+                        <th class="home-table-title">Title</th>
+                        <th class="home-table-mark">Mark</th>
+                        <th class="home-table-deadline">Deadline</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for question in item.qus %}
+                    <tr class="home-question-item">
+                        <td><a href="{% url 'questions:all_questions' slug=question.question.slug %}">{{question.question.question_title}}</a></td>
+                        <td>
+                        {% if question.max_mark is not null %}
+                            <span class="home-mark">{{ question.max_mark }}/{{ question.question.mark_max_value }}</span>
+                        {% else %}
+                            <span class="home-mark-no">-</span>
+                        {% endif %}
+                        </td>
+                        <td><span class="home-deadline">{{ question.question_deadline|date:"D d M Y H:i"}}</span></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
           </div>
         </div>
       </div>
