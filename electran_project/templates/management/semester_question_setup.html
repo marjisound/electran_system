@@ -3,7 +3,7 @@
 {% block content %}
 <div class="">
   <a href="{% url 'management:semester_list' %}">Back to semester list</a>
-  <form class="" method="post">
+  <form class="" method="post" id="qus_sem_form">
   {% csrf_token %}
   <div class="row">
     <div class="">
@@ -23,10 +23,10 @@
     <div class="panel-group" id="accordion">
       {% if que_cat %}
       {% for item in que_cat %}
-        <div class="panel panel-default">
+        <div class="panel panel-default" id="divCat{{ forloop.counter }}">
           <div class="panel-heading">
             <h4 class="panel-title pull-left">
-              <input class="catCheckAll" value="{{forloop.counter}}" type="checkbox">
+              <input class="catCheckAll" value="{{forloop.counter}}" type="checkbox" id="chkCatCheckAll{{forloop.counter}}">
               <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{forloop.counter}}" class="cat-title-link">
                 {{item.cat.cat_title}}
               </a>
@@ -46,14 +46,17 @@
             <div class="panel-body">
               <ol>
                 {% for question in item.qus %}
-                  <li class="semester-question-sub-list">
+                  <li class="semester-question-sub-list" id="liQuestion{{ question.id }}">
                     <div class="qus-sem-question-title">
                       <input {{question.checked}} data-catid="{{forloop.parentloop.counter}}"
-                             type="checkbox" value="{{question.id}}" name="chk_question" id="qusTitle{{ question.id }}">
+                             type="checkbox" value="{{question.id}}" name="chk_question" id="qusTitle{{ question.id }}"
+                             {{ question.disable }}>
                       <label class="checkbox-inline" for="qusTitle{{ question.id }}">{{question.question_title}}</label>
 
                     </div>
-                    <div>
+                    <div id="divQuestionDetail{{ question.id }}"
+                            data-catid-detail="{{forloop.parentloop.counter}}"
+                            {% if not question.checked %} style="display:none" {% endif %}>
                         <div class="question-date-label"><label class="" for="date_question_{{question.id}}">Deadline: </label></div>
                         <div class="input-group date question-date-input" id="date_question_container_{{ question.id }}">
 

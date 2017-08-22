@@ -17,6 +17,8 @@
     font-weight: normal;
 }
 
+
+
 body {
     font-family: Verdana,Helvetica,Arial,sans-serif;
 }
@@ -26,7 +28,43 @@ body {
 /*************  home page  **************/
 
 .home-question-item {
-    padding:7px;
+    border: 1px solid rgba(138, 136, 136, 0.3);
+}
+
+.home-question-item div{
+    padding:5px;
+}
+
+.home-table-title {
+    width: 70%;
+}
+
+.home-table-mark {
+    width: 10%;
+}
+
+.home-mark-no {
+    margin-left: 5px;
+}
+
+.home-table-deadline {
+    width: 20%;
+}
+
+.home-questions-table {
+    width:100%;
+}
+
+.home-questions-table tr:nth-child(even) {
+    background-color: rgba(146, 146, 146, 0.3);
+}
+
+.home-questions-table td{
+    padding: 5px;
+}
+
+.home-questions-table th{
+    color: #6d6d6d;
 }
 
 .home-container h3 {
@@ -38,6 +76,27 @@ body {
 
 .home-container{
     padding-top: 20px;
+}
+
+.home-container .panel-default>.panel-heading {
+    background-color: #d7dad6;
+}
+
+.home-container .panel-title{
+    font-weight: bold;
+    color: #6d6d6d;
+}
+
+.home-cat-list-title {
+    background-color: #a7b3a3;
+    height: 20px;
+}
+.home-cat-list-title div{
+    display: inline-block;
+}
+
+.home-cat-list-title div:first-child{
+    font-weight: bold;
 }
 
 .student-navbar .home-user-name {
@@ -176,6 +235,18 @@ body {
   display: inline-block;
   margin-right: 10px;
   margin-left: 20px;
+}
+
+.sem-create-panel {
+
+}
+
+.sem-create-form {
+    width:30%;
+}
+
+.deadline-container {
+    height:30px;
 }
 
 .cat-date-btn {
@@ -393,11 +464,23 @@ body {
     #top-nav-logout {
         float: left;
     }
+
+    .home-cat-list-title {
+        font-size: 8px;
+    }
 }
 
 @media (max-width:1200px) {
     .register-table-container {
         padding: 0;
+    }
+
+    .home-cat-list-title {
+        font-size: 11px;
+    }
+
+    .sem-create-form  {
+        width: 40%;
     }
 
 }
@@ -415,12 +498,29 @@ body {
       width: 85%;
     }
 
+    .home-cat-list-title {
+        font-size: 13px;
+    }
+
 }
 
 @media (max-width:1000px) {
     .top-navigation-container {
       width: 80%;
     }
+    .home-cat-list-title {
+        font-size: 9px;
+    }
+
+
 
 }
+@media (min-width:768px) {
+    .home-cat-list-title {
+        font-size: 9px;
+    }
+
+}
+
+
 

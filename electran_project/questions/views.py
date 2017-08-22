@@ -4,28 +4,37 @@ from management.models import Question, QuestionSemester, Mark, UserSemester
 from django.template import Template, RequestContext
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import redirect
+from django.contrib.auth.decorators import login_required
 import os
 import json
 import datetime
 from django.utils import timezone
 
 
-# @login_required()
+@login_required()
 def all_questions(request, slug=None):
     try:
         current_question = Question.objects.get(slug__exact=slug)
         question_semester = QuestionSemester.objects.filter(question__id=current_question.id, semester__sem_is_active=True)
         if len(question_semester) != 1:
-            return HttpResponse('no')
+            if request.POST:
+                return create_http_response(request, 'invalid_question', context={
+                    'slug': slug,
+                    'type': 'error'
+                })
         user_semester = UserSemester.objects.get(user_id=request.user.id, semester_id=question_semester[0].semester_id)
 
     except ObjectDoesNotExist:
-        return HttpResponse('no')
+        if request.POST:
+            return create_http_response(request, 'invalid_question', context={
+                'slug': slug,
+                'type': 'error'
+            })
     else:
         # List of unmarked questions in active semester in descending order
         user_marks = Mark.objects.filter(
             user_semester__user__id=request.user.id,
-            final_mark=None,
+            final_mark__exact=None,
             user_semester__semester__sem_is_active=True).order_by('-click_datetime')
 
         # *************** getting the specific question file based on question class name field in db ***********

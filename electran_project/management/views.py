@@ -3,26 +3,45 @@ from django.http import Http404, HttpResponseRedirect, HttpResponse
 from django.urls import reverse
 from django.contrib import messages
 from validate_email import validate_email
-from .models import (Question, QuestionCategory, Semester, QuestionSemester, UserSemester)
+from .models import (Question, QuestionCategory, Semester, QuestionSemester, UserSemester, Mark)
 from .forms import NewSemesterForm, AddUsersToSemesterForm
 from django.views.generic import ListView
 from django.contrib.auth.decorators import login_required
 from .custom import validation
 from django.db import Error, IntegrityError
 from django.conf import settings
+from django.db.models import Max, Count
 
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
 
-def get_questions(semesters=[], sem_id=None):
+def home_get_questions(marks=None):
+    categories = QuestionCategory.objects.order_by('order')
+    questions = QuestionSemester.objects.filter(semester__sem_is_active=True, question_visibility=True)
+
+    questions_with_cats = []
+
+    for cat in categories:
+        qus_cat = {'cat': cat, 'qus': []}
+        cat_has_qus = False
+        for qus in questions:
+            if qus.question.category_id == cat.id:
+                max_mark = marks.filter(question_semester__question_id=qus.question.id).aggregate(Max('final_mark'))
+                cat_has_qus = True
+                qus.max_mark = max_mark['final_mark__max']
+                qus_cat['qus'].append(qus)
+        qus_cat['qus'] = sorted(qus_cat['qus'], key=lambda x: x.question.order)
+        if cat_has_qus:
+            questions_with_cats.append(qus_cat)
+    return questions_with_cats
+
+
+def get_questions(semesters=[]):
     categories = QuestionCategory.objects.order_by('order')
 
-    if sem_id:
-        questions = Question.objects.filter(questionsemester__semester__sem_is_active=True)
-    else:
-        questions = Question.objects.order_by()
+    questions = Question.objects.order_by()
 
     questions_with_cats = []
 
@@ -31,11 +50,15 @@ def get_questions(semesters=[], sem_id=None):
         cat_has_qus = False
         for qus in questions:
             for sem in semesters:
-                if sem['question_id'] == qus.id:
+                if sem.question.id == qus.id:
                     qus.checked = 'checked'
-                    qus.deadline = sem['question_deadline']
-                    if sem['question_visibility']:
+                    qus.deadline = sem.question_deadline
+                    if sem.question_visibility:
                         qus.visible = 'checked'
+                    if sem.mark__final_mark__count > 0:
+                        qus.disable = ' disabled'
+                    else:
+                        qus.disable = ' '
             if qus.category.id == cat.id:
                 cat_has_qus = True
                 qus_cat['qus'].append(qus)
@@ -49,13 +72,16 @@ def get_questions(semesters=[], sem_id=None):
 def homePage(request):
     semester = None
     sem_id_list = list(Semester.objects.filter(sem_is_active__exact=True))
+    user_marks = Mark.objects.filter(
+        user_semester__user__id=request.user.id,
+        final_mark__isnull=False,
+        user_semester__semester__sem_is_active=True)
     if len(sem_id_list) != 1:
         questions_with_cats = []
 
     else:
         semester = sem_id_list[0]
-        sem_id = sem_id_list[0].id
-        questions_with_cats = get_questions(sem_id=sem_id)
+        questions_with_cats = home_get_questions(marks=user_marks)
     template = 'management/index.html'
     context_dict = {
         'que_cat': questions_with_cats,
@@ -85,42 +111,62 @@ def semester_create(request):
 
 # @login_required()
 def semester_question_setup(request, pk=None):
+    existing_questions = QuestionSemester.objects.filter(semester_id=pk).annotate(Count('mark__final_mark'))
+
+
     if request.method == 'POST':
 
         question_chk_name = 'chk_question'
         checked_questions = request.POST.getlist(question_chk_name)
-        QuestionSemester.objects.filter(semester_id=pk).delete()
 
         for item in checked_questions:
-
-            question_obj = Question.objects.get(id=int(item))
-            semester_obj = Semester.objects.get(id=int(pk))
-            date_name = 'date_question_' + item  # name of date input field in html for question_deadline
+            date_name = 'date_question_' + item
             date = request.POST.get(date_name)
-            visible_name = 'visible_question_' + item  # name of checkbox input field for question_visibility
-            visibility = request.POST.get(visible_name)
-
-            if not visibility:
-                visibility = False
-            elif visibility == 'True':
-                visibility = True
 
             if validation.validate_date(date):
-                obj = QuestionSemester(question=question_obj,
-                                       semester=semester_obj,
-                                       question_deadline=date,
-                                       question_visibility=visibility)
-                obj.save()
+                question_found = existing_questions.filter(question_id=int(item))
+                visible_name = 'visible_question_' + item
+                visibility = request.POST.get(visible_name)
+                if not visibility:
+                    visibility = False
+                elif visibility == 'True':
+                    visibility = True
+
+                if question_found:
+
+                    new_obj = QuestionSemester.objects.get(id=question_found[0].id)
+                    new_obj.question_deadline = date
+                    new_obj.question_visibility = visibility
+                    new_obj.save(force_update=True)
+
+                else:
+
+                    question_obj = Question.objects.get(id=int(item))
+                    semester_obj = Semester.objects.get(id=int(pk))
+                    new_obj = QuestionSemester(question=question_obj,
+                                               semester=semester_obj,
+                                               question_deadline=date,
+                                               question_visibility=visibility)
+                    new_obj.save()
+
             else:
                 messages.error(request, 'Could not add questions. Date fields are required for checked questions')
-                return HttpResponseRedirect(reverse('questions:sem_qus_setup', kwargs={'pk': pk}))
+                return HttpResponseRedirect(reverse('management:sem_qus_setup', kwargs={'pk': pk}))
+        print(checked_questions)
+        for question in existing_questions:
+            print(question.question.id)
+            if str(question.question.id) not in checked_questions:
+                if question.mark__final_mark__count == 0:
+                    print('delete')
+                    new_obj = QuestionSemester.objects.get(id=question.id)
+                    new_obj.delete()
+
         messages.success(request, 'Questions added successfully')
         return homePage(request)
     else:
         try:
             semester = Semester.objects.get(pk=pk)
-            qus_sem_detail = QuestionSemester.objects.filter(semester=pk).values()
-            questions_with_cats = get_questions(qus_sem_detail)
+            questions_with_cats = get_questions(existing_questions)
             context_dict = {
                 'semester': semester,
                 'que_cat': questions_with_cats,
