@@ -16,11 +16,16 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 from management import views
+from django.views.defaults import page_not_found
 
 urlpatterns = [
     url(r'^$', views.homePage, name='home'),
-    url(r'^account/', include('allauth.urls')),
-    url(r'^admin/', admin.site.urls),
     url(r'^management/', include('management.urls', namespace='management')),
-    url(r'^questions/', include('questions.urls', namespace='questions'))
+    url(r'^questions/', include('questions.urls', namespace='questions')),
+    url(r'^admin/', admin.site.urls),
+    url(r'^account/confirm-email/$', page_not_found, {'exception': Exception('Not Found')}),
+    url(r'^account/', include('allauth.urls')),
+
+
+
 ]

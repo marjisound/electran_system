@@ -6,13 +6,18 @@ from validate_email import validate_email
 from .models import (Question, QuestionCategory, Semester, QuestionSemester, UserSemester, Mark)
 from .forms import NewSemesterForm, AddUsersToSemesterForm
 from django.views.generic import ListView
+from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
+from django.contrib.admin.views.decorators import staff_member_required
 from .custom import validation
 from django.db import Error, IntegrityError
 from django.conf import settings
 from django.db.models import Max, Count
+from allauth.account.forms import ResetPasswordForm
+from allauth.account.models import EmailAddress
 
 from django.contrib.auth import get_user_model
+
 
 User = get_user_model()
 
@@ -90,7 +95,7 @@ def homePage(request):
     return render(request,template,context_dict)
 
 
-@login_required()
+@staff_member_required
 def semester_create(request):
 
     if request.method == 'POST':
@@ -109,7 +114,7 @@ def semester_create(request):
     })
 
 
-# @login_required()
+@staff_member_required
 def semester_question_setup(request, pk=None):
     existing_questions = QuestionSemester.objects.filter(semester_id=pk).annotate(Count('mark__final_mark'))
 
@@ -176,6 +181,7 @@ def semester_question_setup(request, pk=None):
             raise Http404
 
 
+@staff_member_required
 def add_users_to_semester(request, pk=None):
     sem_users = UserSemester.objects.filter(semester_id=pk)
     if request.method == 'POST':
@@ -245,6 +251,12 @@ def add_users_to_semester(request, pk=None):
                                                       username=prepared_dict['username'],
                                                       password=prepared_dict['password'])
 
+                            new_email = EmailAddress(user=obj,
+                                                     email=prepared_dict['email'],
+                                                     verified=True,
+                                                     primary=True)
+                            new_email.save()
+
                         except IntegrityError:
                             user_creation_error += error_message
 
@@ -253,6 +265,10 @@ def add_users_to_semester(request, pk=None):
 
                         else:
                             try:
+                                reset_pass_form = ResetPasswordForm({'email': prepared_dict['email'], 'name': 'Asghar'})
+                                if reset_pass_form.is_valid():
+                                    reset_pass_form.save(request)
+
                                 semester_user_obj = UserSemester.objects.create(user=obj, semester=semester_obj)
                                 sem_user_created.append(semester_user_obj)
                             except IntegrityError:
@@ -293,68 +309,56 @@ def divide_empty_and_full_dic_values(prepared_dict):
 def create_specific_messages(request, user_creation_error, user_add_sem_error,
                              sem_user_created, already_existing_users, user_list_record,
                              semester_obj, sem_user_added):
+
+    if len(sem_user_created) > 0 and len(sem_user_added) > 0:
+        messages.success(request, ('Out of {0} users, {1} users created and added and '
+                                   '{3} existing users added to the semester {2}').format(
+            len(user_list_record),
+            len(sem_user_created),
+            str(semester_obj),
+            len(sem_user_added)))
+
+    elif len(sem_user_created) > 0 and len(sem_user_added) == 0:
+        messages.success(request, 'Out of {0} users, {1} users created and added to the semester {2}'.format(
+            len(user_list_record),
+            len(sem_user_created),
+            str(semester_obj)))
+
+    elif len(sem_user_created) == 0 and len(sem_user_added) > 0:
+        messages.success(request, ('Out of {0} users, no new user created but '
+                                   '{2} existing users added to the semester {1}').format(
+            len(user_list_record),
+            str(semester_obj),
+            len(sem_user_added)))
+    else:
+        messages.error(request, 'No user was added to this semester')
+
+    if len(already_existing_users) > 0:
+
+        str_existing_users = ''
+        for user in already_existing_users:
+            str_existing_users += (str(user.user) + ' ')
+
+        if len(already_existing_users) == 1:
+            messages.error(request, 'User {0} already existed in this semester'.format(str_existing_users))
+        else:
+            messages.error(request,
+                           'These users already existed in this semester: {0}'.format(str_existing_users))
+
     if user_creation_error:
         messages.error(request, ('System could not create these users because '
                                  'integrity of the database is affected: ' + user_creation_error[:-2]))
-    elif user_add_sem_error:
+    if user_add_sem_error:
         messages.error(request, ('System could not add these users to semester because '
                                  'integrity of the database is affected: ' + user_add_sem_error[:-2]))
 
-    if len(sem_user_created) > 0 and len(already_existing_users) > 0:
-        messages.success(request, ('Out of {0} users, {1} users created and added and '
-                                   '{3} existing users added to the semester {2}').format(
-            len(user_list_record),
-            len(sem_user_created),
-            str(semester_obj),
-            len(sem_user_added)))
-        str_existing_users = ''
-        for user in already_existing_users:
-            str_existing_users += (str(user.user) + ' ')
 
-        if len(already_existing_users) == 1:
-            messages.error(request, 'User {0} already existed in this semester'.format(str_existing_users))
-        else:
-            messages.error(request,
-                           'These users already existed in this semester: {0}'.format(str_existing_users))
-
-    elif len(sem_user_created) > 0:
-        messages.success(request, ('Out of {0} users, {1} users created and added and '
-                                   '{3} existing users added to the semester {2}').format(
-            len(user_list_record),
-            len(sem_user_created),
-            str(semester_obj),
-            len(sem_user_added)))
-    elif len(already_existing_users) > 0:
-        messages.error(request, 'No user was added to this semester')
-        str_existing_users = ''
-        for user in already_existing_users:
-            str_existing_users += (str(user.user) + ' ')
-
-        if len(already_existing_users) == 1:
-            messages.error(request, 'User {0} already existed in this semester'.format(str_existing_users))
-        else:
-            messages.error(request,
-                           'These users already existed in this semester: {0}'.format(str_existing_users))
-    else:
-        messages.error(request,'No user was added to this semester')
-
-
-
-
-
-
-
-# @login_required()
+@method_decorator(staff_member_required, name='dispatch')
 class SemesterListView(ListView):
     model = Semester
     template_name = 'management/semester_list_view.html'
     context_object_name = 'semesters'
 
-
-    # def get_context_data(self, **kwargs):
-    #     context = super(SemesterListView, self).get_context_data(**kwargs)
-    #     context['now'] = timezone.now()
-    #     return context
 
 from django.shortcuts import redirect
 # @login_required()

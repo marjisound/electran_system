@@ -1,0 +1,20 @@
+{% extends "custom_base.html" %}
+
+{% block content %}
+
+{% endblock content %}
+{% block help %}
+
+    <div class="col-md-12 question-help-container">
+        <p>
+            <a class="btn question-help-btn" data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+            Help Info
+            </a>
+        </p>
+        <div class="collapse" id="collapseExample">
+            <div class="card card-block question-help-content-container">
+            {% block specific %} {% endblock %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
