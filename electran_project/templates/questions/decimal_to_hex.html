@@ -1,4 +1,4 @@
-{% extends "custom_base.html" %}
+{% extends "questions/question_base.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
 
@@ -6,18 +6,24 @@
     {% if is_form %}
         <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
-            <h2>Decimal to Hex Conversion</h2>
-            <p>Convert the following powers of 2 and decimal numbers into hexadecimal:</p>
-                <h3>{{ random_value.random1 }}</h3>
+            <h2 class="question-title">Decimal to Hex Conversion</h2>
+            <p class="question-paragraph">Convert the following powers of 2 and decimal numbers into hexadecimal:</p>
+                <h3 class="question-random-value">{{ random_value.random1 }}</h3>
             <div class="col-md-4 no-padding">
                 <div class="form-group">
                     <label for="answer">Answer:</label>
                     <input type="text" class="form-control" id="answer" name="answer">
                 </div>
-                <input type="submit" class="btn btn-primary" value="submit" name="submit">
+                <input type="submit" class="btn btn-primary electran-submit-btn" value="submit" name="submit">
             </div>
         </form>
     {% else %}
+        <div>
+            <a href="{% url 'home' %}">Back to questions</a>
+        </div>
+        <div class="retry-container">
+            <a href="{% url 'questions:all_questions' slug=slug %}">Retry the question</a>
+        </div>
         <h2>Decimal to Hex Conversion</h2>
         <p>Convert the following powers of 2 and decimal numbers into hexadecimal:</p>
         <h3>{{ random_value.random1 }}</h3>
@@ -32,4 +38,7 @@
     {% endif %}
     </div>
 
+{% endblock %}
+{% block specific %}
+    {% include "questions/question_helps/power2_hex_conversion.html" %}
 {% endblock %}

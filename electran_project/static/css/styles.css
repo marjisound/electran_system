@@ -20,7 +20,7 @@
 
 
 body {
-    font-family: Verdana,Helvetica,Arial,sans-serif;
+    font-family: Verdana,Helvetica,Arial,sans-serif !important;
 }
 
 /*********** end of generic**************/
@@ -107,6 +107,46 @@ body {
 }
 
 /*********** question content**************/
+.question-help-container {
+    margin-top: 20px;
+}
+
+.question-help-content-container {
+    background-color: #d5dcd9;
+    padding: 10px;
+    border-radius: 3px;
+}
+
+.question-help-btn {
+    border: 1px solid #bbb5b5;
+    height: 24px;
+    font-size: 14px;
+    padding: 2px 5px 0 5px;
+    border-radius: 2px;
+}
+
+.question-title {
+    font-size: 24px;
+    font-weight: 600;
+    color: #6d6d6d;
+    margin-bottom: 21px;
+}
+
+.question-paragraph {
+    font-size: 17px;
+}
+
+.question-random-value {
+    font-size: 20px;
+    margin-bottom: 30px;
+}
+.student-answer {
+    margin-bottom: 20px;
+}
+
+.question-input-label {
+    color: #6d6d6d;
+}
 
 .retry-container {
     margin-top: 10px;
@@ -197,6 +237,8 @@ body {
     border-color: #6d8a7b !important;
     transform: translate(2px,2px);
 }
+
+
 /*********** end of question content**************/
 .user-upload-form {
     margin-bottom: 25px;

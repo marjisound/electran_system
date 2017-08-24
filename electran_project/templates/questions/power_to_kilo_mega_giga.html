@@ -1,4 +1,4 @@
-{% extends "custom_base.html" %}
+{% extends "questions/question_base.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
 
@@ -6,21 +6,21 @@
         {% if is_form %}
             <form method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
-                <h2>Binary in K, M, G</h2>
-                <p>Express the following in binary K, M or G, e.g 15K, 23M, 507G : </p>
-                <h3>2^{{ random_value.random1 }} + 2^{{ random_value.random2 }} + 2^{{ random_value.random3 }}</h3>
+                <h2 class="question-title">Binary in K, M, G</h2>
+                <p class="question-paragraph">Express the following in binary K, M or G, e.g 15K, 23M, 507G : </p>
+                <h3 class="question-random-value">2^{{ random_value.random1 }} + 2^{{ random_value.random2 }} + 2^{{ random_value.random3 }}</h3>
                 <div class="col-md-4 no-padding">
                     <div class="form-group">
                         <label for="answer">Answer:</label>
                         <input type="text" class="form-control" id="answer" name="answer">
                     </div>
-                    <input type="submit" class="btn btn-primary" value="submit" name="submit">
+                    <input type="submit" class="btn btn-primary electran-submit-btn" value="submit" name="submit">
                 </div>
             </form>
         {% else %}
-            <h2>Binary in K, M, G</h2>
-            <p>Express the following in binary K, M or G, e.g 15K, 23M, 507G : </p>
-            <h3>2^{{ random_value.random1 }} + 2^{{ random_value.random2 }} + 2^{{ random_value.random3 }}</h3>
+            <h2 class="question-title">Binary in K, M, G</h2>
+            <p class="question-paragraph">Express the following in binary K, M or G, e.g 15K, 23M, 507G : </p>
+            <h3 class="question-random-value">2^{{ random_value.random1 }} + 2^{{ random_value.random2 }} + 2^{{ random_value.random3 }}</h3>
             <div class="col-md-6 no-padding">
                 <p>Your answer was: {{ answer }}</p>
                 {% if not result %}
@@ -30,4 +30,7 @@
         {% endif %}
     </div>
 
+{% endblock %}
+{% block specific %}
+    {% include "questions/question_helps/binary_hex_conversion.html" %}
 {% endblock %}

@@ -28,22 +28,17 @@ STUDENTS_MANDATORY_FIELDS = {
 }
 
 # Email setup
+DEFAULT_FROM_EMAIL='electran@marjisound.com'
 EMAIL_HOST = 'mail.marjisound.com'
 EMAIL_HOST_USER = 'electran@marjisound.com'
 EMAIL_MAIN = 'electran@marjisound.com'
 EMAIL_HOST_PASSWORD = 'electr@n2017'
-EMAIL_PORT = '26'
+EMAIL_PORT = 26
 EMAIL_USE_TLS = False
 """
 from django.conf import settings
 from django.core.mail import send_mail
-send_mail(
-        "subject",
-        "message",
-        settings.EMAIL_MAIN,
-        ["electran@marjisound.com"],
-        fail_silently=False
-        )
+send_mail("subject","message",settings.EMAIL_MAIN,["marji_sound@yahoo.com"],fail_silently=False)
 """
 
 # Django AllAuth setup
@@ -52,6 +47,7 @@ ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = "username_email"
 ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 7
 ACCOUNT_EMAIL_VERIFICATION = 'optional'
+ACCOUNT_ADAPTER = 'custom_accounts.account_adapter.NoNewUsersAccountAdapter'
 
 
 LOGIN_REDIRECT_URL = '/'

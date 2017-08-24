@@ -8,6 +8,9 @@ class Question(MipsInstructionsBase, BinaryHexBase):
     ANSWER_TYPE = 'multiple'
     memory_storage_address = None
 
+    def __init__(self):
+        self.display_correct = None
+
     def generate_user_random_display(self, value):
         new_value = value.copy()
         new_value['immediate'] = hex(value['immediate'])

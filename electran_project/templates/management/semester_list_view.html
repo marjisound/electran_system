@@ -10,6 +10,7 @@
         <tr>
           <th>Semester</th>
           <th>Questions</th>
+          <th>Students</th>
           <th>Is Active</th>
           <th>Manage Students</th>
           <th>Manage Questions</th>
@@ -21,6 +22,7 @@
           <tr>
             <td>{{semester}}</td>
             <td>{{semester.questions.all.count}}</td>
+            <td>{{semester.users.all.count}}</td>
             <td>{{semester.sem_is_active}}</td>
             <td><a href="{% url 'management:upload_users' semester.id %}">Upload Users</a></td>
             <td><a href="/management/{{semester.id}}">click me</a></td>

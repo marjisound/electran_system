@@ -201,7 +201,7 @@ class MipsInstructionsBase(QuestionBase):
     }
 
     ITYPE_GROUPS = {
-        'rt_rs': ['addi', 'addiu', 'andi', 'ori', 'slti', 'sltui'],
+        'arithmetic': ['addi', 'addiu', 'andi', 'ori', 'slti', 'sltui'],
         'load_store': ['lw', 'sw'],
         'no_rs': ['lui'],
         'rs_rt': ['beq', 'bne'],
@@ -533,3 +533,13 @@ class MipsInstructionsBase(QuestionBase):
             memory_dict[hex(fst_memory+i)[2:]] = codecs.encode(os.urandom(1), 'hex').decode()
 
         return memory_dict
+
+
+    @staticmethod
+    def sign_extend(decimal_num):
+        bin_num = '{:0>16}'.format(bin(decimal_num)[2:])
+        bin_msb = bin_num[0]
+        prepared_sign = '{:' + bin_msb + '>32}'
+        sign_extended_immediate_bin = prepared_sign.format(bin_num)
+
+        return sign_extended_immediate_bin

@@ -92,7 +92,7 @@ class UserSemester(models.Model):
     updated = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return str(self.user) + ' - semester(' + str(self.semester) + ')'
+        return str(self.user) + ' - ' + str(self.semester)
 
     class Meta:
         unique_together = ('user', 'semester')

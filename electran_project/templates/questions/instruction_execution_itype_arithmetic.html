@@ -6,13 +6,13 @@
         {% if is_form %}
             <form method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
-                <h2>Instruction Execution I-Type load/store</h2>
+                <h2>Instruction Execution I-Type arithmetic</h2>
                 <p>Consider the MIPS instruction, the register contents and the block
                     of Memory below. Enter the changes that occur when the instruction
                     is fetched and executed (i.e. indicate what registers or memory
                     addresses are changed and write in the new values - the memory is big-endian):</p>
 
-                <h3>{{ random_value.instruction_type }} ${{ random_value.rt }}, {{ random_value.immediate }}(${{ random_value.rs }})</h3>
+                <h3>{{ random_value.instruction_type }} ${{ random_value.rt }}, ${{ random_value.rs }}, {{ random_value.immediate }}</h3>
 
 
                 <div class="col-md-12 no-padding register-memory-container">
@@ -127,12 +127,13 @@
             <div class="retry-container">
                 <a href="{% url 'questions:all_questions' slug=slug %}">Retry the question</a>
             </div>
-                <h2>Instruction Execution R-Type jump</h2>
+                <h2>Instruction Execution I-Type arithmetic</h2>
                 <p>Consider the MIPS instruction, the register contents and the block
                     of Memory below. Enter the changes that occur when the instruction
                     is fetched and executed (i.e. indicate what registers or memory
                     addresses are changed and write in the new values - the memory is big-endian):</p>
-                <h3>{{ random_value.instruction_type }} ${{ random_value.rt }}, {{ random_value.immediate }}(${{ random_value.rs }})</h3>
+
+                <h3>{{ random_value.instruction_type }} ${{ random_value.rt }}, ${{ random_value.rs }}, {{ random_value.immediate }}</h3>
             <div class="col-md-10 no-padding">
                 {% if not result %}
                 <div class="col-md-5 no-padding">

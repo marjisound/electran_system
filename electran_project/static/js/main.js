@@ -10,14 +10,24 @@ $(document).ready(function(){
         toggleCatQuestions($(this).val());
     })
   });
+
+  // to toggle the collapse for all categories
+  $('#catCollapseAll').click(function () {
+      $('div[id^="collapse"]').collapse('toggle')
+      var areaExpand = $('a[data-toggle="collapse"]').attr('aria-expanded')
+      console.log(typeof areaExpand)
+      if(areaExpand == 'true') {
+          $('#catCollapseAll').text("Collapse All")
+      }else{
+
+          $('#catCollapseAll').text("Open All")
+      }
+  });
+
+
   $(".catCheckAll").click(function () {
     var catid = $(this).val();
     toggleCatQuestions(catid);
-    // $("input[data-catid=" + catid + "]").prop('checked', $(this).is(":checked"));
-    //   if ($(this).prop('checked'))
-    //       $("div[data-catid-detail=" + catid + "]").fadeIn()
-    //   else
-    //       $("div[data-catid-detail=" + catid + "]").fadeOut()
   });
 
   $('div[id^="date_question_container_"],div[id^="date_category_container_"]').datetimepicker({
