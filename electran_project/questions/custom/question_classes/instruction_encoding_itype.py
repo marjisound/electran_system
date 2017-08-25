@@ -15,11 +15,11 @@ class Question(MipsInstructionsBase, BinaryHexBase):
             random_value = '{0} ${1}, ${2}, {3}'.format(value['instruction_type'], value['rs'], value['rt'],
                                                         hex(value['offset']))
 
-        elif value['instruction_type'] in self.ITYPE_GROUPS['rt_rs']:
+        elif value['instruction_type'] in self.ITYPE_GROUPS['arithmetic']:
             random_value = '{0} ${1}, ${2}, {3}'.format(value['instruction_type'], value['rt'], value['rs'],
                                                         hex(value['offset']))
 
-        elif value['instruction_type'] in self.ITYPE_GROUPS['rs_end']:
+        elif value['instruction_type'] in self.ITYPE_GROUPS['load_store']:
             random_value = '{0} ${1}, {2}(${3})'.format(value['instruction_type'], value['rt'], hex(value['offset']),
                                                         value['rs'])
 

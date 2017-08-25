@@ -1,0 +1,204 @@
+{% extends "custom_base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+    <div class="col-md-12 no-padding">
+        {% if is_form %}
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <h2>Instruction Execution I-Type branch</h2>
+                <p>Consider the MIPS instruction, the register contents and the block
+                    of Memory below. Enter the changes that occur when the instruction
+                    is fetched and executed (i.e. indicate what registers or memory
+                    addresses are changed and write in the new values - the memory is big-endian):</p>
+
+                {% if random_value.itype_group == 'rs_rt' %}
+                    <h3>{{ random_value.instruction_type }} ${{ random_value.rs }}, ${{ random_value.rt }}, {{ random_value.immediate }}</h3>
+                {% else %}
+
+                <h3>{{ random_value.instruction_type }} ${{ random_value.rs }}, {{ random_value.immediate }}</h3>
+
+                {% endif %}
+                <div class="col-md-12 no-padding register-memory-container">
+                    <div class="form-group">
+                        <div class="col-lg-2 col-sm-4">
+                            <label for="register_file">Register File:</label>
+                            <select class="form-control" id="register_file" name="answer_register">
+                                <option value="unchanged">Unchanged</option>
+                                <option value="written">Written</option>
+                            </select>
+                            <label for="register_file">Register Number:</label>
+                            <select class="form-control" id="register_file" name="answer_register_num">
+                                    <option>None</option>
+                                {% for key in random_value.registers %}
+                                    <option value="{{ key }}">${{ key }}</option>
+                                {% endfor %}
+                            </select>
+                            <label for="answer_register_value">Register new value:</label>
+                            <input type="text" class="form-control" id="answer_register_value" name="answer_register_value">
+                        </div>
+                        <div class="col-lg-2 col-sm-4">
+                            <div>
+                                <label for="register_file">PC <span class="electran_font_sm">(Program Counter):</span></label>
+                                <select class="form-control" id="register_file" name="answer_pc">
+                                    <option value="unchanged">Unchanged</option>
+                                    <option value="written">Written</option>
+                                </select>
+                                <label for="answer_pc_value">PC new value:</label>
+                                <input type="text" class="form-control" id="answer_pc_value" name="answer_pc_value">
+                            </div>
+                            <div>
+                                <label for="answer_overflow">Overflow</label>
+                                <select class="form-control" id="answer_overflow" name="answer_overflow" required>
+                                    <option selected value="None">None</option>
+                                    <option value="1">Yes</option>
+                                    <option value="0">No</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-sm-4">
+                            <label for="register_file">Memory 0:</label>
+                            <select class="form-control" id="register_file" name="answer_memory_0">
+                                <option value="unchanged">Unchanged</option>
+                                <option value="written">Written</option>
+                            </select>
+                            <label for="register_file">Memory Address:</label>
+                            <select class="form-control" id="register_file" name="answer_memory_0_address">
+                                <option>None</option>
+                                {% for key in random_value.memory_locations %}
+                                    <option>{{ key }}</option>
+                                {% endfor %}
+                            </select>
+                            <label for="answer_memory_0_value">Memory new value:</label>
+                            <input type="text" class="form-control" id="answer_memory_0_value" name="answer_memory_0_value">
+                        </div>
+                    <div class="col-lg-2 col-sm-4">
+                            <label for="register_file">Memory 1:</label>
+                            <select class="form-control" id="register_file" name="answer_memory_1">
+                                <option value="unchanged">Unchanged</option>
+                                <option value="written">Written</option>
+                            </select>
+                            <label for="register_file">Memory Address:</label>
+                            <select class="form-control" id="register_file" name="answer_memory_1_address">
+                                <option>None</option>
+                                {% for key in random_value.memory_locations %}
+                                    <option>{{ key }}</option>
+                                {% endfor %}
+                            </select>
+                            <label for="answer_memory_1_value">Memory new value:</label>
+                            <input type="text" class="form-control" id="answer_memory_1_value" name="answer_memory_1_value">
+                        </div>
+                        <div class="col-lg-2 col-sm-4">
+                            <label for="register_file">Memory 2:</label>
+                            <select class="form-control" id="register_file" name="answer_memory_2">
+                                <option value="unchanged">Unchanged</option>
+                                <option value="written">Written</option>
+                            </select>
+                            <label for="register_file">Memory Address:</label>
+                            <select class="form-control" id="register_file" name="answer_memory_2_address">
+                                <option>None</option>
+                                {% for key in random_value.memory_locations %}
+                                    <option>{{ key }}</option>
+                                {% endfor %}
+                            </select>
+                            <label for="answer_memory_2_value">Memory new value:</label>
+                            <input type="text" class="form-control" id="answer_memory_2_value" name="answer_memory_2_value">
+                        </div>
+                        <div class="col-lg-2 col-sm-4">
+                            <label for="register_file">Memory 3:</label>
+                            <select class="form-control" id="register_file" name="answer_memory_3">
+                                <option value="unchanged">Unchanged</option>
+                                <option value="written">Written</option>
+                            </select>
+                            <label for="register_file">Memory Address:</label>
+                            <select class="form-control" id="register_file" name="answer_memory_3_address">
+                                <option>None</option>
+                                {% for key in random_value.memory_locations %}
+                                    <option>{{ key }}</option>
+                                {% endfor %}
+                            </select>
+                            <label for="answer_memory_3_value">Memory new value:</label>
+                            <input type="text" class="form-control" id="answer_memory_3_value" name="answer_memory_3_value">
+                        </div>
+                        <input type="submit" class="btn btn-primary electran-submit-btn" value="submit" name="submit">
+                    </div>
+                </div>
+            </form>
+        {% else %}
+            <div>
+                <a href="{% url 'home' %}">Back to questions</a>
+            </div>
+            <div class="retry-container">
+                <a href="{% url 'questions:all_questions' slug=slug %}">Retry the question</a>
+            </div>
+                <h2>Instruction Execution I-Type branch</h2>
+                <p>Consider the MIPS instruction, the register contents and the block
+                    of Memory below. Enter the changes that occur when the instruction
+                    is fetched and executed (i.e. indicate what registers or memory
+                    addresses are changed and write in the new values - the memory is big-endian):</p>
+
+                {% if random_value.itype_group == 'rs_rt' %}
+                    <h3>{{ random_value.instruction_type }} ${{ random_value.rs }}, ${{ random_value.rt }}, {{ random_value.immediate }}</h3>
+                {% else %}
+
+                <h3>{{ random_value.instruction_type }} ${{ random_value.rs }}, {{ random_value.immediate }}</h3>
+
+                {% endif %}
+            <div class="col-md-10 no-padding">
+                {% if not result %}
+                <div class="col-md-5 no-padding">
+                    <table class="table table-condensed register-table answer-table">
+                        <tr class="answer_table_title">
+                            <th>field</th>
+                            <th>Your answer</th>
+                            <th>Correct answer</th>
+                        </tr>
+                        {% for key, value in display_correct %}
+                        <tr>
+                            <td class="register-number-cell">{{ key }}</td>
+                            {% for answer in value %}
+                            <td class="register-value-cell">{{ answer }}</td>
+                            {% endfor %}
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+                {% endif %}
+            </div>
+        {% endif %}
+
+        <div class="col-md-12 no-left-padding no-right-padding">
+            <div class="col-lg-6 col-md-12 register-table-container">
+                <table class="table table-condensed register-table">
+                    <caption><span class="register-table-title">Registers</span>  <span>PC:  {{ random_value.pc }}</span></caption>
+                    <tr>
+                    {% for key, value in random_value.registers.items %}
+                        <td class="register-number-cell">${{ key }}</td>
+                        <td class="register-value-cell">{{ value }}</td>
+                    {% if forloop.counter|divisibleby:4 and forloop.counter is not 32 %}
+                    </tr>
+                    <tr>
+                    {% endif %}
+                    {% endfor %}
+                    </tr>
+                </table>
+            </div>
+            <div class="col-lg-6 col-md-12 no-padding">
+                <table class="table table-condensed register-table">
+                    <caption><span class="register-table-title">Memory Block</span></caption>
+                    <tr>
+                    {% for key, value in random_value.memory_locations.items %}
+                        <td>${{ key }}</td>
+                        <td>{{ value }}</td>
+                    {% if forloop.counter|divisibleby:4 and forloop.counter is not 32 %}
+                    </tr>
+                    <tr>
+                    {% endif %}
+                    {% endfor %}
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

@@ -146,6 +146,73 @@ class FixedLength(TestCase):
         correct_result = ('00000310', None)
         self.assertEqual(correct_result, expected)
 
+    def test_beq_itype(self):
+        """
+        This test is for beq
+        """
+        value = {'val1': int('0a335253', 16), 'val2': int('0a33d253', 16),
+                 'immediate': int('949d', 16), 'pc': '1e6bc26c'}
+        question = base_classes.MipsInstructionsBase()
+        expected = question.beq_itype(value)
+
+        correct_result = ('1e6bc270', None)
+        self.assertEqual(correct_result, expected)
+
+        value = {'val1': int('2b81635a', 16), 'val2': int('2b81635a', 16),
+                 'immediate': int('f20', 16), 'pc': '1e6c8820'}
+        expected = question.beq_itype(value)
+        correct_result = ('1e6bc270', None)
+        self.assertEqual(correct_result, expected)
+
+    def test_bne_itype(self):
+        """
+        This test is for bne
+        """
+        value = {'val1': int('2d3f7e79', 16), 'val2': int('2d3f7e7b', 16),
+                 'immediate': int('2d90', 16), 'pc': '1e6b6de0'}
+        question = base_classes.MipsInstructionsBase()
+        expected = question.bne_itype(value)
+
+        correct_result = ('1e6c2424', None)
+        self.assertEqual(correct_result, expected)
+
+
+    def test_bltz_itype(self):
+        """
+        This test is for bltz
+        """
+        value = {'val1': int('99c1f10b', 16), 'val2': int('0a33d253', 16),
+                 'immediate': int('792c', 16), 'pc': '1e6aa964'}
+        question = base_classes.MipsInstructionsBase()
+        expected = question.bltz_itype(value)
+
+        correct_result = ('1e6c8e18', None)
+        self.assertEqual(correct_result, expected)
+
+    def test_bgtz_itype(self):
+        """
+        This test is for bgtz
+        """
+        value = {'val1': int('06655be4', 16), 'val2': int('0a33d253', 16),
+                 'immediate': int('2b5a', 16), 'pc': '1e6c8e18'}
+        question = base_classes.MipsInstructionsBase()
+        expected = question.bgtz_itype(value)
+
+        correct_result = ('1e6d3b84', None)
+        self.assertEqual(correct_result, expected)
+
+    def test_blez_itype(self):
+        """
+        This test is for blez
+        """
+        value = {'val1': int('cbd111ee', 16), 'val2': int('0a33d253', 16),
+                 'immediate': int('8c96', 16), 'pc': '1e6d3b84'}
+        question = base_classes.MipsInstructionsBase()
+        expected = question.blez_itype(value)
+
+        correct_result = ('1e6b6de0', None)
+        self.assertEqual(correct_result, expected)
+
 
 
 

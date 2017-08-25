@@ -31,7 +31,6 @@ class Question(MipsInstructionsBase, BinaryHexBase):
         type(self).memory_storage_address = random.choice(range(int(min(memory_dict), 16), int(max(memory_dict), 16), 4))
 
         instruction_type = random.choice(['lw', 'sw'])
-        # instruction_type = 'lw'
 
         register_dict = self.random_registers()
 
