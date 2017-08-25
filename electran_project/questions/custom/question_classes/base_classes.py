@@ -129,6 +129,20 @@ class BinaryHexBase(QuestionBase):
             else:
                 return True, 'format'
 
+    def is_valid_int(self, int_num):
+        if not int_num or type(int_num) != str:
+            self.wrong_format_message = 'The answer field must be filled in. Please try again'
+            return False, 'field'
+        else:
+            try:
+                int_num = int_num.replace(' ', '')
+                int(int_num)
+            except ValueError:
+                self.wrong_format_message = 'Your answer did not have a correct decimal format. Please try again'
+                return False, 'format'
+            else:
+                return True, 'format'
+
     @staticmethod
     def spacing_binary_numbers(value):
         modulo_value = len(value) % 4
@@ -200,6 +214,11 @@ class MipsInstructionsBase(QuestionBase):
 
     }
 
+    JTYPE_VALUES = {
+        'j': 0x2,
+        'jal': 0x3,
+    }
+
     ITYPE_GROUPS = {
         'arithmetic': ['addi', 'addiu', 'andi', 'ori', 'slti', 'sltui'],
         'load_store': ['lw', 'sw'],
@@ -207,6 +226,7 @@ class MipsInstructionsBase(QuestionBase):
         'rs_rt': ['beq', 'bne'],
         'no_rt': ['bgez', 'bgtz', 'blez', 'bltz']
     }
+
 
     JTYPE_VALUES = {
         'j': 0x2,
@@ -486,6 +506,83 @@ class MipsInstructionsBase(QuestionBase):
         result_hex = MipsInstructionsBase.make_specific_number_of_bits(hex(result)[2:], 8)
         return result_hex, None
 
+    @staticmethod
+    def beq_itype(value):
+        if value['val1'] == value['val2']:
+            result = MipsInstructionsBase.branch_on_immediate(value['pc'], value['immediate'])
+        else:
+            result = hex(int(value['pc'], 16) + 4)[2:]
+        return result, None
+
+    @staticmethod
+    def bne_itype(value):
+        if value['val1'] != value['val2']:
+            result = MipsInstructionsBase.branch_on_immediate(value['pc'], value['immediate'])
+        else:
+            result = hex(int(value['pc'], 16) + 4)[2:]
+        return result, None
+
+    @staticmethod
+    def bgez_itype(value):
+        val1_bin = MipsInstructionsBase.make_specific_number_of_bits(bin(value['val1'])[2:], 32)
+        if val1_bin[0] == '0':
+            result = MipsInstructionsBase.branch_on_immediate(value['pc'], value['immediate'])
+        else:
+            result = hex(int(value['pc'], 16) + 4)[2:]
+        return result, None
+
+    @staticmethod
+    def bgtz_itype(value):
+        val1_bin = MipsInstructionsBase.make_specific_number_of_bits(bin(value['val1'])[2:], 32)
+        if val1_bin[0] == '0' and value['val1'] != 0:
+            result = MipsInstructionsBase.branch_on_immediate(value['pc'], value['immediate'])
+        else:
+            result = hex(int(value['pc'], 16) + 4)[2:]
+        return result, None
+
+    @staticmethod
+    def blez_itype(value):
+        val1_bin = MipsInstructionsBase.make_specific_number_of_bits(bin(value['val1'])[2:], 32)
+        if val1_bin[0] == '1' or value['val1'] == 0:
+            result = MipsInstructionsBase.branch_on_immediate(value['pc'], value['immediate'])
+        else:
+            result = hex(int(value['pc'], 16) + 4)[2:]
+        return result, None
+
+    @staticmethod
+    def bltz_itype(value):
+        val1_bin = MipsInstructionsBase.make_specific_number_of_bits(bin(value['val1'])[2:], 32)
+        if val1_bin[0] == '1':
+            result = MipsInstructionsBase.branch_on_immediate(value['pc'], value['immediate'])
+        else:
+            result = hex(int(value['pc'], 16) + 4)[2:]
+        return result, None
+
+
+    @staticmethod
+    def j_jtype(value):
+        target = value['immediate'] << 2
+        target = '{:0>7}'.format(hex(target)[2:])
+        pc_4_msb = value['pc'][:1]
+        result = pc_4_msb + target
+        return result, None
+
+    @staticmethod
+    def branch_on_immediate(pc, immediate):
+
+        sign_extended_immediate = MipsInstructionsBase.sign_extend(immediate)
+
+        shifted = int(sign_extended_immediate, 2) << 2
+
+        shifted_32bit = MipsInstructionsBase.make_specific_number_of_bits(bin(shifted)[2:], 32)
+
+        result = hex(int(shifted_32bit, 2) + int(pc, 16) + 4)[2:]
+
+        result = MipsInstructionsBase.make_specific_number_of_bits(result, 8)
+        return result
+
+
+
     RTYPE_CALCULATIONS = {
         'add': add_rtype.__func__,
         'addu': addu_rtype.__func__,
@@ -511,6 +608,17 @@ class MipsInstructionsBase(QuestionBase):
         'andi': andi_itype.__func__,
         'slti': slti_itype.__func__,
         'sltiu': sltiu_itype.__func__,
+        'beq': beq_itype.__func__,
+        'bne': bne_itype.__func__,
+        'bgez': bgez_itype.__func__,
+        'bgtz': bgtz_itype.__func__,
+        'blez': blez_itype.__func__,
+        'bltz': bltz_itype.__func__,
+    }
+
+    JTYPE_CALCULATIONS = {
+        'j': j_jtype.__func__,
+        'jal': j_jtype.__func__,
     }
 
     PC_VALUE = 113983136
