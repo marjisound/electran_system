@@ -6,11 +6,11 @@
         {% if is_form %}
             <form method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
-                <h2 class="question-title">Fixed Point to Binary Conversion</h2>
-                <p class="question-paragraph">Turn the following +ve decimal number into a signed binary
-                    fixed point representation with assumed point position between bits 2 and 3, rounding
-                    down as necessary, e.g 1.9 converts to 0001111:</p>
-                <h3 class="question-random-value">{{ random_value.random1 }}.{{ random_value.random2 }}</h3>
+                <h2 class="question-title">IEEE single precision into Binary Representation</h2>
+                <p class="question-paragraph">Turn the following IEEE single precision value
+                    (expressed in hexadecimal) into the corresponding binary representation.
+                    Negative numbers should be expressed as - some value, e.g -1.01, -1010.1101:</p>
+                <h3 class="question-random-value">{{ random_value.random1 }}</h3>
                 <div class="col-md-4 no-padding">
                     <div class="form-group">
                         <label for="answer">Answer:</label>
@@ -26,11 +26,11 @@
             <div class="retry-container">
                 <a href="{% url 'questions:all_questions' slug=slug %}">Retry the question</a>
             </div>
-                <h2 class="question-title">Fixed Point to Binary Conversion</h2>
-                <p class="question-paragraph">Turn the following +ve decimal number into a signed binary
-                    fixed point representation with assumed point position between bits 2 and 3, rounding
-                    down as necessary, e.g 1.9 converts to 0001111:</p>
-                <h3 class="question-random-value">{{ random_value.random1 }}.{{ random_value.random2 }}</h3>
+                <h2 class="question-title">IEEE single precision into Binary Representation</h2>
+                <p class="question-paragraph">Turn the following IEEE single precision value
+                    (expressed in hexadecimal) into the corresponding binary representation.
+                    Negative numbers should be expressed as - some value, e.g -1.01, -1010.1101:</p>
+                <h3 class="question-random-value">{{ random_value.random1 }}</h3>
             <div class="col-md-6 no-padding">
                 <p>Your answer was: {{ answer }}</p>
                 {% if not result %}
