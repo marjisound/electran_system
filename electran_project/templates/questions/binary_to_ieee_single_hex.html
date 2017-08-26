@@ -1,0 +1,44 @@
+{% extends "questions/question_base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+    <div class="col-md-10">
+        {% if is_form %}
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <h2 class="question-title">Binary Fractional Number into IEEE single precision Hex</h2>
+                <p class="question-paragraph">Turn the following binary fractional numbers into IEEE
+                    single precision numbers in hexadecimal (enter all 8 digits of the hex result):</p>
+                <h3 class="question-random-value">{{ random_value.random1 }}</h3>
+                <div class="col-md-4 no-padding">
+                    <div class="form-group">
+                        <label for="answer">Answer:</label>
+                        <input type="text" class="form-control" id="answer" name="answer">
+                    </div>
+                    <input type="submit" class="btn btn-primary electran-submit-btn" value="submit" name="submit">
+                </div>
+            </form>
+        {% else %}
+            <div>
+                <a href="{% url 'home' %}">Back to questions</a>
+            </div>
+            <div class="retry-container">
+                <a href="{% url 'questions:all_questions' slug=slug %}">Retry the question</a>
+            </div>
+                <h2 class="question-title">Binary Fractional Number into IEEE single precision Hex</h2>
+                <p class="question-paragraph">Turn the following binary fractional numbers into IEEE
+                    single precision numbers in hexadecimal (enter all 8 digits of the hex result):</p>
+                <h3 class="question-random-value">{{ random_value.random1 }}</h3>
+            <div class="col-md-6 no-padding">
+                <p>Your answer was: {{ answer }}</p>
+                {% if not result %}
+                <p>But the correct answer was: {{ correct_answer }}</p>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+
+{% endblock %}
+{% block specific %}
+    {% include "questions/question_helps/binary_hex_conversion.html" %}
+{% endblock %}

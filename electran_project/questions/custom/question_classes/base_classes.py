@@ -143,6 +143,20 @@ class BinaryHexBase(QuestionBase):
             else:
                 return True, 'format'
 
+    def is_valid_float(self, int_num):
+        if not int_num or type(int_num) != str:
+            self.wrong_format_message = 'The answer field must be filled in. Please try again'
+            return False, 'field'
+        else:
+            try:
+                int_num = int_num.replace(' ', '')
+                float(int_num)
+            except ValueError:
+                self.wrong_format_message = 'Your answer did not have a correct real number format. Please try again'
+                return False, 'format'
+            else:
+                return True, 'format'
+
     @staticmethod
     def spacing_binary_numbers(value):
         modulo_value = len(value) % 4
