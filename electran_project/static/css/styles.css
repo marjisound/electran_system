@@ -26,6 +26,11 @@ body {
 /*********** end of generic**************/
 
 /*************  home page  **************/
+.validation-error {
+    color: red;
+    font-size: 11px;
+    font-weight: bold;
+}
 
 .home-question-item {
     border: 1px solid rgba(138, 136, 136, 0.3);
@@ -221,6 +226,24 @@ body {
     margin-right: 20px;
 }
 
+.low-high-memory-main {
+    margin-bottom: 20px;
+}
+
+.lowest-highest-input{
+    width: 50%;
+    margin-top: 3px;
+}
+
+.low-high-memory-parameter {
+    font-size: 15px;
+    margin-bottom: 3px;
+}
+
+.param-end {
+    margin-bottom: 20px;
+}
+
 .electran-submit-btn {
     margin-top: 20px;
     margin-bottom: 20px;
@@ -294,6 +317,14 @@ body {
 .cat-date-btn {
     float: right;
     margin: 0 10px 0 0;
+    height: 24px;
+    font-size: 12px;
+    padding: 0 5px 0 5px;
+}
+
+.home-expand-btn {
+    float: right;
+    margin: 0 0px 10px 0;
     height: 24px;
     font-size: 12px;
     padding: 0 5px 0 5px;

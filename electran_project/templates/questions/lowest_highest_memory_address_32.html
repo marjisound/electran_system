@@ -1,0 +1,77 @@
+{% extends "questions/question_base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+    <div class="col-md-10">
+        {% if is_form %}
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <h2 class="question-title">Lowest & Highest memory locations</h2>
+                <p class="question-paragraph low-high-memory-main">Question Cw13_a: In this question you are asked to find the lowest
+                    and lowset addresses that map to a particular memory in a computer system. You are given the
+                    size of the memory (number of locations), the size of the systems's address bus
+                    (the number of bits in an address), and the binary pattern that the address decoding logic
+                    matches on the upper address lines to select the memory. You are required to give the answers
+                    in hexadecimal. <br> The parameters for this question are:</p>
+                <p class="low-high-memory-parameter">Size of Address Bus = {{ random_value.random1 }}</p>
+                <p class="low-high-memory-parameter">Number of memory locations (binary K, M, G used as necessary) =
+                    {{ random_value.random2 }}</p>
+                <p class="low-high-memory-parameter param-end">pattern matched by address decoding (binary) = {{ random_value.random3 }}</p>
+                <div class="col-md-8 no-padding">
+                    <div class="form-group">
+                        <label for="answer_lowest_address">What is the lowest address that maps to the memory:</label>
+                        <input class="lowest-highest-input" type="text" class="form-control" id="answer_lowest_address" name="answer_lowest_address">
+                    </div>
+                    <div class="form-group">
+                        <label for="answer_highest_address">What is the highest address that maps to the memory:</label>
+                        <input class="lowest-highest-input" type="text" class="form-control" id="answer_highest_address" name="answer_highest_address">
+                    </div>
+                    <input type="submit" class="btn btn-primary electran-submit-btn" value="submit" name="submit">
+                </div>
+            </form>
+        {% else %}
+            <div>
+                <a href="{% url 'home' %}">Back to questions</a>
+            </div>
+            <div class="retry-container">
+                <a href="{% url 'questions:all_questions' slug=slug %}">Retry the question</a>
+            </div>
+                <h2 class="question-title">Lowest & Highest memory locations</h2>
+                <p class="question-paragraph low-high-memory-main">Question Cw13_a: In this question you are asked to find the lowest
+                    and lowset addresses that map to a particular memory in a computer system. You are given the
+                    size of the memory (number of locations), the size of the systems's address bus
+                    (the number of bits in an address), and the binary pattern that the address decoding logic
+                    matches on the upper address lines to select the memory. You are required to give the answers
+                    in hexadecimal. <br> The parameters for this question are:</p>
+                <p class="low-high-memory-parameter">Size of Address Bus = {{ random_value.random1 }}</p>
+                <p class="low-high-memory-parameter">Number of memory locations (binary K, M, G used as necessary) =
+                    {{ random_value.random2 }}</p>
+                <p class="low-high-memory-parameter">pattern matched by address decoding (binary) = {{ random_value.random3 }}</p>
+                        <div class="col-md-10 no-padding">
+                {% if not result %}
+                <div class="col-md-8 no-padding">
+                    <table class="table table-condensed register-table answer-table">
+                        <tr class="answer_table_title">
+                            <th>field</th>
+                            <th>Your answer</th>
+                            <th>Correct answer</th>
+                        </tr>
+                        {% for key, value in display_correct %}
+                        <tr>
+                            <td class="register-number-cell">{{ key }}</td>
+                            {% for answer in value %}
+                            <td class="register-value-cell">{{ answer }}</td>
+                            {% endfor %}
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+
+{% endblock %}
+{% block specific %}
+    {% include "questions/question_helps/binary_hex_conversion.html" %}
+{% endblock %}

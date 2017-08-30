@@ -3,6 +3,7 @@ from django.utils import timezone
 import datetime
 from django.contrib.auth import get_user_model
 from django.utils.text import slugify
+from django.db.models import Q
 User = get_user_model()
 
 
@@ -46,6 +47,14 @@ class Question(models.Model):
         super(Question, self).save(*args, **kwargs)
 
 
+class Module(models.Model):
+    module_code = models.CharField(max_length=50)
+    module_name = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.module_code
+
+
 class Semester(models.Model):
     TERM_CHOICES = [
         ('first','First'),
@@ -55,19 +64,20 @@ class Semester(models.Model):
     sem_year = models.IntegerField(default=datetime.date.today().year, verbose_name='Semester Year')
     sem_month = models.CharField(max_length=50,choices=TERM_CHOICES, verbose_name='Semester Month')
     sem_is_active = models.BooleanField(verbose_name='Active')
+    sem_module = models.ForeignKey(Module, on_delete=models.CASCADE)
     questions = models.ManyToManyField(Question, through='QuestionSemester', related_name='semester')
     users = models.ManyToManyField(User, through='UserSemester', related_name='semester')
     updated = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return str(self.sem_year) + '-' + str(self.sem_month)
+        return str(self.sem_year) + '-' + str(self.sem_month) + '-' + str(self.sem_module)
 
     def count_question(self):
         return self.questions.count()
 
     def save(self, *args, **kwargs):
         if self.sem_is_active:
-            Semester.objects.all().update(sem_is_active=False)
+            Semester.objects.filter(~Q(sem_year=self.sem_year) | ~Q(sem_month=self.sem_month)).update(sem_is_active=False)
         super(Semester, self).save(*args, **kwargs)
 
 
@@ -111,6 +121,9 @@ class Mark(models.Model):
     def __str__(self):
         return str(self.user_semester.user.first_name) + ' ' + str(self.user_semester.user.last_name) +\
                '-' + str(self.question_semester)
+
+
+
 
 
 

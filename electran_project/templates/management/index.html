@@ -3,9 +3,39 @@
 {% block content %}
 <div class="jumbotron home-container">
   <h3 class="text-center">Electran Assessment System</h3>
-  <h5 class="text-center">Semester {{ semester }}</h5>
-  <div class="panel-group" id="accordion">
-    {% if que_cat %}
+{% if semester %}
+  <h5 class="text-center">Semester {{ semester.sem_year }}-{{ semester.sem_month }}</h5>
+{% if has_multiple_modules %}
+    <form method="post" id="semesterModuleForm" class="col-md-4 ">
+      {% csrf_token %}
+        <div class="qus-sem-question-title">
+            <label for="semester_module">Select module</label>
+            <select  class="form-control" id="semesterModule" name="semester_module">
+                    <option value="0">select</option>
+                {% for semester_item in semester_list %}
+                    <option value="{{ semester_item.id }}" {% if semester_item.id == semester.id %}{% if que_cat %}selected{% endif %}{% endif %}>{{ semester_item.sem_module }}</option>
+                {% endfor %}
+            </select>
+            <span id="semesterModuleError" style="display: none" class="validation-error">Module must be selected</span>
+        <br>
+            <input type="submit" class="btn btn-primary electran-submit-btn" value="submit">
+
+
+        </div>
+    </form>
+{% endif %}
+
+{% if que_cat %}
+    <div class="col-md-12">
+          <h5 class="text-center">Module {{ semester.sem_module }}</h5>
+    </div>
+    <div class="col-md-12">
+        <button class="btn btn-primary electran-submit-btn home-expand-btn" type="button" id="catCollapseAll">
+             Collapse All
+        </button>
+    </div>
+  <div class="col-md-12 panel-group" id="accordion">
+
     {% for item in que_cat %}
       <div class="panel panel-default">
         <div class="panel-heading">
@@ -46,9 +76,13 @@
         </div>
       </div>
     {% endfor %}
-    {% endif %}
+
 
   </div>
+{% endif %}
+{% else %}
+    <h5 class="text-center">Not registered in any active semester</h5>
+{% endif %}
 </div>
 
 

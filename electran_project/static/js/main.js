@@ -1,5 +1,6 @@
 /*Menu-toggle*/
 $(document).ready(function(){
+
   $("#menu-toggle").click(function(e) {
       e.preventDefault();
       $("#wrapper").toggleClass("active");
@@ -11,7 +12,14 @@ $(document).ready(function(){
     })
   });
 
-  // to toggle the collapse for all categories
+  $('#semesterModuleForm').submit(function (e) {
+      if($('#semesterModule').val() === '0'){
+          $('#semesterModuleError').fadeIn();
+          return false;
+      }
+  });
+
+  // to toggle the collapse for all categories in admin set questions for semester
   $('#catCollapseAll').click(function () {
       $('div[id^="collapse"]').collapse('toggle')
       var areaExpand = $('a[data-toggle="collapse"]').attr('aria-expanded')
@@ -20,9 +28,10 @@ $(document).ready(function(){
           $('#catCollapseAll').text("Collapse All")
       }else{
 
-          $('#catCollapseAll').text("Open All")
+          $('#catCollapseAll').text("Expand All")
       }
   });
+
 
 
   $(".catCheckAll").click(function () {

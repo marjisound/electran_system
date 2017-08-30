@@ -5,38 +5,39 @@ import random
 class Question(BinaryHexBase):
 
     def generate_user_random_display(self, value):
-        exponent = value['bias'] - 127
-        int_section_of_mantissa = value['mantissa'][:exponent]
-        int_section_of_result = '1' + int_section_of_mantissa
-
-        fraction = value['mantissa'][exponent:]
-
-        while fraction.endswith('0'):
-            fraction = fraction[:-1]
+        random_fraction = str(value['fraction'])
+        while random_fraction.endswith('0'):
+            random_fraction = random_fraction[:-1]
 
         if value['sign'] == '0':
-            sign = ''
+            sign = '+'
         else:
             sign = '-'
-
-        result = sign + int_section_of_result + '.' + fraction
-
-        return {'random1': result}
+        return {'random1': sign + str(value['integer']),
+                'random2': random_fraction}
 
     def generate_random(self):
-        bias = random.randint(128, 142)
-        mantissa_15_bit = bin(random.randint(1, 32767))[2:]
-        mantissa_15_bit = self.make_specific_number_of_bits(mantissa_15_bit, 15)
-        mantissa = mantissa_15_bit + ('0' * 8)
-        sign_bit = random.choice(['0', '1'])
+        random_int = random.randint(100, 16384)
+        random_fraction = 25 * 5 * random.randint(1, 7) * (5 ** random.randrange(5))
+        sign = random.choice(['1', '0'])
 
-        return {'bias': bias,
-                'mantissa': mantissa,
-                'sign': sign_bit}
+        return {'integer': random_int, 'fraction': random_fraction, 'sign': sign}
 
     def expected_answer(self, value):
-        bias = bin(value['bias'])[2:]
-        result_bin = value['sign'] + bias + value['mantissa']
+        bin_value = bin(value['integer'])[2:]
+        fract = float('0.' + str(value['fraction']))
+        fract_bin = ''
+        while not fract.is_integer():
+            temp_fract = fract * 2
+            fract_bin += str(int(temp_fract))
+            fract = temp_fract - int(temp_fract)
+
+        exponent = len(bin_value[1:])
+        mantissa = '{:0<23}'.format(bin_value[1:] + fract_bin)
+
+        bias = bin(exponent + 127)[2:]
+
+        result_bin = value['sign'] + bias + mantissa
         result = hex(int(result_bin, 2))[2:]
 
         return result

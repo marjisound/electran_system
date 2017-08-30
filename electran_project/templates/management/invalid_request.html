@@ -1,0 +1,21 @@
+{% extends "custom_base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+    <div class="col-md-10">
+
+
+        <div class="jumbotron">
+            <div class="alert alert-danger">
+                {% if type == 'module_session_error' %}
+                <strong>Sorry</strong> A problem occurred related to the selected module. Please try again.
+                {% elif type == 'sem_not_active' %}
+                    <strong>Sorry</strong> The selected module is not active
+                {% endif %}
+            </div>
+        </div>
+
+
+    </div>
+
+{% endblock %}

@@ -12,17 +12,28 @@ from django.utils import timezone
 
 
 @login_required()
-def all_questions(request, slug=None):
+def all_questions(request, slug=None, module=None):
     try:
         current_question = Question.objects.get(slug__exact=slug)
-        question_semester = QuestionSemester.objects.filter(question__id=current_question.id, semester__sem_is_active=True)
+
+        semester_id = request.session.get('active_semester_id')
+        if not semester_id:
+            template = 'management/invalid_request.html'
+            return create_http_response(request, 'invalid_question', context={
+                'slug': slug,
+                'type': 'error'
+            })
+
+        question_semester = QuestionSemester.objects.filter(question__id=current_question.id,
+                                                            semester_id=semester_id,
+                                                            semester__sem_is_active=True,)
         if len(question_semester) != 1:
             if request.POST:
                 return create_http_response(request, 'invalid_question', context={
                     'slug': slug,
                     'type': 'error'
                 })
-        user_semester = UserSemester.objects.get(user_id=request.user.id, semester_id=question_semester[0].semester_id)
+        user_semester = UserSemester.objects.get(user_id=request.user.id, semester_id=semester_id)
 
     except ObjectDoesNotExist:
         if request.POST:
@@ -35,6 +46,7 @@ def all_questions(request, slug=None):
         user_marks = Mark.objects.filter(
             user_semester__user__id=request.user.id,
             final_mark__exact=None,
+            user_semester__semester_id=semester_id,
             user_semester__semester__sem_is_active=True).order_by('-click_datetime')
 
         # *************** getting the specific question file based on question class name field in db ***********

@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import Http404, HttpResponseRedirect, HttpResponse
+from django.core.exceptions import ObjectDoesNotExist
 from django.urls import reverse
 from django.contrib import messages
 from validate_email import validate_email
@@ -15,6 +16,7 @@ from django.conf import settings
 from django.db.models import Max, Count
 from allauth.account.forms import ResetPasswordForm
 from allauth.account.models import EmailAddress
+from django.http import JsonResponse
 
 from django.contrib.auth import get_user_model
 
@@ -22,9 +24,11 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 
-def home_get_questions(marks=None):
+def home_get_questions(marks=None, sem_id=None):
     categories = QuestionCategory.objects.order_by('order')
-    questions = QuestionSemester.objects.filter(semester__sem_is_active=True, question_visibility=True)
+    questions = QuestionSemester.objects.filter(semester_id=sem_id,
+                                                semester__sem_is_active=True,
+                                                question_visibility=True)
 
     questions_with_cats = []
 
@@ -75,24 +79,64 @@ def get_questions(semesters=[]):
 
 @login_required()
 def homePage(request):
+
     semester = None
-    sem_id_list = list(Semester.objects.filter(sem_is_active__exact=True))
-    user_marks = Mark.objects.filter(
-        user_semester__user__id=request.user.id,
-        final_mark__isnull=False,
-        user_semester__semester__sem_is_active=True)
-    if len(sem_id_list) != 1:
-        questions_with_cats = []
+    has_multiple_modules = True
+    questions_with_cats = []
+
+    sem_active_list = list(Semester.objects.filter(sem_is_active__exact=True, users__exact=request.user.id))
+
+    if len(sem_active_list) == 0:
+        if request.session.__contains__('active_semester_id'):
+            request.session.__delitem__('active_semester_id')
+
+    elif len(sem_active_list) == 1:
+        semester = sem_active_list[0]
+        user_marks = Mark.objects.filter(
+            user_semester__user__id=request.user.id,
+            final_mark__isnull=False,
+            user_semester__semester_id=semester.id,
+            user_semester__semester__sem_is_active=True)
+        request.session.__setitem__('active_semester_id', semester.id)
+        questions_with_cats = home_get_questions(marks=user_marks, sem_id=semester.id)
 
     else:
-        semester = sem_id_list[0]
-        questions_with_cats = home_get_questions(marks=user_marks)
+        semester = sem_active_list[0]
+        if request.method == 'POST':
+            try:
+                selected_semester_id = int(request.POST.get('semester_module'))
+
+                if not selected_semester_id:
+                    template = 'management/invalid_request.html'
+                    return render(request, template, {'type': 'module_session_error'})
+
+                if selected_semester_id > 0:
+                    semester = Semester.objects.get(sem_is_active__exact=True,
+                                                    id=selected_semester_id)
+                    request.session.__setitem__('active_semester_id', selected_semester_id)
+
+            except (ObjectDoesNotExist, ValueError, TypeError):
+                template = 'management/invalid_request.html'
+                return render(request, template, {'type': 'sem_not_active'})
+
+        has_multiple_modules = True
+        if request.session.__contains__('active_semester_id'):
+            semester_id = request.session.__getitem__('active_semester_id')
+            user_marks = Mark.objects.filter(
+                user_semester__user__id=request.user.id,
+                final_mark__isnull=False,
+                user_semester__semester_id=semester_id,
+                user_semester__semester__sem_is_active=True)
+            questions_with_cats = home_get_questions(marks=user_marks, sem_id=semester_id)
+
     template = 'management/index.html'
     context_dict = {
         'que_cat': questions_with_cats,
-        'semester': semester
+        'semester': semester,
+        'semester_list': sem_active_list,
+        'has_multiple_modules': has_multiple_modules
     }
-    return render(request,template,context_dict)
+    return render(request, template, context_dict)
 
 
 @staff_member_required
@@ -103,7 +147,7 @@ def semester_create(request):
 
         if form.is_valid():
             form.save(commit=True)
-            return homePage(request)
+            return HttpResponseRedirect(reverse('home'))
         else:
             print('ERROR form invalid')
     else:
@@ -117,7 +161,6 @@ def semester_create(request):
 @staff_member_required
 def semester_question_setup(request, pk=None):
     existing_questions = QuestionSemester.objects.filter(semester_id=pk).annotate(Count('mark__final_mark'))
-
 
     if request.method == 'POST':
 
@@ -167,7 +210,7 @@ def semester_question_setup(request, pk=None):
                     new_obj.delete()
 
         messages.success(request, 'Questions added successfully')
-        return homePage(request)
+        return HttpResponseRedirect(reverse('home'))
     else:
         try:
             semester = Semester.objects.get(pk=pk)
@@ -359,6 +402,13 @@ class SemesterListView(ListView):
     template_name = 'management/semester_list_view.html'
     context_object_name = 'semesters'
 
+
+def get_data(request, *args, **kwargs):
+    data = {
+        'sales': 100,
+        'customers': 10,
+    }
+    return JsonResponse(data)
 
 from django.shortcuts import redirect
 # @login_required()

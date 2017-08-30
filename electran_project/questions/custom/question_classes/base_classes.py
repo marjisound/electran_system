@@ -49,6 +49,15 @@ class BinaryHexBase(QuestionBase):
         'G': 30
     }
 
+    KILO_MEGA_GIGA = {
+        '10': 'K',
+        '20': 'M',
+        '30': 'G',
+        '40': 'T',
+        '50': 'P',
+        '60': 'E'
+    }
+
     @staticmethod
     def delete_binary_identifier(value):
         if value.startswith('0b') or value.startswith('0B'):

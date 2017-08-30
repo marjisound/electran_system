@@ -1,0 +1,79 @@
+{% extends "questions/question_base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+    <div class="col-md-10">
+        {% if is_form %}
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <h2 class="question-title">Time To Read Multiple Sectors on blocks on Same Cylinder</h2>
+                <p class="question-paragraph">In this question you have to calculate the time (on average) to read
+                    a number of sectors, assuming that the sectors are allocated consecutively in blocks of a fixed
+                    size and the blocks are scattered randomly over the same cylinder on a hard disk. (This speeds
+                    access to blocks, albeit with some unused sectors in the last block.) Assume that the heads are
+                    already over the cylinder somewhere. The data you need for this is:</p>
+                <h3 class="question-random-value">number of tracks in a cylinder: {{ random_value.tracks_in_cylinder }}</h3>
+                <h3 class="question-random-value">number of tracks on the disk: {{ random_value.track_numbers }}</h3>
+                <h3 class="question-random-value">number of sectors in a block: {{ random_value.sectors_in_block }}</h3>
+                <h3 class="question-random-value">number of sectors to be read: {{ random_value.read_sectors }}</h3>
+                <h3 class="question-random-value">sectors per track: {{ random_value.sector_numbers }}</h3>
+                <h3 class="question-random-value">rotation rate: {{ random_value.random_rpm }}</h3>
+
+                <p class="question-paragraph">Ignore the inter-sector gaps and assume sectors are spread uniformly over the track.</p>
+                <p class="question-paragraph">Round your answer to the nearest hundredth of a millisecond!</p>
+                <div class="col-md-4 no-padding">
+                    <div class="form-group">
+                        <label for="answer">Answer:</label>
+                        <input type="text" class="form-control" id="answer" name="answer">
+                    </div>
+                    <input type="submit" class="btn btn-primary electran-submit-btn" value="submit" name="submit">
+                </div>
+            </form>
+        {% else %}
+            <div>
+                <a href="{% url 'home' %}">Back to questions</a>
+            </div>
+            <div class="retry-container">
+                <a href="{% url 'questions:all_questions' slug=slug %}">Retry the question</a>
+            </div>
+                <h2 class="question-title">Time To Read Multiple Sectors on blocks on Same Cylinder</h2>
+                <p class="question-paragraph">In this question you have to calculate the time (on average) to read
+                    a number of sectors, assuming that the sectors are allocated consecutively in blocks of a fixed
+                    size and the blocks are scattered randomly over the same cylinder on a hard disk. (This speeds
+                    access to blocks, albeit with some unused sectors in the last block.) Assume that the heads are
+                    already over the cylinder somewhere. The data you need for this is:</p>
+                <h3 class="question-random-value">number of tracks in a cylinder: {{ random_value.tracks_in_cylinder }}</h3>
+                <h3 class="question-random-value">number of tracks on the disk: {{ random_value.track_numbers }}</h3>
+                <h3 class="question-random-value">number of sectors in a block: {{ random_value.sectors_in_block }}</h3>
+                <h3 class="question-random-value">number of sectors to be read: {{ random_value.read_sectors }}</h3>
+                <h3 class="question-random-value">sectors per track: {{ random_value.sector_numbers }}</h3>
+                <h3 class="question-random-value">rotation rate: {{ random_value.random_rpm }}</h3>
+
+                <p class="question-paragraph">Ignore the inter-sector gaps and assume sectors are spread uniformly over the track.</p>
+                <p class="question-paragraph">Round your answer to the nearest hundredth of a millisecond!</p>
+            <div class="col-md-12 no-padding">
+                <p>Your answer was: {{ answer }}</p>
+                {% if not result %}
+                <p>But the correct answer was: {{ correct_answer.result }}</p>
+                <p>( (number of blocks * (rotational latency + time to read block))
+                    {% if correct_answer.remaining_sectors %}
+                    <br> + (rotational latency + time to read last 10 sectors in last block) =
+                    {% else %}
+                        =
+                    {% endif %}
+                    ({{ correct_answer.number_of_blocks }} * (
+                    {{ correct_answer.rotational_latency }} + {{ correct_answer.time_read_block }})
+                    {% if correct_answer.remaining_sectors %}
+                        + ({{ correct_answer.rotational_latency }} + {{ correct_answer.time_read_remaining }}) )
+                    {% else %}
+                        )
+                    {% endif %}) </p>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+
+{% endblock %}
+{% block specific %}
+    {% include "questions/question_helps/binary_hex_conversion.html" %}
+{% endblock %}

@@ -1,8 +1,9 @@
 from django.contrib import admin
-from .models import QuestionCategory, Question, Semester, QuestionSemester, UserSemester, Mark
+from .models import QuestionCategory, Question, Semester, QuestionSemester, UserSemester, Mark, Module
 
 # Register your models here.
 admin.site.register(QuestionCategory)
+admin.site.register(Module)
 
 
 admin.site.register(QuestionSemester)
@@ -23,7 +24,7 @@ admin.site.register(Mark, MarkAdmin)
 
 
 class SemesterAdmin(admin.ModelAdmin):
-    list_filter = ('sem_is_active', 'sem_year', 'sem_month')
+    list_filter = ('sem_is_active', 'sem_year', 'sem_month', 'sem_module')
 
 admin.site.register(Semester, SemesterAdmin)
 

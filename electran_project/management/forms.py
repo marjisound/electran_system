@@ -5,7 +5,7 @@ from .models import Semester, QuestionSemester, Question, QuestionCategory
 class NewSemesterForm(forms.ModelForm):
     class Meta:
         model = Semester
-        fields = ['sem_year', 'sem_month', 'sem_is_active']
+        fields = ['sem_year', 'sem_month', 'sem_module', 'sem_is_active']
 
 
 QUESTION_CHOICES = {}

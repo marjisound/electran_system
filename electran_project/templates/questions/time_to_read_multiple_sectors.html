@@ -1,0 +1,64 @@
+{% extends "questions/question_base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+    <div class="col-md-10">
+        {% if is_form %}
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <h2 class="question-title">Time To Read Multiple Sectors</h2>
+                <p class="question-paragraph">In this question you have to calculate the time to read a number of
+                    sectors from a track on a hard disk, with the head having to be moved to this track from another
+                    track on the disk. The data you need for this is:</p>
+                <h3 class="question-random-value">start track: {{ random_value.start_track }}</h3>
+                <h3 class="question-random-value">track to be read from: {{ random_value.track }}</h3>
+                <h3 class="question-random-value">average Track seek: {{ random_value.track_seek }} ms</h3>
+                <h3 class="question-random-value">number of sectors to be read: {{ random_value.read_sectors }}</h3>
+                <h3 class="question-random-value">number of sectors on each track: {{ random_value.sector_numbers }}</h3>
+                <h3 class="question-random-value">rotation rate: {{ random_value.random_rpm }}</h3>
+                <p class="question-paragraph">Ignore the inter-sector gaps and assume sectors are spread uniformly
+                    over the track. Assume that the head can be at any place on the start track when the read is
+                    requested, i.e. make use of the rotational latency.</p>
+                <p class="question-paragraph">Round your answer to the nearest hundredth of a millisecond!</p>
+                <div class="col-md-4 no-padding">
+                    <div class="form-group">
+                        <label for="answer">Answer:</label>
+                        <input type="text" class="form-control" id="answer" name="answer">
+                    </div>
+                    <input type="submit" class="btn btn-primary electran-submit-btn" value="submit" name="submit">
+                </div>
+            </form>
+        {% else %}
+            <div>
+                <a href="{% url 'home' %}">Back to questions</a>
+            </div>
+            <div class="retry-container">
+                <a href="{% url 'questions:all_questions' slug=slug %}">Retry the question</a>
+            </div>
+                <h2 class="question-title">Time To Read Multiple Sectors</h2>
+                <p class="question-paragraph">In this question you have to calculate the time to read a number of
+                    sectors from a track on a hard disk, with the head having to be moved to this track from another
+                    track on the disk. The data you need for this is:</p>
+                <h3 class="question-random-value">start track: {{ random_value.start_track }}</h3>
+                <h3 class="question-random-value">track to be read from: {{ random_value.track }}</h3>
+                <h3 class="question-random-value">average Track seek: {{ random_value.track_seek }} ms</h3>
+                <h3 class="question-random-value">number of sectors to be read: {{ random_value.read_sectors }}</h3>
+                <h3 class="question-random-value">number of sectors on each track: {{ random_value.sector_numbers }}</h3>
+                <h3 class="question-random-value">rotation rate: {{ random_value.random_rpm }}</h3>
+                <p class="question-paragraph">Ignore the inter-sector gaps and assume sectors are spread uniformly
+                    over the track. Assume that the head can be at any place on the start track when the read is
+                    requested, i.e. make use of the rotational latency.</p>
+                <p class="question-paragraph">Round your answer to the nearest hundredth of a millisecond!</p>
+            <div class="col-md-6 no-padding">
+                <p>Your answer was: {{ answer }}</p>
+                {% if not result %}
+                <p>But the correct answer was: {{ correct_answer }}</p>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+
+{% endblock %}
+{% block specific %}
+    {% include "questions/question_helps/binary_hex_conversion.html" %}
+{% endblock %}

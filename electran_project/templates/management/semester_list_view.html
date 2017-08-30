@@ -9,6 +9,7 @@
       <thead>
         <tr>
           <th>Semester</th>
+          <th>Module</th>
           <th>Questions</th>
           <th>Students</th>
           <th>Is Active</th>
@@ -21,6 +22,7 @@
         {% for semester in semesters %}
           <tr>
             <td>{{semester}}</td>
+            <td>{{semester.sem_module}}</td>
             <td>{{semester.questions.all.count}}</td>
             <td>{{semester.users.all.count}}</td>
             <td>{{semester.sem_is_active}}</td>
