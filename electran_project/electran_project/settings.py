@@ -70,6 +70,7 @@ DEBUG = True
 
 #Azure website
 ALLOWED_HOSTS = ['electransystem.azurewebsites.net']
+# ALLOWED_HOSTS = []
 
 
 # Application definition
