@@ -68,7 +68,7 @@ SECRET_KEY = '0tk%fl8%r574o6g_u)wx1rastm6%_#t10r_=yosftgrkk3_v3_'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-#Azure
+#Azure web
 ALLOWED_HOSTS = ['electransystem.azurewebsites.net']
 # ALLOWED_HOSTS = []
 
