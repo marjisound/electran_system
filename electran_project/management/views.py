@@ -426,3 +426,4 @@ def test_view(request, slug=None):
     # random_hex = test.generate_random()
     # expected_answer = test.expected_answer(random_hex)
     # return render(request,'management/test.html',{'form':test})
+
