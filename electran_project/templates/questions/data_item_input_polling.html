@@ -1,0 +1,110 @@
+{% extends "questions/question_base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+    <div class="col-md-12">
+        {% if is_form %}
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <h2 class="question-title">Data Item Input Using Polling</h2>
+                <p class="question-paragraph">This question concerns the use of polling to handle the input and
+                    storage in memory of data arriving at an input interface, and the achievement of data rates
+                    that can achieved using this mechanism.<br>You are given details of the execution of the
+                    polling code and information to calculate the execution time of this code.</p>
+                <p class="question-paragraph">
+                    You are first required to calculate the fastest time to execute the code to input a single data
+                    item from the interface, assuming there is a data item available at the start of the code, i.e.
+                    there is no looping within the code.From this and the number of data bits input on each interrupt,
+                    you are required to calculate the maximum data rate in bits per second, that can be handled.
+                    Finally, you are required to calculate the number of loops in the polling section of the code for
+                    a particular (lower) data rate.<br>Below you are given: the number of instructions executed
+                    in the polling loop to check if there is a data item available within the interface for input,
+                    the number of instructions to read and store the data item in memory and loop back to the polling
+                    loop, the average number of clock cycles executed per instruction by this software, the size
+                    (in bits) of each data item, and the clock frequency.
+                </p>
+                <h3 class="question-random-value">instructions executed in the polling loop: {{ random_value.loop_instruction }}</h3>
+                <h3 class="question-random-value">instructions executed to read and store data item: {{ random_value.read_write_instructions }}</h3>
+                <h3 class="question-random-value">average clock cycles per instruction: {{ random_value.instruction_clock_cycle }}</h3>
+                <h3 class="question-random-value">number of bits per data item: {{ random_value.data_item_bits }}</h3>
+                <h3 class="question-random-value">clock frequency: {{ random_value.clock_frequency }}MHz</h3>
+
+                <div class="col-md-12 no-padding">
+                    <div class="form-group">
+                        <label class="col-md-12 no-padding" for="answer_polling_time">What is the fastest time
+                            (in microseconds)to execute the polling code?</label>
+                        <input class="col-md-4" type="text" class="form-control" id="answer_polling_time" name="answer_fastest_time">
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-12 no-padding" for="answer_data_rate">What is the maximum
+                            achievable data rate in Kbits/second?</label>
+                        <input class="col-md-4" type="text" class="form-control" id="answer_data_rate" name="answer_data_rate">
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-12 no-padding" for="answer_loop">How many loops through the polling loop occur
+                            every data item if the data rate is only {{ random_value.kilo_bit_per_second }} Kbits/sec?</label>
+                        <input class="col-md-4" type="text" class="form-control" id="answer_loop" name="answer_loop">
+                    </div>
+                    <div class="col-sm-12 no-padding">
+                        <input type="submit" class="btn btn-primary electran-submit-btn" value="submit" name="submit">
+                    </div>
+
+                </div>
+            </form>
+        {% else %}
+            <div>
+                <a href="{% url 'home' %}">Back to questions</a>
+            </div>
+            <div class="retry-container">
+                <a href="{% url 'questions:all_questions' slug=slug %}">Retry the question</a>
+            </div>
+                <h2 class="question-title">Data Item Input Using Polling</h2>
+                <p class="question-paragraph">This question concerns the use of polling to handle the input and
+                    storage in memory of data arriving at an input interface, and the achievement of data rates
+                    that can achieved using this mechanism.<br>You are given details of the execution of the
+                    polling code and information to calculate the execution time of this code.</p>
+                <p class="question-paragraph">
+                    You are first required to calculate the fastest time to execute the code to input a single data
+                    item from the interface, assuming there is a data item available at the start of the code, i.e.
+                    there is no looping within the code.From this and the number of data bits input on each interrupt,
+                    you are required to calculate the maximum data rate in bits per second, that can be handled.
+                    Finally, you are required to calculate the number of loops in the polling section of the code for
+                    a particular (lower) data rate.<br>Below you are given: the number of instructions executed
+                    in the polling loop to check if there is a data item available within the interface for input,
+                    the number of instructions to read and store the data item in memory and loop back to the polling
+                    loop, the average number of clock cycles executed per instruction by this software, the size
+                    (in bits) of each data item, and the clock frequency.
+                </p>
+                <h3 class="question-random-value">instructions executed in the polling loop: {{ random_value.loop_instruction }}</h3>
+                <h3 class="question-random-value">instructions executed to read and store data item: {{ random_value.read_write_instructions }}</h3>
+                <h3 class="question-random-value">average clock cycles per instruction: {{ random_value.instruction_clock_cycle }}</h3>
+                <h3 class="question-random-value">number of bits per data item: {{ random_value.data_item_bits }}</h3>
+                <h3 class="question-random-value">clock frequency: {{ random_value.clock_frequency }}MHz</h3>
+            <div class="col-md-12 no-padding">
+                {% if not result %}
+                <div class="col-md-8 no-padding">
+                    <table class="table table-condensed register-table answer-table">
+                        <tr class="answer_table_title">
+                            <th>field</th>
+                            <th>Your answer</th>
+                            <th>Correct answer</th>
+                        </tr>
+                        {% for key, value in display_correct %}
+                        <tr>
+                            <td class="register-number-cell">{{ key }}</td>
+                            {% for answer in value %}
+                            <td class="register-value-cell">{{ answer }}</td>
+                            {% endfor %}
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+
+{% endblock %}
+{% block specific %}
+    {% include "questions/question_helps/binary_hex_conversion.html" %}
+{% endblock %}

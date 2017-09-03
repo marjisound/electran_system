@@ -111,6 +111,36 @@ body {
     padding-bottom: 15px;
 }
 
+.electran-table {
+    border:1px solid #6d6d6d;
+}
+
+.electran-table th{
+    font-size: 12px;
+    background-color: #6d6d6d;
+    color: #ffffff;
+    font-weight:normal;
+    border:1px solid #6d6d6d;
+}
+
+.electran-table td{
+    border:1px solid rgba(109, 109, 109, 0.3);
+}
+
+.electran-table caption{
+    color: #212b26;
+    font-weight: bold;
+    padding-bottom: 20px;
+}
+
+.electran-table tr:nth-child(even) {
+    background-color: rgba(146, 146, 146, 0.3);
+}
+
+.electran-table tr:hover{
+    background-color: rgba(146, 146, 146, 0.6) !important;
+}
+
 /*********** question content**************/
 .question-help-container {
     margin-top: 20px;
@@ -138,12 +168,12 @@ body {
 }
 
 .question-paragraph {
-    font-size: 17px;
+    font-size: 14px;
 }
 
 .question-random-value {
-    font-size: 20px;
-    margin-bottom: 30px;
+    font-size: 18px;
+    margin-bottom: 20px;
 }
 .student-answer {
     margin-bottom: 20px;

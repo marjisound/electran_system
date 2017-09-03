@@ -1,12 +1,22 @@
 from django.contrib import admin
-from .models import QuestionCategory, Question, Semester, QuestionSemester, UserSemester, Mark, Module
+from .models import (QuestionCategory,
+                     Question,
+                     Semester,
+                     QuestionSemester,
+                     UserSemester,
+                     Mark,
+                     Module,
+                     UserQuestionSemester)
 
 # Register your models here.
 admin.site.register(QuestionCategory)
 admin.site.register(Module)
 
 
-admin.site.register(QuestionSemester)
+class QuestionSemesterAdmin(admin.ModelAdmin):
+    list_filter = ('semester', 'question_visibility')
+
+admin.site.register(QuestionSemester, QuestionSemesterAdmin)
 
 
 class QuestionAdmin(admin.ModelAdmin):
@@ -16,7 +26,7 @@ admin.site.register(Question, QuestionAdmin)
 
 
 class MarkAdmin(admin.ModelAdmin):
-    list_filter = ('user_semester__semester', 'user_semester__user', 'final_mark', 'question_semester')
+    list_filter = ('user_semester__semester', 'user_semester__user', 'final_mark', 'question_semester__question')
     list_display = ('user_semester', 'question_semester', 'final_mark', 'mark_datetime')
     search_fields = ['user_semester__user__student_no', 'user_semester__user__email']
 
@@ -33,3 +43,9 @@ class UserSemesterAdmin(admin.ModelAdmin):
     list_filter = ('user', 'semester', 'is_registered_for_semester')
 
 admin.site.register(UserSemester, UserSemesterAdmin)
+
+
+class UserQuestionSemesterAdmin(admin.ModelAdmin):
+    list_filter = ('user_semester', 'question_semester')
+
+admin.site.register(UserQuestionSemester, UserQuestionSemesterAdmin)

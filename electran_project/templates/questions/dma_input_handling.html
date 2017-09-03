@@ -1,0 +1,91 @@
+{% extends "questions/question_base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+    <div class="col-md-12">
+        {% if is_form %}
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <h2 class="question-title">DMA Input Handling</h2>
+                <p class="question-paragraph">This question concerns the use of DMA to handle the input and
+                    storage in memory of data arriving at an input interface, the achievable data rates that can
+                    achieved using this mechanism, and the bus bandwidth (capacity) used for particular data
+                    rates.<br>You are given details of the execution of the clock cycles executed for each DMA
+                    transfer, and the clock cycles to acquire and release the busses.</p>
+                <p class="question-paragraph">
+                    Below you are given: the number of clock cycles required for the DMA device to transfer a
+                    single data item between the input interface and memory, the number of clock cycles to acquire
+                    and releases the system busses, the size (in bits) of each data item, and the clock frequency.
+                </p>
+                <h3 class="question-random-value">number of clock cycles for each data transfer: {{ random_value.data_transfer_cycles }}</h3>
+                <h3 class="question-random-value">number of clock cycles to acquire and release busses: {{ random_value.release_buss_cycles }}</h3>
+                <h3 class="question-random-value">number of bits per data item: {{ random_value.data_item_bits }}</h3>
+                <h3 class="question-random-value">clock frequency: {{ random_value.clock_frequency }}MHz</h3>
+
+                <div class="col-md-12 no-padding">
+                    <div class="form-group">
+                        <label class="col-md-12 no-padding" for="answer_data_rate">What is the maximum achievable
+                            data rate in Kbits/second?</label>
+                        <input class="col-md-4" type="text" class="form-control" id="answer_data_rate" name="answer_data_rate">
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-12 no-padding" for="answer_bus_clock_percentage">What percentage of the bus clocks
+                            are used by the DMA device if the data rate is {{ random_value.actual_data_rate }}Kbits/sec?</label>
+                        <input class="col-md-4" type="text" class="form-control" id="answer_bus_clock_percentage" name="answer_bus_clock_percentage">
+                    </div>
+                    <div class="col-sm-12 no-padding">
+                        <input type="submit" class="btn btn-primary electran-submit-btn" value="submit" name="submit">
+                    </div>
+
+                </div>
+            </form>
+        {% else %}
+            <div>
+                <a href="{% url 'home' %}">Back to questions</a>
+            </div>
+            <div class="retry-container">
+                <a href="{% url 'questions:all_questions' slug=slug %}">Retry the question</a>
+            </div>
+                <h2 class="question-title">DMA Input Handling</h2>
+                <p class="question-paragraph">This question concerns the use of DMA to handle the input and
+                    storage in memory of data arriving at an input interface, the achievable data rates that can
+                    achieved using this mechanism, and the bus bandwidth (capacity) used for particular data
+                    rates.<br>You are given details of the execution of the clock cycles executed for each DMA
+                    transfer, and the clock cycles to acquire and release the busses.</p>
+                <p class="question-paragraph">
+                    Below you are given: the number of clock cycles required for the DMA device to transfer a
+                    single data item between the input interface and memory, the number of clock cycles to acquire
+                    and releases the system busses, the size (in bits) of each data item, and the clock frequency.
+                </p>
+                <h3 class="question-random-value">number of clock cycles for each data transfer: {{ random_value.data_transfer_cycles }}</h3>
+                <h3 class="question-random-value">number of clock cycles to acquire and release busses: {{ random_value.release_buss_cycles }}</h3>
+                <h3 class="question-random-value">number of bits per data item: {{ random_value.data_item_bits }}</h3>
+                <h3 class="question-random-value">clock frequency: {{ random_value.clock_frequency }}MHz</h3>
+            <div class="col-md-12 no-padding">
+                {% if not result %}
+                <div class="col-md-8 no-padding">
+                    <table class="table table-condensed register-table answer-table">
+                        <tr class="answer_table_title">
+                            <th>field</th>
+                            <th>Your answer</th>
+                            <th>Correct answer</th>
+                        </tr>
+                        {% for key, value in display_correct %}
+                        <tr>
+                            <td class="register-number-cell">{{ key }}</td>
+                            {% for answer in value %}
+                            <td class="register-value-cell">{{ answer }}</td>
+                            {% endfor %}
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+
+{% endblock %}
+{% block specific %}
+    {% include "questions/question_helps/binary_hex_conversion.html" %}
+{% endblock %}

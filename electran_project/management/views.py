@@ -13,14 +13,13 @@ from django.contrib.admin.views.decorators import staff_member_required
 from .custom import validation
 from django.db import Error, IntegrityError
 from django.conf import settings
-from django.db.models import Max, Count
+from django.db.models import Count
 from allauth.account.forms import ResetPasswordForm
 from allauth.account.models import EmailAddress
 from django.http import JsonResponse
+from .custom import helper
 
 from django.contrib.auth import get_user_model
-
-
 User = get_user_model()
 
 
@@ -29,7 +28,6 @@ def home_get_questions(marks=None, sem_id=None):
     questions = QuestionSemester.objects.filter(semester_id=sem_id,
                                                 semester__sem_is_active=True,
                                                 question_visibility=True)
-
     questions_with_cats = []
 
     for cat in categories:
@@ -37,9 +35,9 @@ def home_get_questions(marks=None, sem_id=None):
         cat_has_qus = False
         for qus in questions:
             if qus.question.category_id == cat.id:
-                max_mark = marks.filter(question_semester__question_id=qus.question.id).aggregate(Max('final_mark'))
+                max_mark = helper.get_max_mark_for_question(marks, qus)['max_mark']
                 cat_has_qus = True
-                qus.max_mark = max_mark['final_mark__max']
+                qus.max_mark = max_mark
                 qus_cat['qus'].append(qus)
         qus_cat['qus'] = sorted(qus_cat['qus'], key=lambda x: x.question.order)
         if cat_has_qus:
@@ -111,8 +109,7 @@ def homePage(request):
                     return render(request, template, {'type': 'module_session_error'})
 
                 if selected_semester_id > 0:
-                    semester = Semester.objects.get(sem_is_active__exact=True,
-                                                    id=selected_semester_id)
+
                     request.session.__setitem__('active_semester_id', selected_semester_id)
 
             except (ObjectDoesNotExist, ValueError, TypeError):
@@ -122,6 +119,8 @@ def homePage(request):
         has_multiple_modules = True
         if request.session.__contains__('active_semester_id'):
             semester_id = request.session.__getitem__('active_semester_id')
+            semester = Semester.objects.get(sem_is_active__exact=True,
+                                            id=semester_id)
             user_marks = Mark.objects.filter(
                 user_semester__user__id=request.user.id,
                 final_mark__isnull=False,
@@ -403,27 +402,45 @@ class SemesterListView(ListView):
     context_object_name = 'semesters'
 
 
-def get_data(request, *args, **kwargs):
-    data = {
-        'sales': 100,
-        'customers': 10,
-    }
-    return JsonResponse(data)
+@staff_member_required
+def report_marks(request):
+    selected_semester = None
+    semester_students = None
+    selected_sem_id = None
+    total_mark = None
+    if request.method == 'POST':
+        selected_sem_id = request.POST.get('selectedSemester')
 
-from django.shortcuts import redirect
-# @login_required()
-def test_view(request, slug=None):
-    if slug == 'new':
-        request.session.__setitem__('program_random_value', 4)
-        return HttpResponse('no')
-    elif slug == 'old':
-        value = request.session.__getitem__('program_random_value')
-        return redirect('management:test', slug='new')
     else:
-        return HttpResponse('no')
+        if request.session.__contains__('selected_semester_for_reports'):
+            selected_sem_id = request.session.__getitem__('selected_semester_for_reports')
 
-    # test = HexToBinaryConversion()
-    # random_hex = test.generate_random()
-    # expected_answer = test.expected_answer(random_hex)
-    # return render(request,'management/test.html',{'form':test})
+    if selected_sem_id:
+        try:
+            selected_semester = Semester.objects.get(id=selected_sem_id)
+            # semester_students = UserSemester.objects.filter(semester_id__exact=selected_sem_id,
+            #                                                 is_registered_for_semester__exact=True,
+            #                                                 user__is_admin=False)
+            request.session.__setitem__('selected_semester_for_reports', selected_sem_id)
+            semester_students = list(UserSemester.objects.filter(semester_id__exact=selected_sem_id))
+            for user_sem in semester_students:
+                mark = helper.calculate_student_mark(user_sem.id, selected_sem_id)
+                user_sem.mark = mark['all_qus_mark']
+                user_sem.max_mark = mark['all_qus_max_mark']
+                user_sem.before_deadline_mark = mark['before_deadline_mark']
+                user_sem.after_deadline_mark = mark['after_deadline_mark']
+            total_mark = semester_students[0].max_mark
+        except ObjectDoesNotExist:
+            pass
+
+    semester_list = Semester.objects.all()
+    context_dict = {
+        'semester_list': semester_list,
+        'selected_semester': selected_semester,
+        'semester_students': semester_students,
+        'total_mark': total_mark
+    }
+    template = 'management/report_marks.html'
+    return render(request, template, context_dict)
+
 

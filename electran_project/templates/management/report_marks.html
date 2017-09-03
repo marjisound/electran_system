@@ -1,0 +1,59 @@
+{% extends "custom_base.html" %}
+
+{% block content %}
+<div class="jumbotron home-container">
+    <form method="post" id="semesterModuleForm" class="col-md-4 ">
+      {% csrf_token %}
+        <div class="qus-sem-question-title">
+            <label for="selectedSemester">Select semester</label>
+            <select  class="form-control" id="selectedSemester" name="selectedSemester">
+                    <option value="0">select</option>
+                {% for semester_item in semester_list %}
+                    <option value="{{ semester_item.id }}" {% if semester_item.id == semester.id %}{% if que_cat %}selected{% endif %}{% endif %}>{{ semester_item }}</option>
+                {% endfor %}
+            </select>
+            <span id="semesterModuleError" style="display: none" class="validation-error">Semester must be selected</span>
+        <br>
+            <input type="submit" class="btn btn-primary electran-submit-btn" value="submit">
+        </div>
+    </form>
+
+    {% if selected_semester %}
+        {% if semester_students %}
+            <table class="col-sm-12 table table-striped electran-table">
+            <caption class="text-center">{{ selected_semester}}</caption>
+                <thead>
+                    <tr>
+                        <th class="col-sm-1" style="width: 4%">Row</th>
+                        <th class="col-sm-3">Student</th>
+                        <th class="col-sm-2">Student no</th>
+                        <th class="col-sm-2">Mark</th>
+                        <th class="col-sm-2">Pre deadline</th>
+                        <th class="col-sm-2">Post deadline</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for student in semester_students %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{student.user.first_name}} {{ student.user.last_name }}</td>
+                        {% if student.user.student_no %}
+                        <td>{{student.user.student_no}}</td>
+                        {% else %}
+                        <td>-</td>
+                        {% endif %}
+                        <td>{{student.mark}}</td>
+                        <td>{{student.before_deadline_mark}}</td>
+                        <td>{{student.after_deadline_mark}}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+    {% endif %}
+
+</div>
+
+
+
+{% endblock content %}
