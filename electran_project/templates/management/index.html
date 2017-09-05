@@ -59,10 +59,10 @@
                 <tbody>
                     {% for question in item.qus %}
                     <tr class="home-question-item">
-                        <td><a href="{% url 'questions:all_questions' slug=question.question.slug %}">{{question.question.question_title}}</a></td>
+                        <td><a href="{% url 'questions:all_questions' slug=question.slug %}">{{question.question_title}}</a></td>
                         <td>
                         {% if question.max_mark is not null %}
-                            <span class="home-mark">{{ question.max_mark }}/{{ question.question.mark_max_value }}</span>
+                            <span class="home-mark">{{ question.max_mark }}/{{ question.mark_max_value }}</span>
                         {% else %}
                             <span class="home-mark-no">-</span>
                         {% endif %}

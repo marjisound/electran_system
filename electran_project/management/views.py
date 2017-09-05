@@ -4,7 +4,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.urls import reverse
 from django.contrib import messages
 from validate_email import validate_email
-from .models import (Question, QuestionCategory, Semester, QuestionSemester, UserSemester, Mark)
+from .models import (Question, QuestionCategory, Semester, QuestionSemester, UserSemester, Mark, UserQuestionSemester)
 from .forms import NewSemesterForm, AddUsersToSemesterForm
 from django.views.generic import ListView
 from django.utils.decorators import method_decorator
@@ -13,7 +13,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 from .custom import validation
 from django.db import Error, IntegrityError
 from django.conf import settings
-from django.db.models import Count
+from django.db.models import Count, Max, Sum, Exists, OuterRef, F, Q
 from allauth.account.forms import ResetPasswordForm
 from allauth.account.models import EmailAddress
 from django.http import JsonResponse
@@ -23,23 +23,34 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 
-def home_get_questions(marks=None, sem_id=None):
+def home_get_questions(sem_id=None, user_id=None):
+
     categories = QuestionCategory.objects.order_by('order')
-    questions = QuestionSemester.objects.filter(semester_id=sem_id,
-                                                semester__sem_is_active=True,
-                                                question_visibility=True)
+
+    questions = helper.get_questions_with_mark(sem_id=sem_id, user_id=user_id)
     questions_with_cats = []
 
     for cat in categories:
         qus_cat = {'cat': cat, 'qus': []}
         cat_has_qus = False
         for qus in questions:
-            if qus.question.category_id == cat.id:
-                max_mark = helper.get_max_mark_for_question(marks, qus)['max_mark']
+            if qus['category_id'] == cat.id:
+                # max_mark = helper.get_max_mark_for_question(marks, qus)['max_mark']
                 cat_has_qus = True
-                qus.max_mark = max_mark
+                mark_before_deadline = qus['max_mark_before'] if qus['max_mark_before'] is not None else 0
+                mark_after_deadline = qus['max_mark_after'] / 2 if qus['max_mark_after'] is not None else 0
+                qus['max_mark'] = mark_before_deadline + mark_after_deadline
+
+                if qus['questionsemester__userquestionsemester__question_deadline']:
+                    qus['question_deadline'] = qus['questionsemester__userquestionsemester__question_deadline']
+                else:
+                    qus['question_deadline'] = qus['questionsemester__question_deadline']
+
+                if isinstance(qus['max_mark'], float) and (qus['max_mark']).is_integer():
+                    qus['max_mark'] = int(qus['max_mark'])
+
                 qus_cat['qus'].append(qus)
-        qus_cat['qus'] = sorted(qus_cat['qus'], key=lambda x: x.question.order)
+        qus_cat['qus'] = sorted(qus_cat['qus'], key=lambda x: x['order'])
         if cat_has_qus:
             questions_with_cats.append(qus_cat)
     return questions_with_cats
@@ -90,13 +101,9 @@ def homePage(request):
 
     elif len(sem_active_list) == 1:
         semester = sem_active_list[0]
-        user_marks = Mark.objects.filter(
-            user_semester__user__id=request.user.id,
-            final_mark__isnull=False,
-            user_semester__semester_id=semester.id,
-            user_semester__semester__sem_is_active=True)
         request.session.__setitem__('active_semester_id', semester.id)
-        questions_with_cats = home_get_questions(marks=user_marks, sem_id=semester.id)
+        questions_with_cats = home_get_questions(sem_id=semester.id, user_id=request.user.id)
+
 
     else:
         semester = sem_active_list[0]
@@ -121,12 +128,9 @@ def homePage(request):
             semester_id = request.session.__getitem__('active_semester_id')
             semester = Semester.objects.get(sem_is_active__exact=True,
                                             id=semester_id)
-            user_marks = Mark.objects.filter(
-                user_semester__user__id=request.user.id,
-                final_mark__isnull=False,
-                user_semester__semester_id=semester_id,
-                user_semester__semester__sem_is_active=True)
-            questions_with_cats = home_get_questions(marks=user_marks, sem_id=semester_id)
+
+            questions_with_cats = home_get_questions(sem_id=semester_id, user_id=request.user.id)
+
 
     template = 'management/index.html'
     context_dict = {
@@ -404,6 +408,7 @@ class SemesterListView(ListView):
 
 @staff_member_required
 def report_marks(request):
+    # ###############################
     selected_semester = None
     semester_students = None
     selected_sem_id = None
@@ -423,13 +428,54 @@ def report_marks(request):
             #                                                 user__is_admin=False)
             request.session.__setitem__('selected_semester_for_reports', selected_sem_id)
             semester_students = list(UserSemester.objects.filter(semester_id__exact=selected_sem_id))
+
+            # Maximum achivable mark
+            achievable_mark = Question.objects.filter(
+                questionsemester__semester_id__exact=selected_sem_id).aggregate(Sum('mark_max_value'))
             for user_sem in semester_students:
-                mark = helper.calculate_student_mark(user_sem.id, selected_sem_id)
-                user_sem.mark = mark['all_qus_mark']
-                user_sem.max_mark = mark['all_qus_max_mark']
-                user_sem.before_deadline_mark = mark['before_deadline_mark']
-                user_sem.after_deadline_mark = mark['after_deadline_mark']
-            total_mark = semester_students[0].max_mark
+
+                # mark before deadline
+                subquery_before_deadline = UserQuestionSemester.objects.filter(user_semester_id__exact=user_sem.id,
+                                                                               question_semester_id__exact=OuterRef(
+                                                                                   'question_semester_id'),
+                                                                               question_deadline__gte=OuterRef(
+                                                                                   'mark_datetime'))
+
+                sum_before_deadline = Mark.objects.filter(question_semester__question_visibility__exact=True,
+                                                          question_semester__semester_id__exact=selected_sem_id,
+                                                          user_semester_id__exact=user_sem.id,
+                                                          ).annotate(subquery=Exists(subquery_before_deadline)).filter(
+                            Q(mark_datetime__lte=F('question_semester__question_deadline')) | Q(subquery=True)).values(
+                            'question_semester_id').annotate(max_mark=Max('final_mark')).aggregate(Sum('max_mark'))
+
+                # mark after deadline
+                exception_deadline = UserQuestionSemester.objects.filter(user_semester_id__exact=user_sem.id,
+                                                                         question_semester_id__exact=OuterRef(
+                                                                             'question_semester_id'))
+
+                subquery_after_deadline = UserQuestionSemester.objects.filter(user_semester_id__exact=user_sem.id,
+                                                                              question_semester_id__exact=OuterRef(
+                                                                                  'question_semester_id'),
+                                                                              question_deadline__lt=OuterRef(
+                                                                                  'mark_datetime'))
+                sum_after_deadline = Mark.objects.filter(question_semester__question_visibility__exact=True,
+                                                         question_semester__semester_id__exact=selected_sem_id,
+                                                         user_semester_id__exact=user_sem.id,
+                                                         ).annotate(exception_deadline=~Exists(exception_deadline),
+                                                                    after_deadline=Exists(
+                                                                         subquery_after_deadline)).filter(
+                    Q(mark_datetime__gt=F('question_semester__question_deadline'), exception_deadline=True) |
+                    Q(after_deadline=True)).values('question_semester_id').annotate(
+                                                            max_mark=Max('final_mark')).aggregate(Sum('max_mark'))
+
+                user_sem.sum_before_deadline = sum_before_deadline['max_mark__sum'] if sum_before_deadline['max_mark__sum'] is not None else 0
+                user_sem.sum_after_deadline = sum_after_deadline['max_mark__sum']/2 if sum_before_deadline['max_mark__sum'] is not None else 0
+
+                if isinstance(user_sem.sum_after_deadline, float) and (user_sem.sum_after_deadline).is_integer():
+                    user_sem.sum_after_deadline = int(user_sem.sum_after_deadline )
+                user_sem.mark = user_sem.sum_before_deadline + user_sem.sum_after_deadline
+
+            total_mark = achievable_mark
         except ObjectDoesNotExist:
             pass
 
