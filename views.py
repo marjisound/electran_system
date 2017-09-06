@@ -35,15 +35,16 @@ def home_get_questions(sem_id=None, user_id=None):
         cat_has_qus = False
         for qus in questions:
             if qus['category_id'] == cat.id:
+                # max_mark = helper.get_max_mark_for_question(marks, qus)['max_mark']
                 cat_has_qus = True
                 mark_before_deadline = qus['max_mark_before'] if qus['max_mark_before'] is not None else 0
                 mark_after_deadline = qus['max_mark_after'] / 2 if qus['max_mark_after'] is not None else 0
                 qus['max_mark'] = mark_before_deadline + mark_after_deadline
 
-                if qus['user_deadline']:
-                    qus['question_deadline'] = qus['user_deadline']
+                if qus['questionsemester__userquestionsemester__question_deadline']:
+                    qus['question_deadline'] = qus['questionsemester__userquestionsemester__question_deadline']
                 else:
-                    qus['question_deadline'] = qus['main_deadline']
+                    qus['question_deadline'] = qus['questionsemester__question_deadline']
 
                 if isinstance(qus['max_mark'], float) and (qus['max_mark']).is_integer():
                     qus['max_mark'] = int(qus['max_mark'])
@@ -457,33 +458,18 @@ def report_marks(request):
                                                                                   'question_semester_id'),
                                                                               question_deadline__lt=OuterRef(
                                                                                   'mark_datetime'))
-
-                sub_before_deadline = UserQuestionSemester.objects.filter(user_semester_id__exact=user_sem.id,
-                                                                          question_semester_id__exact=OuterRef('question_semester'),
-                                                                          question_deadline__gte=OuterRef('mark_datetime')
-                                                                          ).values('question_deadline')
-
-                mark_before_deadline = Mark.objects.filter(question_semester__question_visibility__exact=True,
-                                                           question_semester_id__exact=OuterRef('question_semester'),
-                                                           user_semester_id__exact=user_sem.id,
-                                                           final_mark__gte=OuterRef('final_mark')
-                                                           ).annotate(mark_pre_deadline=Exists(sub_before_deadline)).filter(
-                    Q(mark_datetime__lte=F('question_semester__question_deadline')) | Q(mark_pre_deadline=True)
-                ).values('final_mark')
-
                 sum_after_deadline = Mark.objects.filter(question_semester__question_visibility__exact=True,
                                                          question_semester__semester_id__exact=selected_sem_id,
                                                          user_semester_id__exact=user_sem.id,
                                                          ).annotate(exception_deadline=~Exists(exception_deadline),
                                                                     after_deadline=Exists(
-                                                                         subquery_after_deadline),
-                                                                    before_deadline=~Exists(mark_before_deadline)).filter(
-                    Q(Q(mark_datetime__gt=F('question_semester__question_deadline'), exception_deadline=True) |
-                    Q(after_deadline=True)),Q(before_deadline=True)).values('question_semester_id').annotate(
+                                                                         subquery_after_deadline)).filter(
+                    Q(mark_datetime__gt=F('question_semester__question_deadline'), exception_deadline=True) |
+                    Q(after_deadline=True)).values('question_semester_id').annotate(
                                                             max_mark=Max('final_mark')).aggregate(Sum('max_mark'))
 
                 user_sem.sum_before_deadline = sum_before_deadline['max_mark__sum'] if sum_before_deadline['max_mark__sum'] is not None else 0
-                user_sem.sum_after_deadline = sum_after_deadline['max_mark__sum']/2 if sum_after_deadline['max_mark__sum'] is not None else 0
+                user_sem.sum_after_deadline = sum_after_deadline['max_mark__sum']/2 if sum_before_deadline['max_mark__sum'] is not None else 0
 
                 if isinstance(user_sem.sum_after_deadline, float) and (user_sem.sum_after_deadline).is_integer():
                     user_sem.sum_after_deadline = int(user_sem.sum_after_deadline )
