@@ -1,6 +1,6 @@
 from django.db.models import Max, OuterRef, Exists, Q, F, Subquery, IntegerField
 from django.db import models, connection
-from management.models import Mark, UserQuestionSemester, Question
+from management.models import Mark, Question
 
 
 def get_questions_with_mark(sem_id=None, user_id=None):
