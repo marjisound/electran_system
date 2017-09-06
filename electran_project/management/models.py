@@ -123,16 +123,16 @@ class Mark(models.Model):
                '-' + str(self.question_semester)
 
 
-# class UserQuestionSemester(models.Model):
-#     user_semester = models.ForeignKey(UserSemester, on_delete=models.CASCADE)
-#     question_semester = models.ForeignKey(QuestionSemester, on_delete=models.CASCADE)
-#     question_deadline = models.DateTimeField()
-#
-#     def __str__(self):
-#         return str(self.user_semester) + ' - ' + str(self.question_semester)
-#
-#     class Meta:
-#         unique_together = ('question_semester', 'user_semester')
+class UserQuestionSemester(models.Model):
+    user_semester = models.ForeignKey(UserSemester, on_delete=models.CASCADE)
+    question_semester = models.ForeignKey(QuestionSemester, on_delete=models.CASCADE)
+    question_deadline = models.DateTimeField()
+
+    def __str__(self):
+        return str(self.user_semester) + ' - ' + str(self.question_semester)
+
+    class Meta:
+        unique_together = ('question_semester', 'user_semester')
 
 
 

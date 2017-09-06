@@ -6,7 +6,7 @@ from .models import (QuestionCategory,
                      UserSemester,
                      Mark,
                      Module,
-                     )
+                     UserQuestionSemester)
 
 # Register your models here.
 admin.site.register(QuestionCategory)
@@ -45,7 +45,7 @@ class UserSemesterAdmin(admin.ModelAdmin):
 admin.site.register(UserSemester, UserSemesterAdmin)
 
 
-# class UserQuestionSemesterAdmin(admin.ModelAdmin):
-#     list_filter = ('user_semester', 'question_semester')
-#
-# admin.site.register(UserQuestionSemester, UserQuestionSemesterAdmin)
+class UserQuestionSemesterAdmin(admin.ModelAdmin):
+    list_filter = ('user_semester', 'question_semester')
+
+admin.site.register(UserQuestionSemester, UserQuestionSemesterAdmin)
