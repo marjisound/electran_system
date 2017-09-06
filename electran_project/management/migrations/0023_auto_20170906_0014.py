@@ -16,6 +16,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='userquestionsemester',
             name='question_semester',
-            field=models.ForeignKey(default=105, on_delete=django.db.models.deletion.CASCADE, to='management.QuestionSemester'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='management.QuestionSemester'),
         ),
     ]
