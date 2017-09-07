@@ -1,4 +1,5 @@
 from django.contrib import admin
+from .forms import UserQuestionSemesterForm
 from .models import (QuestionCategory,
                      Question,
                      Semester,
@@ -47,5 +48,14 @@ admin.site.register(UserSemester, UserSemesterAdmin)
 
 class UserQuestionSemesterAdmin(admin.ModelAdmin):
     list_filter = ('user_semester', 'question_semester')
+    form = UserQuestionSemesterForm
+
+    class Media:
+        js = ['/static/js/admin_semester_change.js']
+
 
 admin.site.register(UserQuestionSemester, UserQuestionSemesterAdmin)
+
+
+
+

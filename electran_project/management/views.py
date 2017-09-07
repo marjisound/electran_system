@@ -13,11 +13,13 @@ from django.contrib.admin.views.decorators import staff_member_required
 from .custom import validation
 from django.db import Error, IntegrityError
 from django.conf import settings
-from django.db.models import Count, Max, Sum, Exists, OuterRef, F, Q
+from django.db.models import Count, Max, Sum, Exists, OuterRef, F, Q, Value, CharField
 from allauth.account.forms import ResetPasswordForm
 from allauth.account.models import EmailAddress
 from django.http import JsonResponse
 from .custom import helper
+from django.db.models.functions import Concat
+import json
 
 from django.contrib.auth import get_user_model
 User = get_user_model()
@@ -502,5 +504,25 @@ def report_marks(request):
     }
     template = 'management/report_marks.html'
     return render(request, template, context_dict)
+
+
+def admin_semester_choices(request):
+    action_list_question = []
+    action_list_user = []
+
+    semester_id = request.GET.get('semester_id')
+
+    question_semester_list = Question.objects.filter(questionsemester__semester_id__exact=semester_id).values('questionsemester', 'question_title')
+    user_semester_list = User.objects.filter(usersemester__semester_id__exact=semester_id).annotate(
+        student_name=Concat('first_name', Value(' '), 'last_name', Value('('), 'student_no', Value(')'), output_field=CharField())
+    ).values('usersemester', 'student_name')
+
+    [action_list_user.append(each) for each in user_semester_list]
+    [action_list_question.append(each) for each in question_semester_list]
+
+    action_list = [action_list_user, action_list_question]
+
+    json_output = json.dumps(action_list)
+    return HttpResponse(json_output)
 
 

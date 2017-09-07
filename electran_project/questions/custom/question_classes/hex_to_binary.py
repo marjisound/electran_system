@@ -29,6 +29,9 @@ class Question(BinaryHexBase):
             if formatted_answer.startswith('0b'):
                 formatted_answer = formatted_answer[2:]
 
+            while formatted_answer.startswith('0'):
+                formatted_answer = formatted_answer[1:]
+
             if formatted_answer == correct_answer:
                 return True
             else:
