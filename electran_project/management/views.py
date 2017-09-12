@@ -91,7 +91,7 @@ def get_questions(semesters=[]):
 def homePage(request):
 
     semester = None
-    has_multiple_modules = True
+    has_multiple_modules = False
     questions_with_cats = []
 
     sem_active_list = list(Semester.objects.filter(sem_is_active__exact=True, users__exact=request.user.id))
