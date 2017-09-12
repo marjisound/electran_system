@@ -1,38 +1,40 @@
 {% extends "custom_base.html" %}
 
 {% block content %}
-  <div class="jumbotron">
+  <div class="">
     <div class="link-new-semester">
       <a href="{% url 'management:semester_create' %}">Add new semester</a>
     </div>
-    <table class="table table-striped electran-table">
-      <thead>
-        <tr>
-          <th>Semester</th>
-          <th>Module</th>
-          <th>Questions</th>
-          <th>Students</th>
-          <th>Is Active</th>
-          <th>Manage Students</th>
-          <th>Manage Questions</th>
-          <th>Edit Semester</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for semester in semesters %}
-          <tr>
-            <td>{{semester}}</td>
-            <td>{{semester.sem_module}}</td>
-            <td>{{semester.questions.all.count}}</td>
-            <td>{{semester.users.all.count}}</td>
-            <td>{{semester.sem_is_active}}</td>
-            <td><a href="{% url 'management:upload_users' semester.id %}">Upload Users</a></td>
-            <td><a href="/management/{{semester.id}}">click me</a></td>
-            <td><a href="/admin/management/semester/{{semester.id}}/change/">Edit</a></td>
-          </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+    <div class="col-md-12">
+        <table class="table table-striped electran-table">
+          <thead>
+            <tr>
+              <th>Semester</th>
+              <th>Module</th>
+              <th>Questions</th>
+              <th>Students</th>
+              <th>Is Active</th>
+              <th>Manage Students</th>
+              <th>Manage Questions</th>
+              <th>Edit Semester</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for semester in semesters %}
+              <tr>
+                <td>{{semester}}</td>
+                <td>{{semester.sem_module}}</td>
+                <td>{{semester.questions.all.count}}</td>
+                <td>{{semester.users.all.count}}</td>
+                <td>{{semester.sem_is_active}}</td>
+                <td><a href="{% url 'management:upload_users' semester.id %}">Upload Users</a></td>
+                <td><a href="/management/{{semester.id}}">click me</a></td>
+                <td><a href="/admin/management/semester/{{semester.id}}/change/">Edit</a></td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+    </div>
 
   </div>
 {% endblock %}

@@ -588,6 +588,10 @@ body {
     .home-cat-list-title {
         font-size: 8px;
     }
+    
+    .home-expand-btn {
+        float: none;
+    }
 }
 
 @media (max-width:1200px) {
@@ -632,14 +636,30 @@ body {
         font-size: 9px;
     }
 
+    .electran-table th{
+        font-size: 8px;
+    }
+    .electran-table tr td{
+        font-size: 10px;
+    }
 
+    .electran-table {
+        margin-left: -5px;
+    }
 
 }
+
+@media (max-width:400px) {
+    .electran-table {
+        margin-left: -17px;
+    }
+}
+
+
 @media (min-width:768px) {
     .home-cat-list-title {
         font-size: 9px;
     }
-
 }
 
 
