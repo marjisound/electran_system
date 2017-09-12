@@ -19,8 +19,6 @@ class AddUsersToSemesterForm(forms.Form):
 class UserQuestionSemesterForm(forms.ModelForm):
 
     semester = forms.ModelChoiceField(queryset=Semester.objects.all())
-    txt_user_semester = forms.CharField(widget=forms.HiddenInput)
-    txt_question_semester = forms.CharField(widget=forms.HiddenInput)
 
     class Meta:
         model = UserQuestionSemester
@@ -30,11 +28,7 @@ class UserQuestionSemesterForm(forms.ModelForm):
         super(UserQuestionSemesterForm, self).__init__(*args, **kwargs)
         if 'instance' in kwargs and hasattr(kwargs['instance'], 'user_semester'):
             initial_sem_id = kwargs['instance'].user_semester.semester_id
-            initial_user_sem_id = kwargs['instance'].user_semester_id
-            initial_question_sem_id = kwargs['instance'].question_semester_id
             self.fields['semester'].initial = initial_sem_id
-            self.fields['txt_user_semester'].initial = initial_user_sem_id
-            self.fields['txt_question_semester'].initial = initial_question_sem_id
 
 
 

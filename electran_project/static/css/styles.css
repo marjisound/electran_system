@@ -32,6 +32,10 @@ body {
     font-weight: bold;
 }
 
+.link-new-semester {
+    margin-bottom: 20px;
+}
+
 .home-question-item {
     border: 1px solid rgba(138, 136, 136, 0.3);
 }
@@ -111,9 +115,52 @@ body {
     padding-bottom: 15px;
 }
 
+.electran-table {
+    border:1px solid #6d6d6d;
+}
+
+.electran-table th{
+    font-size: 12px;
+    background-color: #6d6d6d;
+    color: #ffffff;
+    font-weight:normal;
+    border:1px solid #6d6d6d;
+}
+
+.electran-table td{
+    border:1px solid rgba(109, 109, 109, 0.3);
+}
+
+.electran-table caption{
+    color: #212b26;
+    font-weight: bold;
+    padding-bottom: 20px;
+}
+
+.electran-table tr:nth-child(even) {
+    background-color: rgba(146, 146, 146, 0.3);
+}
+
+.electran-table tr:hover{
+    background-color: rgba(146, 146, 146, 0.6) !important;
+}
+
+.export-excel input {
+    margin-bottom: 0;
+}
+
+.export-excel div {
+    font-size: 9px;
+}
+
 /*********** question content**************/
 .question-help-container {
     margin-top: 20px;
+}
+
+.answer-input-label, .sem-create-form label{
+    font-size: 13px;
+    margin-bottom: 10px;
 }
 
 .question-help-content-container {
@@ -138,12 +185,12 @@ body {
 }
 
 .question-paragraph {
-    font-size: 17px;
+    font-size: 14px;
 }
 
 .question-random-value {
-    font-size: 20px;
-    margin-bottom: 30px;
+    font-size: 18px;
+    margin-bottom: 20px;
 }
 .student-answer {
     margin-bottom: 20px;
@@ -307,7 +354,7 @@ body {
 }
 
 .sem-create-form {
-    width:30%;
+    width:20%;
 }
 
 .deadline-container {

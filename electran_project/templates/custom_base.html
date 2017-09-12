@@ -15,7 +15,12 @@
     <script type="text/javascript" src="{% static "js/main.js" %}"></script>
   </head>
   <body>
-    <div id="wrapper">
+  {% if user.is_admin %}
+      <div id="wrapper">
+  {% else %}
+
+    <div id="wrapper" class="active">
+    {% endif %}
         <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     		<div class="container-fluid">
     			<div class="navbar-header">
@@ -28,9 +33,11 @@
             			<span class="icon-bar"></span>
         			</button>
               <div  class="navbar-brand">
+                {% if user.is_admin %}
                 <a id="menu-toggle" href="#" class="glyphicon glyphicon-align-justify btn-menu toggle">
                       <i class="fa fa-bars"></i>
                 </a>
+                {% endif %}
   				<a href="{% url 'home' %}">Electran</a>
               </div>
     			</div>
@@ -45,6 +52,7 @@
     		</div>
     	</nav>
         <!-- Sidebar -->
+        {% if user.is_admin %}
         <div id="sidebar-wrapper">
             <nav id="spy">
                 <ul class="sidebar-nav nav">
@@ -68,9 +76,15 @@
                             <span class="fa fa-anchor solo">Mark Reports</span>
                         </a>
                     </li>
+                    <li>
+                        <a href="/admin/management/userquestionsemester/add/" target="_blank">
+                            <span class="fa fa-anchor solo">Add Extension</span>
+                        </a>
+                    </li>
                 </ul>
             </nav>
         </div>
+        {% endif %}
         <!-- Page content -->
         <div id="page-content-wrapper">
             <div class="page-content">

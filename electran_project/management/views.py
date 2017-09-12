@@ -16,9 +16,9 @@ from django.conf import settings
 from django.db.models import Count, Max, Sum, Exists, OuterRef, F, Q, Value, CharField
 from allauth.account.forms import ResetPasswordForm
 from allauth.account.models import EmailAddress
-from django.http import JsonResponse
 from .custom import helper
 from django.db.models.functions import Concat
+import django_excel
 import json
 
 from django.contrib.auth import get_user_model
@@ -131,7 +131,6 @@ def homePage(request):
                                             id=semester_id)
 
             questions_with_cats = home_get_questions(sem_id=semester_id, user_id=request.user.id)
-
 
     template = 'management/index.html'
     context_dict = {
@@ -409,17 +408,16 @@ class SemesterListView(ListView):
 
 @staff_member_required
 def report_marks(request):
-    # ###############################
+
     selected_semester = None
     semester_students = None
-    selected_sem_id = None
     total_mark = None
+    selected_sem_id = None
     if request.method == 'POST':
-        selected_sem_id = request.POST.get('selectedSemester')
-
-    else:
-        if request.session.__contains__('selected_semester_for_reports'):
-            selected_sem_id = request.session.__getitem__('selected_semester_for_reports')
+        if 'export_excel' in request.POST:
+            selected_sem_id = request.POST.get('submitted_semester')
+        else:
+            selected_sem_id = request.POST.get('selectedSemester')
 
     if selected_sem_id:
         try:
@@ -427,7 +425,6 @@ def report_marks(request):
             # semester_students = UserSemester.objects.filter(semester_id__exact=selected_sem_id,
             #                                                 is_registered_for_semester__exact=True,
             #                                                 user__is_admin=False)
-            request.session.__setitem__('selected_semester_for_reports', selected_sem_id)
             semester_students = list(UserSemester.objects.filter(semester_id__exact=selected_sem_id))
 
             # Maximum achivable mark
@@ -492,6 +489,9 @@ def report_marks(request):
                 user_sem.mark = user_sem.sum_before_deadline + user_sem.sum_after_deadline
 
             total_mark = achievable_mark
+            if 'export_excel' in request.POST:
+                return prepare_export(semester_students, selected_semester)
+
         except ObjectDoesNotExist:
             pass
 
@@ -500,12 +500,32 @@ def report_marks(request):
         'semester_list': semester_list,
         'selected_semester': selected_semester,
         'semester_students': semester_students,
-        'total_mark': total_mark
+        'total_mark': total_mark,
+        'selected_sem_id': int(selected_sem_id) if selected_sem_id else None
+
     }
     template = 'management/report_marks.html'
     return render(request, template, context_dict)
 
 
+def prepare_export(students, semester):
+    mark_list = []
+    file_name = str(semester)
+    for student in students:
+        obj = {}
+        obj['student_no'] = student.user.student_no
+        obj['first_name'] = student.user.first_name
+        obj['last_name'] = student.user.last_name
+        obj['email'] = student.user.email
+        obj['mark'] = student.mark
+        obj['mark_before_deadline'] = student.sum_before_deadline
+        obj['mark_after_deadline'] = student.sum_after_deadline
+        mark_list.append(obj)
+
+    return django_excel.make_response_from_records(records=mark_list, file_type='xlsx', status=200, file_name=file_name)
+
+
+@staff_member_required
 def admin_semester_choices(request):
     action_list_question = []
     action_list_user = []

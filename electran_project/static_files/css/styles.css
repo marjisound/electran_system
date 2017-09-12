@@ -32,6 +32,10 @@ body {
     font-weight: bold;
 }
 
+.link-new-semester {
+    margin-bottom: 20px;
+}
+
 .home-question-item {
     border: 1px solid rgba(138, 136, 136, 0.3);
 }
@@ -141,9 +145,22 @@ body {
     background-color: rgba(146, 146, 146, 0.6) !important;
 }
 
+.export-excel input {
+    margin-bottom: 0;
+}
+
+.export-excel div {
+    font-size: 9px;
+}
+
 /*********** question content**************/
 .question-help-container {
     margin-top: 20px;
+}
+
+.answer-input-label, .sem-create-form label{
+    font-size: 13px;
+    margin-bottom: 10px;
 }
 
 .question-help-content-container {
@@ -337,7 +354,7 @@ body {
 }
 
 .sem-create-form {
-    width:30%;
+    width:20%;
 }
 
 .deadline-container {

@@ -3,16 +3,24 @@ var $ = django.jQuery.noConflict();
 var defer = $.Deferred();
 $(document).ready(function () {
 
-    var userSemId = $('#id_user_semester').val();
-    var questionSemId = $('#id_question_semester').val();
+    userSemIdOld = $('#id_user_semester').val();
+    questionSemIdOld = $('#id_question_semester').val();
 
     resetSemQuestionSelects();
     $('#id_semester').change(function () {
-        semester_change($(this).val());
+        semId = $(this).val();
+        semester_change(semId);
     });
 
     if ($('#id_semester') && $('#id_semester').val()) {
         semId = $('#id_semester').val();
+        if ($('p.errornote')) {
+            userSemId = userSemIdOld;
+            questionSemId = questionSemIdOld;
+        }else {
+            userSemId = $('#id_txt_user_semester').val();
+            questionSemId = $('#id_txt_question_semester').val();
+        }
 
         semester_change(semId);
         $.when(defer).done(function () {
@@ -21,6 +29,8 @@ $(document).ready(function () {
 
         });
     }
+
+
 });
 
 function resetSemQuestionSelects() {
@@ -39,8 +49,8 @@ function semester_change(semId) {
             "dataType" : "json",
             "cache"    : false,
             "success"  : function(json) {
-                var studentList = json[0];
-                var questionList = json[1];
+                studentList = json[0];
+                questionList = json[1];
 
                 for(var j = 0, len=studentList.length; j < len; j++){
                     $('#id_user_semester').append($('<option></option>').val(studentList[j].usersemester).html(studentList[j].student_name));

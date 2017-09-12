@@ -9,13 +9,20 @@
             <select  class="form-control" id="selectedSemester" name="selectedSemester">
                     <option value="0">select</option>
                 {% for semester_item in semester_list %}
-                    <option value="{{ semester_item.id }}" {% if semester_item.id == semester.id %}{% if que_cat %}selected{% endif %}{% endif %}>{{ semester_item }}</option>
+                    <option value="{{ semester_item.id }}" {% if semester_item.id == selected_sem_id %}{% if selected_semester %}selected{% endif %}{% endif %}>{{ semester_item }}</option>
                 {% endfor %}
             </select>
             <span id="semesterModuleError" style="display: none" class="validation-error">Semester must be selected</span>
         <br>
-            <input type="submit" class="btn btn-primary electran-submit-btn" value="submit">
+            <input type="submit" class="btn btn-primary electran-submit-btn" value="submit" name="test_submit">
         </div>
+        {% if selected_semester %}
+        <div class="export-excel">
+            <input type="hidden" name="submitted_semester" value="{{ selected_sem_id }}" >
+            <input type="submit" class="btn btn-primary electran-submit-btn" value="Export Excel" name="export_excel">
+            <div>{{ selected_semester}} will be exported.</div>
+        </div>
+        {% endif %}
     </form>
 
     {% if selected_semester %}
@@ -49,6 +56,7 @@
                 {% endfor %}
                 </tbody>
             </table>
+
         {% endif %}
     {% endif %}
 
