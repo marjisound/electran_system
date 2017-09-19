@@ -68,8 +68,6 @@ class Question(MipsInstructionsBase, BinaryHexBase):
         register_value = self.delete_hex_identifier(register_value.lower())
         new_student_list['answer_register_value'] = '{:0>8}'.format(register_value)
 
-        new_student_list['answer_register_num'] = int(new_student_list['answer_register_num'])
-
         pc_value = student_answer['answer_pc_value'].replace(' ', '')
         pc_value = self.delete_hex_identifier(pc_value.lower())
         new_student_list['answer_pc_value'] = '{:0>8}'.format(pc_value)
@@ -77,6 +75,9 @@ class Question(MipsInstructionsBase, BinaryHexBase):
         for key, value in new_student_list.items():
             if value == 'None' or value == '':
                 new_student_list[key] = None
+
+        if new_student_list['answer_register_num']:
+            new_student_list['answer_register_num'] = int(new_student_list['answer_register_num'])
 
         # convert overflow value to boolean
         if new_student_list['answer_overflow'] == '1':

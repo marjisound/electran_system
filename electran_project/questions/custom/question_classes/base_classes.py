@@ -394,7 +394,7 @@ class MipsInstructionsBase(QuestionBase):
         elif val1_msb == '1':
             result = 1
 
-        result_hex = MipsInstructionsBase.make_specific_number_of_bits(result, 8)
+        result_hex = MipsInstructionsBase.make_specific_number_of_bits(str(result), 8)
         return result_hex, None
 
     @staticmethod
