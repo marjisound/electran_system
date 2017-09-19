@@ -18,6 +18,12 @@
                 </div>
             </form>
         {% else %}
+            <div>
+                <a href="{% url 'home' %}">Back to questions</a>
+            </div>
+            <div class="retry-container">
+                <a href="{% url 'questions:all_questions' slug=slug %}">Retry the question</a>
+            </div>
             <h2 class="question-title">Binary in K, M, G</h2>
             <p class="question-paragraph">Express the following in binary K, M or G, e.g 15K, 23M, 507G : </p>
             <h3 class="question-random-value">2^{{ random_value.random1 }} + 2^{{ random_value.random2 }} + 2^{{ random_value.random3 }}</h3>
@@ -32,5 +38,7 @@
 
 {% endblock %}
 {% block specific %}
-    {% include "questions/question_helps/binary_hex_conversion.html" %}
+
+    {{ help_file|safe }}
+
 {% endblock %}

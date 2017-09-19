@@ -1,4 +1,4 @@
-{% extends "custom_base.html" %}
+{% extends "questions/question_base.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
 
@@ -190,5 +190,11 @@
             </div>
         </div>
     </div>
+
+{% endblock %}
+{% block specific %}
+
+    {{ help_file|safe }}
+
 
 {% endblock %}

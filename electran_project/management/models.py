@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+from .custom.storage import OverwriteStorage
 import datetime
 from django.contrib.auth import get_user_model
 from django.utils.text import slugify
@@ -20,10 +21,14 @@ class QuestionCategory(models.Model):
 
 
 class Question(models.Model):
+    def user_directory_path(instance, filename):
+        # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
+        return 'help/{0}.html'.format(instance.question_class)
+
     category = models.ForeignKey(QuestionCategory, related_name='question_category')
     question_title = models.CharField(max_length=200)
     question_class = models.CharField(max_length=200)
-    question_help = models.CharField(max_length=200)
+    question_help = models.FileField(upload_to=user_directory_path, storage=OverwriteStorage())
     question_create_date = models.DateField(default=timezone.now)
     slug = models.SlugField(unique=True, max_length=140, null=True, blank=True)
     mark_max_value = models.PositiveIntegerField(default=1)

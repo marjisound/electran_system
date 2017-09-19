@@ -14,7 +14,7 @@
                         <label for="answer">Answer:</label>
                         <input type="text" class="form-control" id="answer" name="answer">
                     </div>
-                    <input type="submit" class="btn btn-primary" value="submit" name="submit">
+                    <input type="submit" class="btn btn-primary electran-submit-btn" value="submit" name="submit">
                 </div>
             </form>
         {% else %}
@@ -38,5 +38,7 @@
 
 {% endblock %}
 {% block specific %}
-    {% include "questions/question_helps/binary_hex_conversion.html" %}
+
+    {{ help_file|safe }}
+
 {% endblock %}

@@ -6,6 +6,7 @@ import codecs
 
 class Question(MipsInstructionsBase, BinaryHexBase):
     ANSWER_TYPE = 'multiple'
+    display_correct = []
 
     def generate_user_random_display(self, value):
         return value
@@ -74,25 +75,12 @@ class Question(MipsInstructionsBase, BinaryHexBase):
             student_answer['answer_overflow'] = True
         elif student_answer['answer_overflow'] == '0':
             student_answer['answer_overflow'] = False
-            
-        if (student_answer['answer_register'].lower() == correct_answer['answer_register'].lower() and
-                int(student_answer['answer_register_num']) == correct_answer['answer_register_num'] and
-                '{:0>8}'.format(register_value) == correct_answer['answer_register_value'].lower() and
-                student_answer['answer_pc'] == correct_answer['answer_pc'] and
-                '{:0>8}'.format(pc_value) == correct_answer['answer_pc_value'] and
-                student_answer['answer_overflow'] == correct_answer['answer_overflow'] and
-                student_answer['answer_memory_0'] == correct_answer['answer_memory_0'] and
-                student_answer['answer_memory_0_address'] == correct_answer['answer_memory_0_address'] and
-                student_answer['answer_memory_0_value'] == correct_answer['answer_memory_0_value'] and
-                student_answer['answer_memory_1'] == correct_answer['answer_memory_1'] and
-                student_answer['answer_memory_1_address'] == correct_answer['answer_memory_1_address'] and
-                student_answer['answer_memory_1_value'] == correct_answer['answer_memory_1_value'] and
-                student_answer['answer_memory_2'] == correct_answer['answer_memory_2'] and
-                student_answer['answer_memory_2_address'] == correct_answer['answer_memory_2_address'] and
-                student_answer['answer_memory_2_value'] == correct_answer['answer_memory_2_value'] and
-                student_answer['answer_memory_3'] == correct_answer['answer_memory_3'] and
-                student_answer['answer_memory_3_address'] == correct_answer['answer_memory_3_address'] and
-                student_answer['answer_memory_3_value'] == correct_answer['answer_memory_3_value']):
+
+        diff_list = self.compare_dictionaries(student_answer, correct_answer)
+
+        self.display_correct = diff_list
+
+        if len(diff_list) == 0:
 
             return True
         else:

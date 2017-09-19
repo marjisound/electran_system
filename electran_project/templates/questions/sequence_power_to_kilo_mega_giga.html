@@ -1,4 +1,4 @@
-{% extends "custom_base.html" %}
+{% extends "questions/question_base.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
 
@@ -16,10 +16,16 @@
                         <label for="answer">Answer:</label>
                         <input type="text" class="form-control" id="answer" name="answer">
                     </div>
-                    <input type="submit" class="btn btn-primary" value="submit" name="submit">
+                    <input type="submit" class="btn btn-primary electran-submit-btn" value="submit" name="submit">
                 </div>
             </form>
         {% else %}
+            <div>
+                <a href="{% url 'home' %}">Back to questions</a>
+            </div>
+            <div class="retry-container">
+                <a href="{% url 'questions:all_questions' slug=slug %}">Retry the question</a>
+            </div>
             <h2>Sequence of power of two in K, M, G</h2>
             <p>Below is the sum of a sequence of power terms, where each term
                 is a different power from the range of i values shown in brackets.
@@ -33,5 +39,10 @@
             </div>
         {% endif %}
     </div>
+
+{% endblock %}
+{% block specific %}
+
+    {{ help_file|safe }}
 
 {% endblock %}

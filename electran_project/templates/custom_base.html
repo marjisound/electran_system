@@ -21,7 +21,7 @@
   {% else %}
 
     <div id="wrapper" class="active">
-    {% endif %}
+  {% endif %}
         <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     		<div class="container-fluid">
     			<div class="navbar-header">
@@ -33,14 +33,14 @@
             			<span class="icon-bar"></span>
             			<span class="icon-bar"></span>
         			</button>
-              <div  class="navbar-brand">
-                {% if user.is_admin %}
-                <a id="menu-toggle" href="#" class="glyphicon glyphicon-align-justify btn-menu toggle">
-                      <i class="fa fa-bars"></i>
-                </a>
-                {% endif %}
-  				<a href="{% url 'home' %}">Electran</a>
-              </div>
+                    <div  class="navbar-brand">
+                        {% if user.is_admin %}
+                        <a id="menu-toggle" href="#" class="glyphicon glyphicon-align-justify btn-menu toggle">
+                              <i class="fa fa-bars"></i>
+                        </a>
+                        {% endif %}
+                        <a href="{% url 'home' %}">Electran</a>
+                    </div>
     			</div>
     			<div id="navbar" class="collapse navbar-collapse student-navbar">
     				<ul class="nav navbar-nav top-navigation-container">
@@ -91,29 +91,31 @@
             <div class="page-content">
                 <div class="container-fluid">
                     <div class="row">
-                        <div class="col-md-10 col-md-offset-1">
-                            <div class="panel panel-danger">
-                                <div class="panel-body">
-                                    {% if messages %}
-                                        <ul class="messages electran-messages-list">
-                                            {% for message in messages %}
-                                            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>
-                                                {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
-                                                    <div class="alert alert-danger">{{ message }}</div>
-                                                {% elif message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
-                                                    <div class="alert alert-success">{{ message }}</div>
-                                                {% elif message.level == DEFAULT_MESSAGE_LEVELS.WARNING %}
-                                                    <div class="alert alert-warning">{{ message }}</div>
-                                                {% else %}
-                                                    <div class="alert alert-info">{{ message }}</div>
-                                                {% endif %}
-                                            </li>
-                                            {% endfor %}
-                                        </ul>
-                                    {% endif %}
-                                  {% block content %}
-                                  {% endblock content %}
-                                {% block help %}{% block specific %}{% endblock %}{% endblock %}
+                        <div>
+                            <div class="col-md-10 col-md-offset-1">
+                                <div class="panel panel-danger">
+                                    <div class="panel-body">
+                                        {% if messages %}
+                                            <ul class="messages electran-messages-list">
+                                                {% for message in messages %}
+                                                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>
+                                                    {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+                                                        <div class="alert alert-danger">{{ message }}</div>
+                                                    {% elif message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+                                                        <div class="alert alert-success">{{ message }}</div>
+                                                    {% elif message.level == DEFAULT_MESSAGE_LEVELS.WARNING %}
+                                                        <div class="alert alert-warning">{{ message }}</div>
+                                                    {% else %}
+                                                        <div class="alert alert-info">{{ message }}</div>
+                                                    {% endif %}
+                                                </li>
+                                                {% endfor %}
+                                            </ul>
+                                        {% endif %}
+                                      {% block content %}
+                                      {% endblock content %}
+                                    {% block help %}{% block specific %}{% endblock %}{% endblock %}
+                                    </div>
                                 </div>
                             </div>
                         </div>

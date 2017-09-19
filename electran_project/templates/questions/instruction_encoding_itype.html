@@ -1,4 +1,4 @@
-{% extends "custom_base.html" %}
+{% extends "questions/question_base.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
 
@@ -14,10 +14,16 @@
                         <label for="answer">Answer:</label>
                         <input type="text" class="form-control" id="answer" name="answer">
                     </div>
-                    <input type="submit" class="btn btn-primary" value="submit" name="submit">
+                    <input type="submit" class="btn btn-primary electran-submit-btn" value="submit" name="submit">
                 </div>
             </form>
         {% else %}
+            <div>
+                <a href="{% url 'home' %}">Back to questions</a>
+            </div>
+            <div class="retry-container">
+                <a href="{% url 'questions:all_questions' slug=slug %}">Retry the question</a>
+            </div>
             <h2>Instruction encoding I-Type</h2>
             <p>Convert the following MIPS instruction into its machine code in binary:</p>
             <h3>{{ random_value.instruction_type }} ${{ random_value.rt }} {{ random_value.offset }}(${{ random_value.rs }}) </h3>
@@ -29,5 +35,10 @@
             </div>
         {% endif %}
     </div>
+
+{% endblock %}
+{% block specific %}
+
+    {{ help_file|safe }}
 
 {% endblock %}

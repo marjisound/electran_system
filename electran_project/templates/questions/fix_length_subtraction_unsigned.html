@@ -1,4 +1,4 @@
-{% extends "custom_base.html" %}
+{% extends "questions/question_base.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
 
@@ -20,10 +20,16 @@
                         <label for="answer1">Answer:</label>
                         <input type="text" class="form-control" id="answer1" name="answer1">
                     </div>
-                    <input type="submit" class="btn btn-primary" value="submit" name="submit">
+                    <input type="submit" class="btn btn-primary electran-submit-btn" value="submit" name="submit">
                 </div>
             </form>
         {% else %}
+            <div>
+                <a href="{% url 'home' %}">Back to questions</a>
+            </div>
+            <div class="retry-container">
+                <a href="{% url 'questions:all_questions' slug=slug %}">Retry the question</a>
+            </div>
             <h2>Fixed length/Unsigned Hex Subtraction</h2>
             <p>Calculate the result of the following subtraction using complement for the second value in the specified base. Be aware
                     that the maximum number of bits is limited to
@@ -44,5 +50,10 @@
             </div>
         {% endif %}
     </div>
+
+{% endblock %}
+{% block specific %}
+
+    {{ help_file|safe }}
 
 {% endblock %}

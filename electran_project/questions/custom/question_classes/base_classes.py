@@ -400,7 +400,7 @@ class MipsInstructionsBase(QuestionBase):
     @staticmethod
     def sltu_rtype(value):
         result = 1 if value['val1'] < value['val2'] else 0
-        result_hex = MipsInstructionsBase.make_specific_number_of_bits(result, 8)
+        result_hex = MipsInstructionsBase.make_specific_number_of_bits(str(result), 8)
         return result_hex, None
 
     @staticmethod

@@ -192,8 +192,16 @@ def create_http_response(request, question_class_name, context):
     dir_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     file_path = os.path.join(dir_path, 'templates') + '/questions/' + question_class_name + '.html'
     html_str = open(file_path, 'r').read()
+
+    if question_class_name is not 'invalid_question':
+        help_file_path = os.path.join(dir_path, 'media') + '/help/' + question_class_name + '.html'
+        if os.path.isfile(help_file_path):
+            help_html_str = open(help_file_path, 'r').read()
+            context['help_file'] = help_html_str
+
     template = Template(html_str)
     request_context = RequestContext(request)
+
     request_context.push(context)
     return HttpResponse(template.render(request_context))
 

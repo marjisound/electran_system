@@ -1,0 +1,339 @@
+<div>
+    <h3>Instruction Help</h3>
+
+    <table class="table table-condensed register-table">
+        <tr>
+            <th colspan="8">R-Format Instructions</th>
+        </tr>
+        <tr>
+            <th>Instruction syntax</th>
+            <th>op-code</th>
+            <th>rs</th>
+            <th>rt</th>
+            <th>rd</th>
+            <th>shamt</th>
+            <th>func</th>
+            <th>meaning</th>
+        </tr>
+        <tr>
+            <td class="align-top">add rd, rs, rt</td>
+            <td class="text-center align-top">0</td>
+            <td class="text-center align-top">f/inst</td>
+            <td class="text-center align-top">f/inst</td>
+            <td class="text-center align-top">f/inst</td>
+            <td class="text-center align-top">0</td>
+            <td class="text-center align-top">0x20</td>
+            <td class="align-top">Rd &lt;- rt + rs <i>#with overflow</i></td>
+        </tr>
+        <tr>
+            <td class="align-top">addu rd, rs, rt</td>
+            <td class="text-center align-top">0</td>
+            <td class="text-center align-top">f/inst</td>
+            <td class="text-center align-top">f/inst</td>
+            <td class="text-center align-top">f/inst</td>
+            <td class="text-center align-top">0</td>
+            <td class="text-center align-top">0x21</td>
+            <td class="align-top">rd &lt;- rt + rs <i>#without overflow</i></td>
+        </tr>
+        <tr>
+            <td class="align-top">sub rd, rs, rt</td>
+            <td class="text-center align-top">0</td>
+            <td class="text-center align-top">f/inst</td>
+            <td class="text-center align-top">f/inst</td>
+            <td class="text-center align-top">f/inst</td>
+            <td class="text-center align-top">0</td>
+            <td class="text-center align-top">0x22</td>
+            <td class="align-top">rd &lt;- rs - rt <i>#with overflow</i></td>
+        </tr>
+        <tr>
+            <td class="align-top">subu rd, rs, rt</td>
+            <td class="text-center align-top">0</td>
+            <td class="text-center align-top">f/inst</td>
+            <td class="text-center align-top">f/inst</td>
+            <td class="text-center align-top">f/inst</td>
+            <td class="text-center align-top">0</td>
+            <td class="text-center align-top">0x23</td>
+            <td class="align-top">rd &lt;- rs - rt <i>#without overflow</i></td>
+        </tr>
+        <tr>
+            <td class="align-top">and rd, rs, rt</td>
+            <td class="text-center align-top">0</td>
+            <td class="text-center align-top">f/inst</td>
+            <td class="text-center align-top">f/inst</td>
+            <td class="text-center align-top">f/inst</td>
+            <td class="text-center align-top">0</td>
+            <td class="text-center align-top">0x24</td>
+            <td class="align-top">rd &lt;- rt and rs</td>
+        </tr>
+        <tr>
+            <td class="align-top">nor rd, rs, rt</td>
+            <td class="text-center align-top">0</td>
+            <td class="text-center align-top">f/inst</td>
+            <td class="text-center align-top">f/inst</td>
+            <td class="text-center align-top">f/inst</td>
+            <td class="text-center align-top">0</td>
+            <td class="text-center align-top">0x27</td>
+            <td class="align-top">rd &lt;- rt nor rs</td>
+        </tr>
+        <tr>
+            <td class="align-top">or rd, rs, rt</td>
+            <td class="text-center align-top">0</td>
+            <td class="text-center align-top">f/inst</td>
+            <td class="text-center align-top">f/inst</td>
+            <td class="text-center align-top">f/inst</td>
+            <td class="text-center align-top">0</td>
+            <td class="text-center align-top">0x25</td>
+            <td class="align-top">rd &lt;- rt or rs</td>
+        </tr>
+        <tr>
+            <td class="align-top">sll rd, rt, shamt</td>
+            <td class="text-center align-top">0</td>
+            <td class="text-center align-top">0</td>
+            <td class="text-center align-top">f/inst</td>
+            <td class="text-center align-top">f/inst</td>
+            <td class="text-center align-top">f/inst</td>
+            <td class="text-center align-top">0</td>
+            <td class="align-top">rd &lt;- rt &lt;&lt; shamt <i>#insert 0s</i></td>
+        </tr>
+        <tr>
+            <td class="align-top">srl rd, rt, shamt</td>
+            <td class="text-center align-top">0</td>
+            <td class="text-center align-top">0</td>
+            <td class="text-center align-top">f/inst</td>
+            <td class="text-center align-top">f/inst</td>
+            <td class="text-center align-top">f/inst</td>
+            <td class="text-center align-top">2</td>
+            <td class="align-top">rd &lt;- rt &gt;&gt; shamt <i>#insert 0s</i></td>
+        </tr>
+        <tr>
+            <td class="align-top">sra rd, rt, shamt</td>
+            <td class="text-center align-top">0</td>
+            <td class="text-center align-top">0</td>
+            <td class="text-center align-top">f/inst</td>
+            <td class="text-center align-top">f/inst</td>
+            <td class="text-center align-top">f/inst</td>
+            <td class="text-center align-top">3</td>
+            <td class="align-top">rd &lt;- rt &gt;&gt; shamt <i>#dup sign</i></td>
+        </tr>
+        <tr>
+            <td class="align-top">slt rd, rs, rt</td>
+            <td class="text-center align-top">0</td>
+            <td class="text-center align-top">f/inst</td>
+            <td class="text-center align-top">f/inst</td>
+            <td class="text-center align-top">f/inst</td>
+            <td class="text-center align-top">0</td>
+            <td class="align-top">0x2a</td>
+            <td>
+                if (rs &lt; rt) rd &lt;- 1<br> else rd &lt;- 0
+            </td>
+        </tr>
+        <tr>
+            <td class="align-top">sltu rd, rs, rt</td>
+            <td class="text-center align-top">0</td>
+            <td class="text-center align-top">f/inst</td>
+            <td class="text-center align-top">f/inst</td>
+            <td class="text-center align-top">f/inst</td>
+            <td class="text-center align-top">0</td>
+            <td class="text-center align-top">0x2b</td>
+            <td class="align-top">
+                if (rs &lt; rt) rd &lt;- 1<br> else rd &lt;- 0
+            </td>
+        </tr>
+        <tr>
+            <td class="align-top">jalr rd, rs</td>
+            <td class="text-center align-top">0</td>
+            <td class="text-center align-top">f/inst</td>
+            <td class="text-center align-top">0</td>
+            <td class="text-center align-top">f/inst</td>
+            <td class="text-center align-top">0</td>
+            <td class="text-center align-top">9</td>
+            <td class="align-top">PC &lt;- rs ; rd &lt;- PC <i>#address of following instruction into rd</i></td>
+        </tr>
+        <tr>
+            <td class="align-top">jr rs</td>
+            <td class="text-center align-top">0</td>
+            <td class="text-center align-top">f/inst</td>
+            <td class="text-center align-top">0</td>
+            <td class="text-center align-top">0</td>
+            <td class="text-center align-top">0</td>
+            <td class="text-center align-top">8</td>
+            <td class="align-top">PC &lt;- rs</td>
+        </tr>
+        <tr>
+            <th colspan="8">I-Format Instructions</th>
+        </tr>
+        <tr>
+            <th>Instruction syntax</th>
+            <th>op-code</th>
+            <th>rs</th>
+            <th>rt</th>
+            <th colspan="3">immediate</th>
+            <th>meaning</th>
+        </tr>
+        <tr>
+            <td class="align-top">addi rt, rs, imm</td>
+            <td class="text-center align-top">8</td>
+            <td class="text-center align-top">f/inst</td>
+            <td class="text-center align-top">f/inst</td>
+            <td class="text-center align-top" colspan="3">f/inst</td>
+            <td class="align-top">rt &lt;- rs + sign_ext(imm)</td>
+        </tr>
+        <tr>
+            <td class="align-top">addiu rt, rs, imm</td>
+            <td class="text-center align-top">9</td>
+            <td class="text-center align-top">f/inst</td>
+            <td class="text-center align-top">f/inst</td>
+            <td class="text-center align-top" colspan="3">f/inst</td>
+            <td class="align-top">rt &lt;- rs + sign_ext(imm)</td>
+        </tr>
+        <tr>
+            <td class="align-top">andi rt, rs, imm</td>
+            <td class="text-center align-top">0xc</td>
+            <td class="text-center align-top">f/inst</td>
+            <td class="text-center align-top">f/inst</td>
+            <td class="text-center align-top" colspan="3">f/inst</td>
+            <td class="align-top">rt &lt;- rs and sign_ext(imm)</td>
+        </tr>
+        <tr>
+            <td class="align-top">ori rt, rs, imm</td>
+            <td class="text-center align-top">0xd</td>
+            <td class="text-center align-top">f/inst</td>
+            <td class="text-center align-top">f/inst</td>
+            <td class="text-center align-top" colspan="3">f/inst</td>
+            <td class="align-top">rt &lt;- rs or sign_ext(imm)</td>
+        </tr>
+        <tr>
+            <td class="align-top">lw rt, imm(rs)</td>
+            <td class="text-center align-top">0x23</td>
+            <td class="text-center align-top">f/inst</td>
+            <td class="text-center align-top">f/inst</td>
+            <td class="text-center align-top" colspan="3">f/inst</td>
+            <td class="align-top">rt &lt;- Mem[ sign_ext(imm)+rs]</td>
+        </tr>
+        <tr>
+            <td class="align-top">sw rt, imm(rs)</td>
+            <td class="text-center align-top">0x2b</td>
+            <td class="text-center align-top">f/inst</td>
+            <td class="text-center align-top">f/inst</td>
+            <td class="text-center align-top" colspan="3">f/inst</td>
+            <td class="align-top">Mem[ sign_ext(imm)+rs] &lt;- rt</td>
+        </tr>
+        <tr>
+            <td class="align-top">lui rt, imm</td>
+            <td class="text-center align-top">0xf</td>
+            <td class="text-center align-top">0</td>
+            <td class="text-center align-top">f/inst</td>
+            <td class="text-center align-top" colspan="3">f/inst</td>
+            <td class="align-top">rt &lt;- imm &lt;&lt; 16</td>
+        </tr>
+        <tr>
+            <td class="align-top">beq rs, rt, offset</td>
+            <td class="text-center align-top">4</td>
+            <td class="text-center align-top">f/inst</td>
+            <td class="text-center align-top">f/inst</td>
+            <td class="text-center align-top" colspan="3">offset</td>
+            <td class="align-top">if (rs==rt) PC &lt;- PC+4+offset*4</td>
+        </tr>
+        <tr>
+            <td class="align-top">bne rs, rt, offset</td>
+            <td class="text-center align-top">5</td>
+            <td class="text-center align-top">f/inst</td>
+            <td class="text-center align-top">f/inst</td>
+            <td class="text-center align-top" colspan="3">offset</td>
+            <td class="align-top">if (rs!=rt) PC &lt;- PC+4+offset*4</td>
+        </tr>
+        <tr>
+            <td class="align-top">bgez rs, offset</td>
+            <td class="text-center align-top">1</td>
+            <td class="text-center align-top">f/inst</td>
+            <td class="text-center align-top">1</td>
+            <td class="text-center align-top" colspan="3">offset</td>
+            <td class="align-top">if (rs &gt;= 0) PC &lt;- PC+4+offset*4</td>
+        </tr>
+        <tr>
+            <td class="align-top">bgtz rs, offset</td>
+            <td class="text-center align-top">7</td>
+            <td class="text-center align-top">f/inst</td>
+            <td class="text-center align-top">0</td>
+            <td class="text-center align-top" colspan="3">offset</td>
+            <td class="align-top">if (rs &gt; 0) PC &lt;- PC+4+offset*4</td>
+        </tr>
+        <tr>
+            <td class="align-top">blez rs, offset</td>
+            <td class="text-center align-top">6</td>
+            <td class="text-center align-top">f/inst</td>
+            <td class="text-center align-top">0</td>
+            <td class="text-center align-top" colspan="3">offset</td>
+            <td class="align-top">if (rs&lt; = 0) PC &lt;- PC+4+offset*4</td>
+        </tr>
+        <tr>
+            <td class="align-top">bltz rs, offset</td>
+            <td class="text-center align-top">1</td>
+            <td class="text-center align-top">f/inst</td>
+            <td class="text-center align-top">0</td>
+            <td class="text-center align-top" colspan="3">offset</td>
+            <td class="align-top">if (rs &lt; 0) PC &lt;- PC+4+offset*4</td>
+        </tr>
+        <tr>
+            <td class="align-top">slti rt, rs, imm</td>
+            <td class="text-center align-top">0xa</td>
+            <td class="text-center align-top">f/inst</td>
+            <td class="text-center align-top">f/inst</td>
+            <td class="text-center align-top" colspan="3">f/inst</td>
+            <td class="align-top">
+                if (rs &lt; sign_ext(imm)) rt &lt;- 1<br> else rt &lt;- 0
+            </td>
+        </tr>
+        <tr>
+            <td class="align-top">sltui rt, rs, imm</td>
+            <td class="text-center align-top">0x0b</td>
+            <td class="text-center align-top">f/inst</td>
+            <td class="text-center align-top">f/inst</td>
+            <td class="text-center align-top" colspan="3">f/inst</td>
+            <td class="align-top">
+                if (rs &lt; sign_ext(imm)) rt &lt;- 1<br> else rt &lt;- 0
+            </td>
+        </tr>
+        <tr>
+            <th colspan="8">J Format Instructions</th>
+        </tr>
+        <tr>
+            <th>Instruction syntax</th>
+            <th>op-code</th>
+            <th colspan="5">target</th>
+            <th>meaning</th>
+        </tr>
+        <tr>
+            <td class="align-top">j target</td>
+            <td class="text-center align-top">2</td>
+            <td class="text-center align-top" colspan="5">f/inst</td>
+            <td class="align-top">PC[27:0} &lt;- target &lt;&lt; 2</td>
+        </tr>
+        <tr>
+            <td class="align-top">jal target</td>
+            <td class="text-center align-top">3</td>
+            <td class="text-center align-top" colspan="5">f/inst</td>
+            <td class="align-top">
+                PC[27:0} &lt;- target &lt;&lt; 2;<br> $31 &lt;- PC <i>#address of following instruction into $31</i>
+            </td>
+        </tr>
+    </table>
+
+    <p>f/inst value in this field comes <b><u>f</u></b>rom <b><u>inst</u></b>ruction</p>
+
+    <p><b>0x</b> indicates hexadecimal value follows, e.g. 0xC = C<sub>12</sub> = 12<sub>10</sub></p>
+
+    <p><b>shamt</b> means shift-amount</p>
+
+    <p><b>"with overflow"</b> means that the cpu will records if an overflow occurs during the operation, so that corrective action can be taken later. Overflow example:  0x7ffffff + 1 -&gt; 0x80000000. If the operation is signed, then 2 positive numbers have been added together, but the result is -ve.  Obviously an error: overflow has occurred.</p>
+
+    <p><b>"without overflow"</b> means that overflow conditions are not recorded.</p>
+
+    <p><b>"sign_ext"</b> means sign-extend the value in brackets from 16-bits to 32 bits.</p>
+
+    <p>
+        <img src="data:image/gif;base64,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" width="599">
+        
+        <img src="data:image/gif;base64,R0lGODdhVwLBAfcAAAAAAP///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAAAAAAALAAAAABXAsEBQAj/AAMIHEiwoMGDCBMqXMiwocOHECNKnEixosWLGDNq3Mixo8ePIEOKHEmypMmTKFOqXMmypcuXMGPKnEmzps2bOHPq3Mmzp8+fQIMKHUq0qNGjSJMqXcq0qdOnUKNKnUq1qtWrWLNq3aoUAACCXhOGHTj25FeGZcsGUAuRLViMat2GPLuWLte7ePNSjGu3oNy6ZM/yDUwYsGHDfQsrPpyW7MGwgiML/Nr472LFkPumpTu2s+S1kxPrHU26tOnTqFOrXs26tevXsH1yrqvZq+3OtDnXpmzbcWC7vEUHDw3cLWSwxnVPPvyYL9vbCKH7pv2WcHHLsbNr3y6bu/fv4MOL7h9PvrxR0T2xw1T/knJO9zfhC0WvXbny0AY3M0eO+TP+uXvtJl10F7E34G8H5ieRXAnm1ptYBYKmUIO3PUhgRPJFZyGCGyrYloQLCtihXxGahxd9Hk5X3YqzPeYQeyquOF2LKeaHInqJ0YjjiyAutCOJywVZI4koymgkiDQCqWCRRgqXYpJHXmgiV0ziBGNLV7KUYU1bztRld+Lhxp9n/VHnF5mI6RaZZGjuFWBhvWUZYkVx/lclWncSJ6GcGPbYUJ34jegmfWI+iOZmawbqZJ76/WdmY4DxGeOUWOX5oqV0YpqSpCh9KZOn6/n5k6b/lHZFFKdmkWqWqF6yGhOoO6la6qy01mrrrbjmquuuvPbq66/ABivssFoK5x+qHunXaJqOMttsm5ld1ixjx36WHH/MQmspmcs+Z9992RL6LZzVYruss5GCiy26Nlp3n7bm+mfnuNMyJya15N6KrEr7ElvsVv3+W5u/BBds8MEIJ6zwwgw37DBq3vJ06LsDz5tvumJVHLG0z1J88WVtrutso9GuC29zZVrs6Mknt3umvAEjZ2xxKD9sM2k5miarSzvf7PPPQAct9NBEF2300cFu/J61Hptc7sg4asybyxirvN/KTeMrbcjTctu00hNn/HG3WYd9NcjnxvxbczSfifTbEUnlrPN8cNdt991456333nz3zO23207bZDa7WGs9OOCGT4124oWP/bTI4V4MNtNiW0224ypb5q26autpY9uQ/y06v0Pq1fNKp4+u+uqst+7667DHLrvgFUOdctUcDdaxvcY2zriimNfLe8q6Ew96zYcfzvHszKuWOpjNRy/99NRXb/312GcPMbiX79f5hKCznGPbyqq7OPCNK2077nx6/XGZJFOuYeBaU42Y8fWWX3n8iA/ve9eKQ9f3tEfA3G1pgAVMoAIXyMAGOvCBEIygBCdIwQpa8IIYzKAGN8jBDv968IMgDKEIR0jCEprwhLGrUJEqhLiQda9l85NZhwbnPpHVMGMb0h/91qc+FG5QVnKryvN8SMQiGjE9r8KSpCx0IxcdkWFJkhtwZAQlPwkGSFNUUo9aFEUhSWlPR9LMpEonKk9dcVJDfKIa18jGNroxWXGBSwCFx5hOnSqNcNQJrNrjqlDhcVVhepL58PUXF1prT3/s45I0R8UuehF8PPpi+FhUOSdacouOVORbqkSoRqqoio7hJIQ+mckdMcpMl5zkjCLpwESWBIEG1KMmeTZLLdUyPuFRoXQ0lxxXAmgosNxIMDWyRwyprZhre+UtiePLhzTzKoWcY/Do1zIdwuVdTZZzJbKimRE59TB3ywTg8hY0S/H5zpqbdCb31inOiTzTb+8EyTC7GU86hXNT91xVPZMFQV36858ADahAB0rQghr0oAhNqEKDs9CGDtRBDo2oCiEq0Yo+9I0YzahG/zfK0Y5+51ylOd6m7hQtXtbMS/u85jiZUjt7FixtJXvVt+YIKd2RTIAB5CZoLgcdSNnwWIQUVAx3yrkr8m+Xs5FX4eLEvcWwDKf1o6a43JVTHZHvkFAF6f06RlNQevSrYA2rWMdK1p+hqmTelAojaRfLSFWtc8fxDFK/Kbrn0FGmvnlh/TITU/hcK15YVJwY2cc0pd7Ppz9dZbvkx8TlvbCa8qsjHQczNa6dM2pERaVI71rWznr2s6ANrWjVOpp55vEp2EmpOmMZ18jKMbMQZWboirYx1a42SHrlKVPz2jXL2Wmp7KSQbDMH0kJVEWyP/C3UuDhV4rKTuJi5q7LWt2JDk1YWsX8drXa3y93ueve7wrTtp1LXvv59aKWvbCJbw+tW5VmktcyU62ZXd60GtYe5xEsfQyVrWL4ClU1n7GtkcWPO/NXujIBjbE2bu9zb0RC/Q4Uv4fY61etGcXzgzbCGN7TM4Q6DF4HvtK5gZTnUHabKR+4Ur4cvVODuvVWY6BueTQF7WeB6Tq+LQypuDynXHSMSeYzlb+9WTOQiG/nISE7yVGKq0pEwuclnS++lcHdS9KIuxCQd6dU4lcaW4i1+zz0sgj9iU8j6GLbW1GlVFQWt/rU5XN5M6nOf5l/+5g99hjIsnJwqYDTSC8h7Hpn/cmjUAK85qkpOtKIXzehGO/rRkI60pCdN6Upb+tKYzrSmN83pTnu9+tOgDrWoR03qUpv61KhOtapXfUG6blWGiWJhnq+jptSaF1EimitDa00dNb+Mr+kaDipzE1/OsppL68zzI/nn4D+rZ3Kh86l8dzdbcwUO2jb2noqPbbqe+TMrpuW2uMdN7nKb+9zoLoqmyItL1H3xkn+Cd7rf88kYZdGLXRysvsNIRSE58t713uKQvBqlnN17zASfd6jwvUqjskjaYESSYpMLcENXx1BoXJtXM/nujEvc3zceo8JpO/KSm/zk/yi3qMpXzvKWu/yhL68oRWN+0JnT3KL9vKMetx1vnqPY5xACupsC+WoHaYipDOrqrhFEZp0vTZZCJ1DUl3Sq8VzndvDDrH5/3fTzjlLk3l4hWrQYJR8F8evJTfuH1Dshsou87WxHu6swhcyy27vjfXrgKQuuRSjF2ZnvPrh57UdGK1Ky2lJnJdkFj/jlZBnejF9p3Q0/8MNb2e4EpHvSJ5rMWTPqRkL9duenXcnhfo6Fo1/TKcUVTc7fmPSJP3rUXP8o2FO9LZtH/etVD3i9O91KU3dR8IlkpXx+KufAHP7gaTJ50inf8VUP02DxVGUkJn/nBfJl8//0vOYPkEHL/KC+qp4/nzEHm4mPw7pmg6t7d2ITqmQGooCIuS0vg1PzLex+HwdUXBc/GfpTVmNWY2xytx20R2z8h37aVmexNVd6Yl9eFyIKOE9nRWjH9Hmb03T1V1/6x3q8p2sMOGvDtlOXgii9hnRqkkwRyEBdJlRtBXxQR2/kt32t4nvX93QymIO4RH5jZ4Plh306uIPFx4MohnJGeIRImIRKuIRM2IRO//iEUBiFHZZ0J4hsSLdlIgh7soZrw+GC6zdDVdVLiTJclKV5wDYi6EdovINrbHOG8/eAvFdsaeiGHhhrM+OGXAeHZOiAcghsv7ZfEyWGVjdkWjUXFOJsgxQxMJVtZ4NtzFZiXANDpydNLsaIWnWI7vI+OVZUljhkE5Z1mihOkVgulzgwYRZup4GK9JdAqohs57F8UhiLsjiLtFiLtniLuJiLuth7JkGEDbNbphcfWZiBxTYmvBaMxAaHYXiAeyiCJ6h0TPc5abI5nNdTuqZxV5eGylh7f2Z6wOhJnEhP+zd4rYgwgqhEaIhhA/g7E4aJNCZDUYaAZaNUrsZnVEMxkic4Waf4OAUGi7lXPPRHhcJTjrsIa14ITWdHEmFXkAzZkA75kBAZkRL/OZEUaXKq5Yu8slvtRzs9Boa1ZorHiIzJOJLDtoXCloltaHTcqIeeI5LfeCD/xHSo54AZ6IzDOIZUlozf+HCY1Hi4N46QQ5D6Yn9XBob3SI/zOJDpOIpHyY6tp4AUFm2gd2tWFY2lWElmtnXrGI+CCJD0JJBYWJGGyIxUMn29+F4YKZZquZZs2ZZu+ZZwGZdy+SsX2UpM9n8y1ZHEWIwxBpOCcpdzOJMmCY99+JHb+DLU4hyuZ42ex5LYOIY32ZJPRpNOEiiJJY6dFJRpOZT5VyxG2Zlh2Zd6liCVKFuKyH726JTqeD5IcoxXGWH8OGdZM05dOV9oCZbZNZcpRpYAD2OWypQpuhmcwjmcxFmcxuB5nMiZnLmoYxaYgjcpfiWlmJ43PibojIW5jYFZOmjFhoc5hyKZmKrnmn1WbjrWiaAogbkXVYA5P/5HikmplNXFa9imk39JL17ZiJupnCIhlHiln/75nwAaoAI6oARaoAaKnIy5eyOIgs3Eh1fokdd5nV6YnSiJjHw4kuhUgl24lyopmorZhjYpTbAmj9aYh5NIko9Zkgz6jD0mMyo5nYcJNO2piReYjlIVimVWoWBpntJ1VYuViO6IP535iITJdY8oX5QoH0TalCZFYYYUn1SpmgcqMbA4pVZ6pViapVq6pShc2qVe+qVgGqZiOqZkWqZmeqZomqZquqZs2qZu+qZwGqdyOqd0Wqd2tnqneJqnerqnfNqnfvqngBqogjqohFqohupRMQmiG8l8iZpi8tSogKSbrmZXJ2Z2mtkRAUOpCmmba3mfgWY87hGi2WSplylA+WJcgAUoLhM+XaigPESUnapn1najzYaYxlZbubZ1CWiQ8ahcjCiAo1elYlmIjjWbj/U/1beIp3eZXvlsnjiZsrmO/JlygkmN/9iMkImkKbg/1RqHFDVzLmqaobeoJime2eqg+Smg+5KQS5auaMqbvYcar/I6r/Rar/Z6r/hKpovadlA2Xra0bH/5dlvjrua2bt3UbqQjb25XhAsbnDipI615kgIHgCuTV4i1frzFcJJVRpt0L0oCcAprRQgGsRtLsKrGcdjVbxSHRSzrcRormRdHrhfHb5ZXgBy7mC/bq2zJcaGksiC3eMuWszk7sgEndhm7sjWLdwbHYnwXl6LXmM/oorvhql/YkisZtZQVrtLorWxTpN+JoS2KsSGZr/hEth81rWabtmq7tmzbtv9uGxsmq7P3FYNDWLfAhHw/iIN2K4R8Szfg0a1h5xwlZkc3CINBKDjGp0xxG7dcsrHAWX2Qu5+/J4x027eNu7hW56uvmZPY+I5FB2OR+lqS+7jgREyJq3jk1KD2lFJDxLjMp7Wbi5dRuYbaNCeSZLM/ya+6C5S5i3lC67tjF3e3i3c/t7vDG7JBZ7uphLu8+LegGZqcK4A7CrqoC3kxy53Uh0PCm0UJ2KTRGHjXO7Zwp73Gy73eGXspKXfmi73E17zga7Hsa7wGCJMjCqIo6ngfyo21G4Bzt5E8y33uyyHTB7KD27AH+L/BW73xNcDAS4LxpqgfC7yTd7ECHMECS7z/BbR3YxREoPR5AYy0H9ewnPUjlleZPafAHPuzIuzAPaidE2d3E7ywHLzBH8yKXkfCL+twakd4zGuWXBTCPPx2PsxbCZdOLVx5iqWkyXvEQJvEQGzErITDEwtGRXzB2bO4RIi2J7y3lxt9rTS568XFXWy5QOG6LwXGrni4Y4y4mOuDQaHF2SvGrzuDp8tHblzGWZzFdexkewwgbZxLPlp6l/e6hUu5JaKBmNqBvUu9UEx9cDV0gIxvtleGiNmcKfqF3pYpw7if4ydgMZMlGgmBEbKBMqbI5BtsRXqFLCpGJKXKkSm1osy82eG/gvWetDqjlrWCtwV/p+WoPmlMiyy3Z6sLzCb2Xvt3YAOGmrcHwMDKlO4nfQCLn8galbisf77My4lMut+LlsE8TNs3n6MMPmZWzcK3yzOqbZD8t5glbTOFzKNqicZ8zXppiNr8Y6LLv74KY/jnNrEMeJnZYvtYdBOMj7WKZnll98UvyMlAKMetQsd/3EB4hIpwTKoMfXwO7cUQjcaMWrlsXNFUesejksccvcYkXcZ4+8YircZz7NGxctJ4vNBkvNIxDT0ZXchhPNMWzdIk9rY83dM+/dNAHdRCPdREXdRGfdRIndT/Sr3UTO06+7o9nqlOsruUjIrFvQk39ViWKIXPFP3LWpYeZnzN7OUvArmTc8tmgxZr2AwvyuZE44nK7RjIfXaQCSZscURYaG0xHgtch1ada+2eo0nQq4mH2RSqrpVVllU8dui53lHWg/QvolnB+BmOaeaJWjmNNkouJYpoZrfZiFbZFWxfoB1bSknZiHhSucyjizkz7TTal7qP/Qwb8znRPAq9f13bl/rOqRXI08TMBX2enG1gOhrY75ijkd2UXHna0iw5UjPcPKzYjy19Rknb9ft/1yjZLFqY+9W1fOmh1BmHjNmN3FdnfmmYFUqfTwlgJlre2giCJHqHXPuHMeaNNs3Zou4d3tIIjt+NK9Tt29rT353iurCakXSdl2FN4ACeXgk+3iba1A7+4BAe4RI+4RRe4RZ+4f0YnuEaDlYFLnsEiJB4/Efhuc1fmb9OxWgVyM1XfdPZZx1We4FUHI5e/WXH8bkbPY0Vi9d5XUOrOS9+VWgx1NeCbbGfWCdvFjn2jFMHlJWiWoWFLbK26j9fyd0cs+C6Qo07V56Ec6Thud1RuoCyquX9CECiTWvmtKsLXKwFfaw+DpVBvJPQSeXT+zc6Zci0KqSfaNt5LrvOzY7tVHrpmZqFWOdsLqXLbT+F5qnPfF3F/OF2w96x0pjdyyH8bK77vcAmvpTmrYyHKL7B2L3hXd70XZvVWY0duaDni+igDpu0Ceofyan/ya5ardEDCq8bfuu4nuu6vuu83uu+/uvA/x7swj7sRNbheQkVVi7O/NR+sW1Mlmwy8HTg9wzWK57G4uhWsOXojoy/qTnINgMoyc7cQKXjcG02GpM5o9rWcF3Xtgzu0FXJ6P7udKbWtgpZ2eqYE9MlgtvtcsTaUvk2WW3gY27opn6ODTjYQl7lLxmbUhmkac5saE7a3puVBC+Yglx7My7Vct7jtDXg/gqajjib/oiUTGrL6cvL97nb5KiGxc3xd37OS5rcRNxVpptZ0B3EQUOa4Y7eXk6hwx2/JCnqlI7f822Voo6CUX6/Oq+tgGiB2JqSlLndWYjqtpd/z/68u+3zqz2lsj7recv1T03sYj/2ZF/2Zn/2aJ/2agK/9v9s3/bCbuwslan98sk+t/NUrs+QbkBXn+PYY/f0PO1x3OIhbeeiW+M0j5ncTm3enjeq6oc3bt8QdlTmbn7rzuPo3NYwJD79ZfhYxUNaqarB6qSvh++FVUZXx+/Z5+8D+zrgPF5ivvl9XvAIH9rqftwqaNzYTOYL3+b9oeXIfc7wZ+oXX/txnt96rjqt3593Dtypjc7TXPTjmfnzvvoNL1L5OPEMf9mJzWBArujkZPOsivPRzoHCOG2TTuk/7+nzfd36i/Sknd0v6v4WOp3k7fQ8D/WRia6G/YaizIUAEUBgAAAFAQxEWHCgQoEMESY0eLBhxIURJRK8+FDjRo4dPX6FBBlS5EiSJU2eRJlS5UqWLV2+hIkyY8OYNW12dHhTZ06dPX3+BBpU6FCiRYtanGlU6VKmTZ0+hRpV6lSqVa1exZpV61auXb1+BRtW7FiyZc2eRZtW7Vq2bd2+hRtX7ly6de3exZtX716+ff3+BRxY8GDChQ0fRpxY8WLGjR0/hhxZ8mTKlf8tX8acWfNmzp09fz5rEKxojgwpmp1JGiNR1S+TgoYNlyfL2TVrP8x5++lt3q+H6l59Enhs4l5NT5RoOvlF0s0PDheeHONyiMEnblRecTl16wodKuduvXp11dkJ0lz9nftz6RrNm78eXHRG6MXtXz3dPbX6iv3rlzyNP//o8w25/uKTjzn2DhRQvAMRFDDA/Rh0rjfc4JvOOewKvK/DrOB7T8EHveNwJRIfTI/ADSEUMT7+ImzRQQT1QzHFC2vM7bUQZ5yttv88BLIpCUkEb74KDWyNNiOJ3C6/6dyzKEMDn8xQQfaizC9JB0+U0snyiJQyzAuLBE+7Jm8MMk013/o2Ea0214QzTjnnpLNOO+/EM0899+SzTz//BDRQQQcltFBDD0U0UUUXZbRRRx+FNFJJJ6W0Uksv/8U0U0035bRTTy1zkqtQYXrTJS1xMhLV/Uo8qlQAXQ1qVFh7mjXQWlf86VZcnfqvzR5ZbTVXYHV9NSZiZ8y0QfXCo+7Yj3KkkFkXVaRRQ+yug5HKBNGcttsUgR0PzO683dba96CkCcYFS6P2vCez5ZZLXM1tL8fnaFwI2wnVRRZQZWPEUEaboCU3YPFAXFdgnl4EOMrxppUQ35GQwvfXAaOtUEdrt+0XWe9GbNJifVFlEbkYD26Y25ELBvfOf0H2uGWVCOa4ZhQRlvjhkl9mN9yk5H1z4RZFtpFcdHuGV2AZaTb4YXmPbtBopk/eMmGcB80STIqytpLW1pbc+ksCr2EMuctTtXV4ZZPHPDPMiEsNm0ntIPraarE1XvZdbdlNjbxVfcPyVKTk9lLuuevu2uyMxfy08bwmdDxyycdke3LLL8c8c80357xzzz8HPXTRRye9dNNPRz111VdnvXXXX4c9IXbZZ6e9dttvxz133XfnvXfffwc+eOGHJ754449Hvq2AAAA7" width="599">
+    </p>
+</div>

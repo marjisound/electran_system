@@ -1,0 +1,161 @@
+<div>
+    <h3 class="text-center">Addition and Subtraction in different Number Bases</h3>
+
+    <p>The basic technique of adding and subtracting integers in decimal is extendible to addition of 2 integers in any base b.</p>
+
+    <p>It can be explained through the use of the power series representation in powers of b of integers, <strong>S</strong> and <strong>T</strong>:-</p>
+
+    <p>S = s<small><sub>0</sub></small>b<small><sup>0</sup></small> + s<small><sub>1</sub></small>b<small><sup>1</sup></small> + s<small><sub>2</sub></small>b<small><sup>2</sup></small> + s<small><sub>3</sub></small>b<small><sup>3</sup></small> + ............. + s<small><sub>m</sub></small>b<small><sup>m</sup></small> + ...</p>
+
+    <p>T = t<small><sub>0</sub></small>b<small><sup>0</sup></small> + t<small><sub>1</sub></small>b<small><sup>1</sup></small> + t<small><sub>2</sub></small>b<small><sup>2</sup></small> + t<small><sub>3</sub></small>b<small><sup>3</sup></small> + ............. + t<small><sub>m</sub></small>b<small><sup>m</sup></small> + ...</p>
+        
+    <p><strong>Addition in base b</strong></p>
+    
+    <p>In the lectures we looked at the addition of <strong>S </strong>and <strong>T</strong> to give result <strong>R</strong> with power series representation:-</p>
+
+    <p><strong>R = r<small><sub>0</sub></small>b<small><sup>0</sup></small> + r<small><sub>1</sub></small>b<small><sup>1</sup></small> + r<small><sub>2</sub></small>b<small><sup>2</sup></small> + r<small><sub>3</sub></small>b<small><sup>3</sup></small> + ............. + r<small><sub>m</sub></small>b<small><sup>m</sup></small> + ...</strong></p>
+
+    <p>where all the coefficients r, s, and t are single symbols from the base b.</p>
+    
+    <p>The value of r<sub>0</sub>, r<sub>1</sub>, r<sub>2</sub>, etc can be found by applying the following rule starting with r<sub>0</sub>:-</p>
+
+    <p class="text-center">s<small><sub>m</sub></small> + t<small><sub>m</sub></small> + c<small><sub>m</sub></small> = r<small><sub>m</sub></small> + c<small><sub>m+1</sub></small>b</p>
+    
+    <p>where c<sub>0</sub>, c<sub>1</sub>, c<sub>2</sub> etc are carries between terms with c<sub>0</sub>=0.</p>
+
+    <p>The following examples are for decimal and binary:-</p>
+
+    <div class="text-center">
+        <p><strong>Addition in decimal: 735 + 896:-</strong></p>
+
+        <p>c<small><sub>m</sub></small>+s<small><sub>m</sub></small>+ t<small><sub>m</sub></small> = r<small><sub>m</sub></small>+c<small><sub>m+1</sub></small>b<small><sub>m</sub></small></p>
+
+        <p>Term 0: 0 + 5 + 6 = 11 : c<small><sub>1</sub></small> = 1 r<small><sub>0</sub></small> = 1</p>
+
+        <p>Term 1: 1 + 3 + 9 = 13 : c<small><sub>2</sub></small> = 1 r<small><sub>1</sub></small> = 3</p>
+
+        <p>Term 2: 1 + 7 + 8 = 16 : c<small><sub>3</sub></small> = 1 r<small><sub>2</sub></small> = 6</p>
+
+        <p>Term 3: 1 + 0 + 0 = 1 : c<small><sub>4</sub></small> = 0 r<small><sub>3</sub></small> = 1</p>
+
+        <p>Term 4: 0 + 0 + 0 = 0 : c<small><sub>5</sub></small> = 0 r<small><sub>4</sub></small> = 0</p>
+
+        <p><strong>735<small><sub>10</sub></small> + 896<small><sub>10</sub></small> = 1631<small><sub>10</sub></small></strong></p>
+
+        <p><strong>Addition in binary: 111 + 011:-</strong></p>
+
+        <p>c<small><sub>m</sub></small>+s<small><sub>m</sub></small>+ t<small><sub>m</sub></small> = r<small><sub>m</sub></small>+c<small><sub>m+1</sub></small>b<small><sub>m</sub></small></p>
+
+        <p>Term 0: 0 + 1 + 1 = 10 : c<small><sub>1</sub></small> = 1 r<small><sub>0</sub></small> = 0</p>
+
+        <p>Term 1: 1 + 1 + 1 = 11 : c<small><sub>2</sub></small> = 1 r<small><sub>1</sub></small> = 1</p>
+
+        <p>Term 2: 1 + 1 + 0 = 10 : c<small><sub>3</sub></small> = 1 r<small><sub>2</sub></small> = 0</p>
+
+        <p>Term 3: 1 + 0 + 0 = 1 : c<small><sub>4</sub></small> = 0 r<small><sub>3</sub></small> = 1</p>
+
+        <p>Term 4: 0 + 0 + 0 = 0 : c<small><sub>5</sub></small> = 0 r<small><sub>4</sub></small> = 0</p>
+
+        <p><strong>111<small><sub>2</sub></small> + 011<small><sub>2</sub></small> = 1010<small><sub>2</sub></small></strong></p>
+    </div>
+    
+    <p>but can be applied in any base:-</p>
+
+    <div class="text-center">
+        <p><strong>Addition in binary: 111 + 011:-</strong></p>
+
+        <p>c<small><sub>m</sub></small>+s<small><sub>m</sub></small>+ t<small><sub>m</sub></small> = r<small><sub>m</sub></small>+c<small><sub>m+1</sub></small>b<small><sub>m</sub></small></p>
+
+        <p>Term 0: 0 + 1 + 1 = 10 : c<small><sub>1</sub></small> = 1 r<small><sub>0</sub></small> = 0</p>
+
+        <p>Term 1: 1 + 1 + 1 = 11 : c<small><sub>2</sub></small> = 1 r<small><sub>1</sub></small> = 1</p>
+
+        <p>Term 2: 1 + 1 + 0 = 10 : c<small><sub>3</sub></small> = 1 r<small><sub>2</sub></small> = 0</p>
+
+        <p>Term 3: 1 + 0 + 0 = 1 : c<small><sub>4</sub></small> = 0 r<small><sub>3</sub></small> = 1</p>
+
+        <p>Term 4: 0 + 0 + 0 = 0 : c<small><sub>5</sub></small> = 0 r<small><sub>4</sub></small> = 0</p>
+
+        <p><strong>111<small><sub>2</sub></small> + 011<small><sub>2</sub></small> = 1010<small><sub>2</sub></small></strong></p>       
+    </div>            
+
+    <p><strong>Subtraction in base b</strong></p>
+
+    <p>The subtraction of T from S gives a result R with power series representation:-</p>
+
+    <p><strong>R = r<small><sub>0</sub></small>b<small><sup>0</sup></small> + r<small><sub>1</sub></small>b<small><sup>1</sup></small> + r<small><sub>2</sub></small>b<small><sup>2</sup></small> + r<small><sub>3</sub></small>b<small><sup>3</sup></small> + ............. + r<small><sub>m</sub></small>b<small><sup>m</sup></small> + ...</strong></p>
+    
+    <p>where all the coefficients r, s, and t are single symbols from the base b.</p>
+
+    <p>The value of r<sub>0</sub>, r<sub>1</sub>, r<sub>2</sub>, etc can be found by applying the following rule starting with r<sub>0</sub>:-</p>
+    
+    <p><strong>s<small><sub>n</sub></small> - t<small><sub>n</sub></small> - w<small><sub>n</sub></small> = r<small><sub>n</sub></small> - w<small><sub>n+1</sub></small>b</strong></p>
+
+    <p>where w<sub>0</sub>, w<sub>1</sub>, w<sub>2</sub> etc are borrows between terms with w<sub>0</sub>=0.</p>
+
+    <p>The following examples are for decimal and binary:-</p>
+
+    <div class="text-center">
+        <p><strong>Subtraction in decimal: 1631<small><sub>10</sub></small> - 896<small><sub>10</sub></small>:-</strong></p>
+        
+        <p>s<small><sub>n</sub></small> - t<small><sub>n</sub></small> - w<small><sub>n</sub></small> = r<small><sub>n</sub></small> - w<small><sub>n+1</sub></small>b</p>
+
+        <p>Term 0: 1 - 6 - 0 = -5 = 5 - 10 : w<small><sub>1</sub></small> = 1 r<small><sub>0</sub></small> = 5</p>
+
+        <p>Term 1: 3 - 9 - 1 = -7 = 3 - 10 : w<small><sub>2</sub></small> = 1 r<small><sub>1</sub></small> = 3</p>
+
+        <p>Term 2: 6 - 8 - 1 = -3 = 7 - 10 : w<small><sub>3</sub></small> = 1 r<small><sub>2</sub></small> = 7</p>
+
+        <p>Term 3: 1 - 0 - 1 = 0 = 0 - 0 : w<small><sub>4</sub></small> = 0 r<small><sub>3</sub></small> = 0</p>
+
+        <p>Term 4: 0 - 0 - 0 = 10 = 0 - 0 : w<small><sub>5</sub></small> = 0 r<small><sub>4</sub></small> = 0</p>
+
+        <p><strong>1631<small><sub>10</sub></small> - 896<small><sub>10</sub></small> = 735<small><sub>10</sub></small></strong></p>
+
+        <p><strong>Subtraction in decimal: 896<small><sub>10</sub></small> - 1631<small><sub>10</sub></small>:-</strong></p>
+
+        <p>s<small><sub>n</sub></small> - t<small><sub>n</sub></small> - w<small><sub>n</sub></small> = r<small><sub>n</sub></small> - w<small><sub>n+1</sub></small>b</p>
+
+        <p>Term 0: 6 - 1 - 0 = 5 = 5 - 0 : w<small><sub>1</sub></small> = 0 r<small><sub>0</sub></small> = 5</p>
+
+        <p>Term 1: 9 - 3 - 0 = 6 = 6 - 0 : w<small><sub>2</sub></small> = 0 r<small><sub>1</sub></small> = 6</p>
+
+        <p>Term 2: 8 - 6 - 0 = 2 = 2 - 0 : w<small><sub>3</sub></small> = 0 r<small><sub>2</sub></small> = 2</p>
+
+        <p>Term 3: 0 - 1 - 0 = -1 = 9 - 10 : w<small><sub>4</sub></small> = 1 r<small><sub>3</sub></small> = 9</p>
+
+        <p>Term 4: 0 - 0 - 1 = -1 = 9 - 10 : w<small><sub>5</sub></small> = 1 r<small><sub>4</sub></small> = 9</p>
+        
+        <p>Term 5 -> ? same as Term 4</p>
+
+        <p><strong>896<small><sub>10</sub></small> - 1631<small><sub>10</sub></small> = ..999...9265<small><sub>10</sub></small></strong></p>
+    </div>
+            
+    <p>Again the subtraction process can be done in any base:-</p>
+
+    <div class="text-center">
+        <p><strong>Subtraction in base 11: 656<small><sub>11</sub></small> - 2938<small><sub>11</sub></small>:-</strong></p>
+
+        <p>s<small><sub>n</sub></small> - t<small><sub>n</sub></small> - w<small><sub>n</sub></small> = r<small><sub>n</sub></small> - w<small><sub>n+1</sub></small>b</p>
+
+        <p>Term 0: 6 - 8 - 0 = -2 = 9 - 11<small><sub>10</sub></small> : w<small><sub>1</sub></small> = 1 r<small><sub>0</sub></small> = 9</p>
+
+        <p>Term 1: 5 - 3 - 1 = 1 = 1 - 0 : w<small><sub>2</sub></small> = 0 r<small><sub>1</sub></small> = 1</p>
+
+        <p>Term 2: 6 - 9 - 0 = -3 = 8 - 11<small><sub>10</sub></small> : w<small><sub>3</sub></small> = 1 r<small><sub>2</sub></small> = 8</p>
+
+        <p>Term 3: 0 - 2 - 1 = -3 = 8 - 11<small><sub>10</sub></small> : w<small><sub>4</sub></small> = 1 r<small><sub>3</sub></small> = 8</p>
+
+        <p>Term 4: 0 - 0 - 1 = -1 = 10<small><sub>10</sub></small> - 11<small><sub>10</sub></small> : w<small><sub>5</sub></small> = 1 r<small><sub>4</sub></small> = A<small><sub>11</sub></small></p>
+
+        <p>Term 5 -> ? same as Term 4</p>
+
+        <p><strong>656<small><sub>11</sub></small> - 2938<small><sub>11</sub></small> = ..AAA...A8819<small><sub>11</sub></small></strong></p>
+    </div>
+            
+    <p><strong>Alternatively,</strong></p>
+
+    <p>subtraction can be done by taking the complement of the value to be subtracted and then performing addition:-</p>
+
+    <p>Subtraction in base 11: <strong>656<small><sub>11</sub></small> - 2938<small><sub>11</sub></small> = 656<small><sub>11</sub></small> + .AAA8173<small><sub>11</sub></small> = .AAA8819<small><sub>11</sub></small> = A8819<small><sub>11</sub></small></strong></p>
+</div>

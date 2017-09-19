@@ -69,8 +69,8 @@ SECRET_KEY = '0tk%fl8%r574o6g_u)wx1rastm6%_#t10r_=yosftgrkk3_v3_'
 DEBUG = True
 
 #Azure
-ALLOWED_HOSTS = ['electransystem.azurewebsites.net']
-# ALLOWED_HOSTS = []
+# ALLOWED_HOSTS = ['electransystem.azurewebsites.net']
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -143,7 +143,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'OPTIONS': {
-            'read_default_file': os.path.join(BASE_DIR, 'electran.cnf'),
+            'read_default_file': os.path.join(BASE_DIR, 'my.cnf'),
         },
     }
 }
@@ -188,3 +188,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR,'static_files')]
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')+'/'
+
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

@@ -1,0 +1,40 @@
+<div>
+    <h3>The <i>ns-Complement</i> representation of negative numbers</h3>
+
+    <p>In the lectures, we developed from the basic addition and subtraction algorithms, a means of converting any number into its negative.</p>
+
+    <p>Given a number in base b with symbols t<small><sub>n</sub></small> t<small><sub>n-1</sub></small> t<small><sub>n-2</sub></small> .. t<small><sub>2</sub></small> t<small><sub>1</sub></small> t<small><sub>0</sub></small></p>
+
+    <p>We convert each t<sub>i</sub> into s<sub>i</sub> with the formula</p>
+
+    <p>s<sub>i</sub> = b-1-t<sub>i</sub></p>
+
+    <p>To give the number <strong>in base b with symbols s<small><sub>n</sub></small>s<small><sub>n-1</sub></small>s<small><sub>n-2</sub></small> .. s<small><sub>2</sub></small>s<small><sub>1</sub></small>s<small><sub>0</sub></small></strong> and then we add 1.</p>
+
+    <p>This is the negative of the number in Ns-complement form.</p>
+
+    <p><strong>Example in decimal</strong>: produce negative of <strong>735<sub>10</sub> = 0000735<sub>10</sub></strong></p>
+
+    <table class="table table-condensed">
+        <tr>
+            <td class="text-center align-top">
+                b = 10 : s<small><sub>n</sub></small> = b - 1 - t<small><sub>n</sub></small> = 10 - 1 - t<small><sub>n</sub></small> = 9- t<small><sub>n</sub></small>
+            </td>
+        </tr>
+        <tr>
+            <td class="text-center align-top">
+                <strong>Convert t<sub>i</sub> to s<sub>i: </sub>9-0 = 0: 9-7=2 : 9-5 = 4</strong>
+            </td>
+        </tr>
+        <tr>
+            <td class="text-center align-top">
+                <strong>-000735<sub>10</sub> = ...9999735<sub>10</sub> + 1 = ..999736<sub>10</sub></strong>
+            </td>
+    </table>
+
+    <p><strong>Negative (complement form) of 735<sub>10</sub> is .9735<sub>10</sub></strong></p>
+
+    <p><strong>Negative of 123456<sub>16</sub> is FFEDCBAA<sub>16</sub></strong></p>
+
+    <p>By same method using b = 16<small><sub>10</sub></small> : s<small><sub>n</sub></small> = b - 1 - t<small><sub>n</sub></small> = 10<small><sub>16</sub></small> - 1 - t<small><sub>n</sub></small> = F<small><sub>16</sub></small>- t<small><sub>n</sub></small></p>
+</div>

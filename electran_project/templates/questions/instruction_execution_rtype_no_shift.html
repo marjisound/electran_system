@@ -125,25 +125,20 @@
                     addresses are changed and write in the new values - the memory is big-endian):-</p>
                 <h3>{{ random_value.instruction_type }} ${{ random_value.rd }} ${{ random_value.rs }} ${{ random_value.rt }}</h3>
             <div class="col-md-10 no-padding">
+                {% if not result %}
                 <div class="col-md-5 no-padding">
                     <table class="table table-condensed register-table answer-table">
-                        <caption><span class="register-table-title">Your Answer</span></caption>
-                        {% for key, value in answer.items %}
-                        <tr>
-                            <td class="register-number-cell">${{ key }}</td>
-                            <td class="register-value-cell">{{ value }}</td>
+                        <tr class="answer_table_title">
+                            <th>field</th>
+                            <th>Your answer</th>
+                            <th>Correct answer</th>
                         </tr>
-                        {% endfor %}
-                    </table>
-                </div>
-                {% if not result %}
-                <div class="col-md-5 col-md-offset-1 no-padding">
-                    <table class="table table-condensed register-table answer-table">
-                        <caption><span class="register-table-title">Correct Answer</span></caption>
-                        {% for key, value in correct_answer.items %}
+                        {% for key, value in display_correct %}
                         <tr>
-                            <td class="register-number-cell">${{ key }}</td>
-                            <td class="register-value-cell">{{ value }}</td>
+                            <td class="register-number-cell">{{ key }}</td>
+                            {% for answer in value %}
+                            <td class="register-value-cell">{{ answer }}</td>
+                            {% endfor %}
                         </tr>
                         {% endfor %}
                     </table>

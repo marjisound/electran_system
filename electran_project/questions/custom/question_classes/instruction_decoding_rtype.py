@@ -75,7 +75,7 @@ class Question(MipsInstructionsBase, BinaryHexBase):
         """
         if not answer or type(answer) != str:
             self.wrong_format_message = 'The answer field must be filled in. Please try again'
-            return False, 'field'
+            return False
         else:
 
             answer_list = answer.split(' ')

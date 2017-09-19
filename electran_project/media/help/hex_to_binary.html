@@ -1,0 +1,121 @@
+<div>
+    <h3>Help page for Hexadecimal-binary conversion</h3>
+    <h5>Hexadecimal Numbers</h5>
+    <p>Everything in computers is groups of bits. It is tedious to write, difficult to read and analyse patterns
+        of bits, so it is useful to have a short form to express bit patterns. Hexadecimal numbers are generally
+        now used to do this. There are 16 of these numbers, each of which can be mapped to a 4-bit binary
+        pattern as in the table.</p>
+    <div class="col-sm-6">
+        <table class="table table-condensed register-table">
+            <caption>
+                <span class="register-table-title">
+                    Relationships between Hexadecimal symbols
+                    and 4-bit binary patterns
+                </span>
+            </caption>
+            <thead>
+                <th>Hexadecimal</th>
+                <th>Binary</th>
+                <th>Hexadecimal</th>
+                <th>Binary</th>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>0</td>
+                    <td>0000</td>
+                    <td>8</td>
+                    <td>1000</td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>0001</td>
+                    <td>9</td>
+                    <td>1001</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>0010</td>
+                    <td>A or a</td>
+                    <td>1010</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>0011</td>
+                    <td>B or b</td>
+                    <td>1011</td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td>0100</td>
+                    <td>C or c</td>
+                    <td>1100</td>
+                </tr>
+                <tr>
+                    <td>5</td>
+                    <td>0101</td>
+                    <td>D or d</td>
+                    <td>1101</td>
+                </tr>
+                <tr>
+                    <td>6</td>
+                    <td>0110</td>
+                    <td>E or e</td>
+                    <td>1110</td>
+                </tr>
+                <tr>
+                    <td>7</td>
+                    <td>0111</td>
+                    <td>F or f</td>
+                    <td>1111</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <p>Any binary pattern can be broken into groups of 4 and mapped into hexadecimal numbers.
+        The reverse operation is equally trivial. Of course where the number of bits is not a multiple
+        of 4 it is necessary to indicate the number of bits and know from which end of the bit pattern
+        the grouping is done. However, modern computer systems usually have all bit patterns at multiple
+        of 8, so that this problem rarely arises. Always group binary numbers into groups of 4 bits
+        starting from the right</p>
+    <table class="table table-condensed register-table">
+        <caption>
+            <span class="register-table-title">
+                Relationships between Hexadecimal symbols
+                and 4-bit binary patterns
+            </span>
+        </caption>
+        <thead>
+            <th>Binary</th>
+            <th>Hexadecimal</th>
+            <th>Binary</th>
+            <th>Hexadecimal</th>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1010 0111</td>
+                <td>A7</td>
+                <td>1111 0110 1010 1110 0101</td>
+                <td>F6AE5</td>
+            </tr>
+            <tr>
+                <td>1100 0011 0110 1000</td>
+                <td>C368</td>
+                <td>1111 0000 1111</td>
+                <td>F0F</td>
+            </tr>
+        </tbody>
+    </table>
+    <p>
+        A last example, showing what to when the number of binary digits is not a multiple of 4
+        <br>
+        Binary	10 0101 1110 1111
+        <br>
+        hex	2AEF
+        <br>
+        When converting from hexadecimal binary you can spaces between your bits to make it easier
+        to check what you have written - the answer checker will throw away all spaces.
+        When converting from binary to hex you can use either upper of lower case for letters.
+    </p>
+
+
+</div>

@@ -10,3 +10,7 @@ urlpatterns = [
     url(r'^upload_users/(?P<pk>\d+)/$', views.add_users_to_semester, name='upload_users'),
     url(r'^report_marks', views.report_marks, name='report_marks'),
 ]
+
+
+
+

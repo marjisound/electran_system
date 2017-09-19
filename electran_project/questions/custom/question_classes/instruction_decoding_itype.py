@@ -76,7 +76,7 @@ class Question(MipsInstructionsBase, BinaryHexBase):
 
         if not answer or type(answer) != str:
             self.wrong_format_message = 'The answer field must be filled in. Please try again'
-            return False, 'field'
+            return False
         else:
             self.wrong_format_message = ('Your answer did not have a correct I-Type '
                                          'instruction format. e.g. \"lw $20, 0x1234($5)\". Please try again')

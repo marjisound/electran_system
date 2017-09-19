@@ -40,5 +40,7 @@
 
 {% endblock %}
 {% block specific %}
-    {% include "questions/question_helps/power2_hex_conversion.html" %}
+
+    {{ help_file|safe }}
+
 {% endblock %}
