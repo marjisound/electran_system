@@ -1,6 +1,6 @@
 /*Menu-toggle*/
 $(document).ready(function(){
-
+  $('div[id^="collapse"]').collapse('hide');
 
   $("#menu-toggle").click(function(e) {
       e.preventDefault();
@@ -22,10 +22,10 @@ $(document).ready(function(){
 
   // to toggle the collapse for all categories in admin set questions for semester
   $('#catCollapseAll').click(function () {
-      $('div[id^="collapse"]').collapse('toggle')
+      $('div[id^="collapse"]').collapse('toggle');
       var areaExpand = $('a[data-toggle="collapse"]').attr('aria-expanded')
-      console.log(typeof areaExpand)
-      if(areaExpand == 'true') {
+
+      if(areaExpand === 'true') {
           $('#catCollapseAll').text("Collapse All")
       }else{
 
