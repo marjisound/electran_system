@@ -235,6 +235,10 @@ body {
     font-size: 11px;
 }
 
+.register-table th {
+    text-align: center;
+}
+
 .answer-table {
     background-color: #f2dede;
 }
