@@ -145,12 +145,20 @@ body {
     background-color: rgba(146, 146, 146, 0.6) !important;
 }
 
+.electran-table tr{
+    transition: 0.2s;
+}
+
 .export-excel input {
     margin-bottom: 0;
 }
 
 .export-excel div {
     font-size: 9px;
+}
+
+.email_btn {
+    float: right;
 }
 
 /*********** question content**************/
@@ -642,6 +650,7 @@ body {
     .electran-table th{
         font-size: 8px;
     }
+
     .electran-table tr td{
         font-size: 10px;
     }

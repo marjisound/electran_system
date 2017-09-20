@@ -233,114 +233,123 @@ def semester_question_setup(request, pk=None):
 def add_users_to_semester(request, pk=None):
     sem_users = UserSemester.objects.filter(semester_id=pk)
     if request.method == 'POST':
-        form = AddUsersToSemesterForm(request.POST, request.FILES)
-        if form.is_valid():
-            semester_obj = Semester.objects.get(id=int(pk))
-
-            file_handle = request.FILES['file']
-            user_list_record = file_handle.get_records()
-            user_titles_array = file_handle.get_array()[0]
-
-            mandatory_titles = settings.STUDENTS_MANDATORY_FIELDS
-            message = 'your Excel file does not have these titles:'
-            excel_titles = []
-            for key, value in mandatory_titles.items():
-                if value not in user_titles_array:
-                    message = message + (' ' + value + ',')
-                    excel_titles.append(value)
-
-            if len(excel_titles) == 0:
-                user_creation_error = ''
-                user_add_sem_error = ''
-                sem_user_added = []  # list of users that already existed and were added to semester
-                sem_user_created = []  # list of newly created users and added to semester
-                already_existing_users = []
-
-                for student in user_list_record:
-                    prepared_dict = {
-                        'student_no': student[mandatory_titles['student_no']],
-                        'email': student[mandatory_titles['email']],
-                        'first_name': student[mandatory_titles['first_name']],
-                        'last_name': student[mandatory_titles['last_name']],
-                        'username': student[mandatory_titles['username']],
-                        'password': User.objects.make_random_password()
-                    }
-
-                    empty_valued_titles, filled_value_titles = divide_empty_and_full_dic_values(prepared_dict)
-
-                    if len(empty_valued_titles) > 0:
-                        messages.error(request, ('The record with title \"{0}\" and'
-                                                 ' value \"{1}\" has an empty value '
-                                                 'for one or more mandatary field/fields').format(
-                                                                                    filled_value_titles[0][0],
-                                                                                    filled_value_titles[0][1]))
-                        continue
-                    elif not validate_email(student[mandatory_titles['email']]):
-                        messages.error(request, ('System could not save the '
-                                                 'record with email \"{0}\" because the email address does not have'
-                                                 'a valid format').format(student[mandatory_titles['email']]))
-                        continue
-
-                    error_message = '\"{0}({1})\", '.format(prepared_dict['email'], prepared_dict['student_no'])
-                    try:
-                        obj = User.objects.get(student_no=prepared_dict['student_no'], email=prepared_dict['email'],
-                                               username=prepared_dict['username'])
-                        semester_user_obj, created = UserSemester.objects.get_or_create(user=obj, semester=semester_obj)
-                        if created:
-                            sem_user_added.append(semester_user_obj)
-                        else:
-                            already_existing_users.append(semester_user_obj)
-                    except User.DoesNotExist:
-                        try:
-                            obj = User.objects.create(first_name=prepared_dict['first_name'],
-                                                      last_name=prepared_dict['last_name'],
-                                                      student_no=prepared_dict['student_no'],
-                                                      email=prepared_dict['email'],
-                                                      username=prepared_dict['username'],
-                                                      password=prepared_dict['password'])
-
-                            new_email = EmailAddress(user=obj,
-                                                     email=prepared_dict['email'],
-                                                     verified=True,
-                                                     primary=True)
-                            new_email.save()
-
-                        except IntegrityError:
-                            user_creation_error += error_message
-
-                        except Error:
-                            user_creation_error += error_message
-
-                        else:
-                            try:
-                                reset_pass_form = ResetPasswordForm({'email': prepared_dict['email'], 'name': 'Asghar'})
-                                if reset_pass_form.is_valid():
-                                    reset_pass_form.save(request)
-
-                                semester_user_obj = UserSemester.objects.create(user=obj, semester=semester_obj)
-                                sem_user_created.append(semester_user_obj)
-                            except IntegrityError:
-                                user_add_sem_error += error_message
-
-                            except Error:
-                                user_add_sem_error += error_message
-
-                create_specific_messages(request, user_creation_error, user_add_sem_error,
-                                         sem_user_created, already_existing_users, user_list_record,
-                                         semester_obj, sem_user_added)
-            else:
-                messages.error(request, message)
-
-            new_form = AddUsersToSemesterForm()
+        if request.POST.get('hidden_type') == 'upload':
+            return upload_users(request, pk, sem_users)
+        elif request.POST.get('hidden_type') == 'email':
+            reset_password_email(request)
             semester = Semester.objects.get(pk=pk)
-            return render(request, 'management/upload_users.html', {'form': new_form, 'semester': semester,
-                                                                    'users': sem_users})
+            form = AddUsersToSemesterForm()
 
     else:
         semester = Semester.objects.get(pk=pk)
         form = AddUsersToSemesterForm()
     return render(request, 'management/upload_users.html', {'form': form, 'semester': semester,
                                                             'users': sem_users})
+
+
+def upload_users(request, pk=None, sem_users=None):
+    form = AddUsersToSemesterForm(request.POST, request.FILES)
+    if form.is_valid():
+        semester_obj = Semester.objects.get(id=int(pk))
+
+        file_handle = request.FILES['file']
+        user_list_record = file_handle.get_records()
+        user_titles_array = file_handle.get_array()[0]
+
+        mandatory_titles = settings.STUDENTS_MANDATORY_FIELDS
+        message = 'your Excel file does not have these titles:'
+        excel_titles = []
+        for key, value in mandatory_titles.items():
+            if value not in user_titles_array:
+                message = message + (' ' + value + ',')
+                excel_titles.append(value)
+
+        if len(excel_titles) == 0:
+            user_creation_error = ''
+            user_add_sem_error = ''
+            sem_user_added = []  # list of users that already existed and were added to semester
+            sem_user_created = []  # list of newly created users and added to semester
+            already_existing_users = []
+
+            for student in user_list_record:
+                prepared_dict = {
+                    'student_no': student[mandatory_titles['student_no']],
+                    'email': student[mandatory_titles['email']],
+                    'first_name': student[mandatory_titles['first_name']],
+                    'last_name': student[mandatory_titles['last_name']],
+                    'username': student[mandatory_titles['username']],
+                    'password': User.objects.make_random_password()
+                }
+
+                empty_valued_titles, filled_value_titles = divide_empty_and_full_dic_values(prepared_dict)
+
+                if len(empty_valued_titles) > 0:
+                    messages.error(request, ('The record with title \"{0}\" and'
+                                             ' value \"{1}\" has an empty value '
+                                             'for one or more mandatary field/fields').format(
+                        filled_value_titles[0][0],
+                        filled_value_titles[0][1]))
+                    continue
+                elif not validate_email(student[mandatory_titles['email']]):
+                    messages.error(request, ('System could not save the '
+                                             'record with email \"{0}\" because the email address does not have'
+                                             'a valid format').format(student[mandatory_titles['email']]))
+                    continue
+
+                error_message = '\"{0}({1})\", '.format(prepared_dict['email'], prepared_dict['student_no'])
+                try:
+                    obj = User.objects.get(student_no=prepared_dict['student_no'], email=prepared_dict['email'],
+                                           username=prepared_dict['username'])
+                    semester_user_obj, created = UserSemester.objects.get_or_create(user=obj, semester=semester_obj)
+                    if created:
+                        sem_user_added.append(semester_user_obj)
+                    else:
+                        already_existing_users.append(semester_user_obj)
+                except User.DoesNotExist:
+                    try:
+                        obj = User.objects.create(first_name=prepared_dict['first_name'],
+                                                  last_name=prepared_dict['last_name'],
+                                                  student_no=prepared_dict['student_no'],
+                                                  email=prepared_dict['email'],
+                                                  username=prepared_dict['username'],
+                                                  password=prepared_dict['password'])
+
+                        new_email = EmailAddress(user=obj,
+                                                 email=prepared_dict['email'],
+                                                 verified=True,
+                                                 primary=True)
+                        new_email.save()
+
+                    except IntegrityError:
+                        user_creation_error += error_message
+
+                    except Error:
+                        user_creation_error += error_message
+
+                    else:
+                        try:
+                            reset_pass_form = ResetPasswordForm({'email': prepared_dict['email'], 'name': 'Asghar'})
+                            if reset_pass_form.is_valid():
+                                reset_pass_form.save(request)
+
+                            semester_user_obj = UserSemester.objects.create(user=obj, semester=semester_obj)
+                            sem_user_created.append(semester_user_obj)
+                        except IntegrityError:
+                            user_add_sem_error += error_message
+
+                        except Error:
+                            user_add_sem_error += error_message
+
+            create_specific_messages(request, user_creation_error, user_add_sem_error,
+                                     sem_user_created, already_existing_users, user_list_record,
+                                     semester_obj, sem_user_added)
+        else:
+            messages.error(request, message)
+
+        new_form = AddUsersToSemesterForm()
+        semester = Semester.objects.get(pk=pk)
+        return render(request, 'management/upload_users.html', {'form': new_form, 'semester': semester,
+                                                                'users': sem_users})
 
 
 def divide_empty_and_full_dic_values(prepared_dict):
@@ -399,6 +408,14 @@ def create_specific_messages(request, user_creation_error, user_add_sem_error,
     if user_add_sem_error:
         messages.error(request, ('System could not add these users to semester because '
                                  'integrity of the database is affected: ' + user_add_sem_error[:-2]))
+
+
+def reset_password_email(request):
+    for user in request.POST.getlist('email_students'):
+        user_email = User.objects.get(id=user).email
+        reset_pass_form = ResetPasswordForm({'email': user_email})
+        if reset_pass_form.is_valid():
+            reset_pass_form.save(request)
 
 
 @method_decorator(staff_member_required, name='dispatch')
