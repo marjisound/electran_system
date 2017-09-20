@@ -1,0 +1,364 @@
+<div>
+    <h3 class="text-center">Hexadecimal-binary conversion</h3>
+
+    <h5>Conversion between numbers in different bases</h5>
+
+    <p>The methods for converting a number between bases, e.g. turning 01011001<sub>2</sub> to 89<sub>10</sub> can be derived from the power series representation of a number.</p>
+
+    <p>The power series representation for 2 different bases, b and k, is:-</p>
+
+    <p>I = s<small><sub>0</sub></small>b<small><sup>0</sup></small> + s<small><sub>1</sub></small>b<small><sup>1</sup></small> + s<small><sub>2</sub></small>b<small><sup>2</sup></small> + s<small><sub>3</sub></small>b<small><sup>3</sup></small> + .... + s<small><sub>m</sub></small>b<small><sup>m</sup></small> = t<small><sub>0</sub></small>k<small><sup>0</sup></small> + t<small><sub>1</sub></small>k<small><sup>1</sup></small> + t<small><sub>2</sub></small>k<small><sup>2</sup></small> + t<small><sub>3</sub></small>k<small><sup>3</sup></small> + ..... + t<small><sub>n</sub></small>k<small><sup>n</sup></small></p>
+    
+    <p>The development of the conversion algorithms to convert I from base b to base k is best seen by re-writing the power series representations:-</p>
+
+    <p>I = t<small><sub>0</sub></small> + k(t<small><sub>1</sub></small> + k(t<small><sub>2</sub></small> + .. + k(t<small><sub>n-1</sub></small> + kt<small><sub>n</sub></small>))) = s<small><sub>0</sub></small> + b(s<small><sub>1</sub></small> + b(s<small><sub>2</sub></small> + .. + b(s<small><sub>m-1</sub></small> + bs<small><sub>m</sub></small>)))</p>
+    
+    <br>
+    <p><strong>Method 1:</strong></p>
+
+    <p>This converts a positive integer, I, from its representation in base k to its representation in base b, when <b>addition and multiplication are available in base b.</b></p>
+
+    <p>Basically this requires the calculation of the symbols s<small><sub>m</sub></small>s<small><sub>m-1</sub></small>......s<small><sub>2</sub></small>s<small><sub>1</sub></small>s<small><sub>0</sub></small> in base b from the (known) symbols of I in base k, i.e. t<small><sub>n</sub></small>t<small><sub>n-1</sub></small>...t<small><sub>4</sub></small>t<small><sub>3</sub></small>t<small><sub>2</sub></small>t<small><sub>1</sub></small>t<small><sub>0</sub></small>.</p>
+
+    <p>The method starts by taking k and the symbols t<small><sub>0</sub></small>, t<small><sub>1</sub></small>, t<small><sub>2</sub></small>,.... t<small><sub>m</sub></small>, converting each into its representation in base b and inserting them in the power series formulation I in terms of k</p>
+
+    <p>I = t<small><sub>0</sub></small> + k(t<small><sub>1</sub></small> + k(t<small><sub>2</sub></small> + .... + k(t<small><sub>n-1</sub></small> + kt<small><sub>n</sub></small>))),</p>
+
+    <p>valid independent of the base.</p>
+
+    <p>This yields, after multiplication and addition in base b, the representation of I in base b.</p>
+
+    <p>This operation can be done sequentially one symbol at a time: set sum to 0; add t<small><sub>n</sub></small> to sum, multiply sum by k, add t<small><sub>n-1</sub></small> to sum, multiply sum by k, etc. The algorithm does not need to know how many significant symbols there are in either the base b or base k representation.</p>
+
+    <p><strong>Example:</strong> Convert 110111<small><sub>2</sub></small> to base 10</p>
+
+    <table class="table table-condensed register-table text-center">
+        <tr>
+            <td>
+                k = 2, b = 10, k<small><sub>b</sub></small> = 2<small><sub>10</sub></small>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Stage 0: sum<small><sub>10</sub></small> = 0
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Stage 1: t<small><sub>5</sub></small> = 1<small><sub>2</sub></small> = 1<small><sub>10</sub></small> : sum<small><sub>10</sub></small> = sum * 2 + t<small><sub>5</sub></small> = 0 * 2 + 1 = 1
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Stage 2: t<small><sub>4</sub></small> = 1<small><sub>2</sub></small> = 1<small><sub>10</sub></small> : sum<small><sub>10</sub></small> = sum * 2 + t<small><sub>4</sub></small> = 1 * 2 + 1 = 3
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Stage 3: t<small><sub>3</sub></small> = 0<small><sub>2</sub></small> = 0<small><sub>10</sub></small> : sum<small><sub>10</sub></small> = sum * 2 + t<small><sub>3</sub></small> = 3 * 2 + 0 = 6
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Stage 4: t<small><sub>2</sub></small> = 1<small><sub>2</sub></small> = 1<small><sub>10</sub></small> : sum<small><sub>10</sub></small> = sum * 2 + t<small><sub>2</sub></small> = 6 * 2 + 1 = 13
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Stage 5: t<small><sub>1</sub></small> = 1<small><sub>2</sub></small> = 1<small><sub>10</sub></small> : sum<small><sub>10</sub></small> = sum * 2 + t<small><sub>1</sub></small> = 13 * 2 + 1 = 27
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Stage 6: t<small><sub>0</sub></small> = 1<small><sub>2</sub></small> = 1<small><sub>10</sub></small> : sum<small><sub>10</sub></small> = sum * 2 + t<small><sub>0</sub></small> = 27 * 2 + 1 = 55
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Done: <b>110111<small><sub>2</sub></small> = 55<small><sub>10</sub></small></b>
+            </td>
+        </tr>
+    </table>
+
+    <p><strong>Example:</strong> Convert BCDE<small><sub>16</sub></small> to base 10</p>
+
+    <table class="table table-condensed register-table text-center">
+        <tr>
+            <td>
+                k = 16, b = 10, k<small><sub>b</sub></small> = 16<small><sub>10</sub></small>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Stage 0: sum<small><sub>10</sub></small> = 0
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Stage 1: t<small><sub>3</sub></small> = B<small><sub>16</sub></small> = 11<small><sub>10</sub></small> : sum<small><sub>10</sub></small> = sum * 16 + t<small><sub>3</sub></small> = 0 * 16 + 11 = 11
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Stage 2: t<small><sub>2</sub></small> = C<small><sub>16</sub></small> = 12<small><sub>10</sub></small> : sum<small><sub>10</sub></small> = sum * 16 + t<small><sub>2</sub></small> = 11 * 16 + 12 = 188
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Stage 3: t<small><sub>1</sub></small> = D<small><sub>16</sub></small> = 13<small><sub>10</sub></small> : sum<small><sub>10</sub></small> = sum * 16 + t<small><sub>1</sub></small> = 188 * 16 + 13 = 3021
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Stage 4: t<small><sub>0</sub></small> = E<small><sub>16</sub></small> = 14<small><sub>10</sub></small> : sum<small><sub>10</sub></small> = sum * 16 + t<small><sub>0</sub></small> = 3021 * 16 + 14 = 48350
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Done: BCDE<small><sub>162</sub></small> = 48350<small><sub>10</sub></small>
+            </td>
+        </tr>
+    </table>        
+    
+    <br>
+    <p><strong>Method 2:</strong></p>
+
+    <p>This converts a positive integer, I, from base b to base k, <b>where division and remainder are available in base b.</b></p>
+
+    <p>Basically this requires the calculation of the symbols t<small><sub>n</sub></small>t<small><sub>n-1</sub></small>........t<small><sub>4</sub></small>t<small><sub>3</sub></small>t<small><sub>2</sub></small>t<small><sub>1</sub></small>t<small><sub>0</sub></small> in base k from the (known) symbols of I in base b, i.e. s<small><sub>m</sub></small>s<small><sub>m-1</sub></small>......s<small><sub>2</sub></small>s<small><sub>1</sub></small>s<small><sub>0</sub></small>.</p>
+
+    <p>Taking the power series for I in powers of k:-</p>
+
+    <p>I = t<small><sub>0</sub></small> + k(t<small><sub>1</sub></small> + k(t<small><sub>2</sub></small> + .... + k(t<small><sub>n-1</sub></small> + kt<small><sub>n</sub></small>)...))</p>
+
+    <p>it can be seen that the <b>integer division of I in base <i>b</i> by <i>k</i> in base <i>b</i> has a remainder <i>t<small><sub>0</sub></small></i> in base <i>b</i> which can be converted into a single symbol in base <i>k</i></b>.</p>
+
+    <p>The result of the division is</p>
+
+    <p>t<small><sub>1</sub></small> + k(t<small><sub>2</sub></small> + .... + k(t<small><sub>n-1</sub></small> + kt<small><sub>n</sub></small>)...)</p>
+
+    <p>which can be iteratively divided by k to give successively t<small><sub>1</sub></small>, t<small><sub>2</sub></small>, .... t<small><sub>n</sub></small> with the iteration stopping when the remainder of the division is zero.</p>
+    
+    <p>This algorithm does not need to know how many significant symbols there are in either the base b or base k representation.</p>
+
+    <p><strong>Example:</strong> Convert 55<small><sub>10</sub></small> to base 2</p>
+
+    <table class="table table-condensed register-table text-center">
+        <tr>
+            <td>
+                k = 2, b = 10, k<small><sub>10</sub></small> = 2<small><sub>10</sub></small>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Stage 0: div<small><sub>10</sub></small> = 55<small><sub>10</font></sub></small>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Stage 1: Rem<small><sub>10</sub></small> of 55<small><sub>10</sub></small> / 2<small><sub>10</sub></small> = 1: <b>t<small><sub>0</sub></small> = 1</b>: div<small><sub>10</sub></small> = div<small><sub>10</sub></small> / 2<small><sub>10</sub></small> = 55<small><sub>10</sub></small> / 2<small><sub>10</sub></small> = 27<small><sub>10</sub></small>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Stage 2: Rem<small><sub>10</sub></small> of 27<small><sub>10</sub></small> / 2<small><sub>10</sub></small> = 1: <b>t<small><sub>1</sub></small> = 1</b>: div<small><sub>10</sub></small> = div<small><sub>10</sub></small> / 2<small><sub>10</sub></small> = 55<small><sub>10</sub></small> / 2<small><sub>10</sub></small> = 13<small><sub>10</sub></small>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Stage 3: Rem<small><sub>10</sub></small> of 13<small><sub>10</sub></small> / 2<small><sub>10</sub></small> = 1: <b>t<small><sub>2</sub></small> = 1</b>: div<small><sub>10</sub></small> = div<small><sub>10</sub></small> / 2<small><sub>10</sub></small> = 55<small><sub>10</sub></small> / 2<small><sub>10</sub></small> = 6<small><sub>10</sub></small>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Stage 4: Rem<small><sub>10</sub></small> of 6<small><sub>10</sub></small> / 2<small><sub>10</sub></small> = 1: <b>t<small><sub>3</sub></small> = 0</b>: div<small><sub>10</sub></small> = div<small><sub>10</sub></small> / 2<small><sub>10</sub></small> = 55<small><sub>10</sub></small> / 2<small><sub>10</sub></small> = 3<small><sub>10</sub></small>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Stage 5: Rem<small><sub>10</sub></small> of 3<small><sub>10</sub></small> / 2<small><sub>10</sub></small> = 1: <b>t<small><sub>4</sub></small> = 1</b>: div<small><sub>10</sub></small> = div<small><sub>10</sub></small> / 2<small><sub>10</sub></small> = 55<small><sub>10</sub></small> / 2<small><sub>10</sub></small> = 1<small><sub>10</sub></small>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Stage 6: Rem<small><sub>10</sub></small> of 1<small><sub>10</sub></small> / 2<small><sub>10</sub></small> = 1: <b>t<small><sub>5</sub></small> = 1</b>: div<small><sub>10</sub></small> = div<small><sub>10</sub></small> / 2<small><sub>10</sub></small> = 55<small><sub>10</sub></small> / 2<small><sub>10</sub></small> = 0<small><sub>10</sub></small>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Done: <b>55<small><sub>10</sub></small> = 110111<small><sub>2</sub></small></b>
+            </td>
+        </tr>
+    </table>
+    
+    <br>
+    <p><strong>Method 3:</strong></p>
+
+    <p>This is a second method for <b>converting a positive integer, <i>I</i>, from base <i>b</i> to base <i>k</i>, where division and remainder are available in base</b> <i>b</i>. This method is usable only when there is an upper bound, I<sub>max</sub> , on I and the method requires that the powers of k less than I<sub>max</sub> are available in base b, i.e. k, k<sup>2</sup>, k<sup>3</sup>, .. k<sup>r</sup> &lt; I<sub>max</sub> and k<sup>r+1</sup>&gt; I<sub>max</sub>. The method can be understood with respect to the power series representation of I:-</p>
+
+    <p>I = t<small><sub>0</sub></small>k<small><sup>0</sup></small> + t<small><sub>1</sub></small>k<small><sup>1</sup></small> + t<small><sub>2</sub></small>k<small><sup>2</sup></small> + t<small><sub>3</sub></small>k<small><sup>3</sup></small> + ............. + t<small><sub>r</sub></small>k<small><sup>r</sup></small></p>
+
+    <p>where the power series has no terms in k<sup>r+1</sup> because I<sub>max</sub> of the series is less than k<sup>r+1</sup>.</p>
+
+    <p>Integer division of <i>I</i> in base b by k<sup>r</sup> gives t<small><sub>r</sub></small> as a result, which can be converted into a symbol in base k.</p>
+
+    <p>The remainder is t<small><sub>0</sub></small>k<small><sup>0</sup></small> + t<small><sub>1</sub></small>k<small><sup>1</sup></small> + t<small><sub>2</sub></small>k<small><sup>2</sup></small> + t<small><sub>3</sub></small>k<small><sup>3</sup></small> + ............. + t<small><sub>r-1</sub></small>k<small><sup>r-1</sup></small> which can be iteratively divided by k<small><sup>r - 1</sup></small>, k<small><sup>r - 2</sup></small>,...k to yield successively the other symbols of T.</p>
+
+    <p>The advantage of this method is that it yields the t symbols in the order t<small><sub>r</sub></small>t<small><sub>r-1</sub></small>.......t<small><sub>2</sub></small>t<small><sub>1</sub></small>t<small><sub>0</sub></small>.</p>
+
+    <p><strong>Example:</strong> Convert 55<small><sub>10</sub></small> to base 2</p>
+
+    <table class="table table-condensed register-table text-center">
+        <tr>
+            <td>
+                k = 2, b = 10, k<small><sub>10</sub></small> = 2<small><sub>10</sub></small>, k<sup>3</sup><small><sub>10</sub></small> = 8<small><sub>10</sub></small>, k<sup>4</sup><small><sub>10</sub></small> = 16<small><sub>10</sub></small>, k<sup>5</sup><small><sub>10</sub></small> = 32<small><sub>10</sub></small>, k<sup>6</sup><small><sub>10</sub></small> = 64<small><sub>10</sub></small>, ....,
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Stage 0: div<small><sub>10</sub></small> = 55<small><sub>10</sub></small>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Stage 1: <b>t<small><sub>5</sub></small></b> = div<small><sub>10</sub></small> / k<sup>5</sup><small><sub>10</sub></small> = 55<small><sub>10</sub></small> / 32<small><sub>10</sub></small> = <b>1<small><sub>10</sub></small></b> : div<small><sub>10</sub></small> = Rem<small><sub>10</sub></small> of 55<small><sub>10</sub></small> / 32<small><sub>10</sub></small> = 23<small><sub>10</sub></small>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Stage 2: <b>t<small><sub>4</sub></small></b> = div<small><sub>10</sub></small> / k<sup>4</sup><small><sub>10</sub></small> = 23<small><sub>10</sub></small> / 16<small><sub>10</sub></small> = <b>1<small><sub>10</sub></small></b> : div<small><sub>10</sub></small> = Rem<small><sub>10</sub></small> of 23<small><sub>10</sub></small> / 16<small><sub>10</sub></small> = 7<small><sub>10</sub></small>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Stage 3: <b>t<small><sub>3</sub></small></b> = div<small><sub>10</sub></small> / k<sup>3</sup><small><sub>10</sub></small> = 7<small><sub>10</sub></small> / 8<small><sub>10</sub></small> = <b>0<small><sub>10</sub></small></b> : div<small><sub>10</sub></small> = Rem<small><sub>10</sub></small> of 7<small><sub>10</sub></small> / 8<small><sub>10</sub></small> = 7<small><sub>10</sub></small>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Stage 4: <b>t<small><sub>2</sub></small></b> = div<small><sub>10</sub></small> / k<sup>2</sup><small><sub>10</sub></small> = 7<small><sub>10</sub></small> / 4<small><sub>10</sub></small> = <b>1<small><sub>10</sub></small></b> : div<small><sub>10</sub></small> = Rem<small><sub>10</sub></small> of 7<small><sub>10</sub></small> / 4<small><sub>10</sub></small> = 3<small><sub>10</sub></small>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Stage 5: <b>t<small><sub>1</sub></small></b> = div<small><sub>10</sub></small> / k<sup>1</sup><small><sub>10</sub></small> = 3<small><sub>10</sub></small> / 2<small><sub>10</sub></small> = <b>1<small><sub>10</sub></small></b> : div<small><sub>10</sub></small> = Rem<small><sub>10</sub></small> of 3<small><sub>10</sub></small> / 2<small><sub>10</sub></small> = 1<small><sub>10</sub></small>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Stage 6: <b>t<small><sub>0</sub></small></b> = div<small><sub>10</sub></small> / k<sup>0</sup><small><sub>10</sub></small> = 1<small><sub>10</sub></small> / 1<small><sub>10</sub></small> = <b>1<small><sub>10</sub></small></b> : div<small><sub>10</sub></small> = Rem<small><sub>10</sub></small> of 1<small><sub>10</sub></small> / 1<small><sub>10</sub></small> = 0<small><sub>10</sub></small>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Done: <b>55<small><sub>10</sub></small> = 110111<small><sub>2</sub></small></b>
+            </td>
+        </tr>
+    </table>
+        
+    <br>
+    <p><strong>Choice of Method</strong></p>
+
+    <p>The choice of which method to use for a conversion is determined primarily by the number system, source or target, in which arithmetic operations can be performed. For most people, arithmetic in base 10 can be performed, so that for manual conversions, method 1 is used when converting into base 10 from another base, but method 2 when converting from base 10.</p>
+
+    <p>For computers, only arithmetic in base 2 is available and so method 1 is used when the target number system is base 2, but method 2 when the source number system is base 2.</p>
+
+    <p>The decision between method 2 and method 3 is more open to choice, but method 2 is more efficient in the number of operations and is therefore preferable.</p>
+
+    <p>For conversions between number systems where arithmetic in neither target or source is available, computers, and most people, will convert via a third number system in which arithmetic is available,</p>
+
+    <p>manual conversion on 351<small><sub>6</sub></small> to tertiary (base 3):</p>
+
+    <table class="table table-condensed register-table text-center">
+        <tr>
+            <td>
+                use method 1 to take 351<small><sub>6</sub></small> to 139<small><sub>10</sub></small>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                then method 2 to take 139<small><sub>10</sub></small> to 12011<small><sub>3</sub></small>
+            </td>
+        </tr>
+    </table>
+        
+    <p>method 1 to convert 351<small><sub>6</sub></small> to base 10</p>
+
+    <table class="table table-condensed register-table text-center">
+        <tr>
+            <td>
+                k = 6, b = 10, k<small><sub>b</sub></small> = 6<small><sub>10</sub></small>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Stage 0: sum<small><sub>10</sub></small> = 0
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Stage 1: t<small><sub>2</sub></small> = 3<small><sub>6</sub></small> = 3<small><sub>10</sub></small> : sum<small><sub>10</sub></small> = sum * 6 + t<small><sub>2</sub></small> = 0 * 6 + 3 = 3<small><sub>10</sub></small>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Stage 2: t<small><sub>1</sub></small> = 5<small><sub>6</sub></small> = 5<small><sub>10</sub></small> : sum<small><sub>10</sub></small> = sum * 6 + t<small><sub>1</sub></small> = 3 * 6 + 5 = 23<small><sub>10</sub></small>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Stage 3: t<small><sub>0</sub></small> = 1<small><sub>6</sub></small> = 1<small><sub>10</sub></small> : sum<small><sub>10</sub></small> = sum * 6 + t<small><sub>0</sub></small> = 23 * 6 + 1 = 138 + 1 = 139<small><sub>10</sub></small>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <b>Done: 351<small><sub>6</sub></small> = 139<small><sub>10</sub></small></b>
+            </td>
+        </tr>
+    </table>
+
+    <p>method 2 to convert 139<small><sub>10</sub></small>to base 3</p>
+
+    <table class="table table-condensed register-table text-center">
+        <tr>
+            <td>
+                k = 3, b = 10, k<small><sub>10</sub></small> = 3<small><sub>10</sub></small>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Stage 0: div<small><sub>10</sub></small> = 139<small><sub>10</sub></small>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Stage 1: Rem<small><sub>10</sub></small> of 139<small><sub>10</sub></small> / 3<small><sub>10</sub></small> = 1: <b>t<small><sub>0</sub></small> = 1</b>: div<small><sub>10</sub></small> = div<small><sub>10</sub></small> / 3<small><sub>10</sub></small> = 139<small><sub>10</sub></small> / 3<small><sub>10</sub></small> = 46<small><sub>10</sub></small>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Stage 2: Rem<small><sub>10</sub></small> of 46<small><sub>10</sub></small> / 3<small><sub>10</sub></small> = 1: <b>t<small><sub>1</sub></small> = 1</b>: div<small><sub>10</sub></small> = div<small><sub>10</sub></small> / 3<small><sub>10</sub></small> = 46<small><sub>10</sub></small> / 3<small><sub>10</sub></small> = 15<small><sub>10</sub></small>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Stage 3: Rem<small><sub>10</sub></small> of 15<small><sub>10</sub></small> / 3<small><sub>10</sub></small> = 0: <b>t<small><sub>2</sub></small> = 0</b>: div<small><sub>10</sub></small> = div<small><sub>10</sub></small> / 3<small><sub>10</sub></small> = 15<small><sub>10</sub></small> / 3<small><sub>10</sub></small> = 5<small><sub>10</sub></small>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Stage 4: Rem<small><sub>10</sub></small> of 5<small><sub>10</sub></small> / 3<small><sub>10</sub></small> = 2: <b>t<small><sub>3</sub></small> = 2</b>: div<small><sub>10</sub></small> = div<small><sub>10</sub></small> / 3<small><sub>10</sub></small> = 5<small><sub>10</sub></small> / 3<small><sub>10</sub></small> =1<small><sub>10</sub></small>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Stage 5: Rem<small><sub>10</sub></small> of 1<small><sub>10</sub></small> / 3<small><sub>10</sub></small> = 1: <b>t<small><sub>4</sub></small> = 1</b>: div<small><sub>10</sub></small> = div<small><sub>10</sub></small> / 3<small><sub>10</sub></small> = 1<small><sub>10</sub></small> / 3<small><sub>10</sub></small> =0<small><sub>10</sub></small>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <b>Done: 139<small><sub>10</sub></small> = 12011<small><sub>3</sub></small></b>
+            </td>
+        </tr>
+    </table>
+</div>

@@ -42,5 +42,7 @@
 
 {% endblock %}
 {% block specific %}
-    {% include "questions/question_helps/binary_hex_conversion.html" %}
+
+    {{ help_file|safe }}
+
 {% endblock %}

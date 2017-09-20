@@ -41,7 +41,7 @@
         <div class="panel-heading">
           <h4 class="panel-title">
             <a data-toggle="collapse" href="#collapse{{forloop.counter}}" aria-expanded="false">
-              {{item.cat.cat_title}}
+              {{forloop.counter}}- {{item.cat.cat_title}}
             </a>
           </h4>
         </div>
@@ -59,7 +59,7 @@
                 <tbody>
                     {% for question in item.qus %}
                     <tr class="home-question-item">
-                        <td><a href="{% url 'questions:all_questions' slug=question.slug %}">{{question.question_title}}</a></td>
+                        <td><a href="{% url 'questions:all_questions' slug=question.slug %}">{{forloop.counter}}- {{question.question_title}}</a></td>
                         <td>
                         {% if question.max_mark is not null %}
                             <span class="home-mark">{{ question.max_mark }}/{{ question.mark_max_value }}</span>

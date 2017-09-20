@@ -65,7 +65,10 @@ def get_questions(semesters=[]):
     questions_with_cats = []
 
     for cat in categories:
+
         qus_cat = {'cat': cat, 'qus': []}
+
+
         cat_has_qus = False
         for qus in questions:
             for sem in semesters:
@@ -104,7 +107,6 @@ def homePage(request):
         semester = sem_active_list[0]
         request.session.__setitem__('active_semester_id', semester.id)
         questions_with_cats = home_get_questions(sem_id=semester.id, user_id=request.user.id)
-
 
     else:
         semester = sem_active_list[0]

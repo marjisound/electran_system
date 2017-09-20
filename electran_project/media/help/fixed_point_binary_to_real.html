@@ -1,0 +1,94 @@
+<div>
+    <h3 class="text-center">Fixed Width Binary Representations of real numbers</h3>
+
+    <p>Two forms of real numbers are used in computer systems: fixed point and floating point.</p>
+    
+    <p>
+        <strong>Fixed Point Numbers</strong>
+        <br>
+        An n-bit <b>integer</b> holds the n bit symbols to the left of the binary point, i.e. <b>s<sub>n</sub> ... s<sub>1</sub> s<sub>0</sub></b>
+    </p>
+
+    <p>
+        An n-bit <b>fixed point real number</b> holds the n bit symbols surrounding the binary point, i.e.
+        <br>
+        <b>s<sub>n-m-1</sub> ... s<sub>1</sub> s<sub>0</sub> s<sub>-1</sub> s<sub>-2</sub> ... s<sub>-m</sub></b>
+    </p>
+
+    <p>where the size of m is normally determined by the software, not by the hardware.</p>
+
+    <p>These bit symbols are stored such that <b>s<sub>-m</sub></b> goes into bit position 0, <b>s<sub>-m+1</sub></b> into bit position 1, etc.</p>
+
+    <p>Because m is fixed by the software, the position of the binary point does not have to be explicitly recorded, but is built into the software.</p>
+
+    <p>Operations are identical to the integer operations above: integers are really just fixed point numbers with m = 0.</p>
+
+    <p>Fixed point numbers may be signed or unsigned.</p>
+
+    <p>Conversion from decimal real number to binary real number.</p>
+
+    <p>The integer part of the decimal real number is converted in the normal way to binary.</p>
+
+    <p>The conversion of the fractional part of the decimal real number follows from the following result:-</p>
+
+    <p>The fractional part of a real number represented in base b is</p>
+
+    <p>F = s<sub>-1</sub>b<sup>-1</sup> + s<sub>-2</sub>b<sup>-2</sup> + ............. + s<sub>-m</sub>b<sup>-m</sup> + ...</p>
+
+    <p>Multiplying F by b =</p>
+
+    <p>bF = s<sub>-1</sub>b<sup>0</sup> + s<sub>-2</sub>b<sup>-1</sup> + ............. + s<sub>-m</sub>b<sup>-m-1</sup> + ...</p>
+
+    <p>and the integer part of bf is just s<sub>-1.</sub></p>
+
+    <p>Thus repeated multiplication of F by b gives the symbols s<sub>-1</sub>, s<sub>-2</sub>, s<sub>-3</sub>, s<sub>-4 </sub>in turn.</p>
+
+    <p>Thus to get the fractional 0.497685<sub>10</sub> into a binary fraction, it just necessary to keep multiplying by 2:-</p>
+
+    <table class="table table-condensed help-table">
+        <tr>
+            <td>
+                0.497685<sub>10</sub> * 2 = 0.995370<sub>10</sub>: <b>s<sub>-1</sub> = 0</b>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                0.995370<sub>10</sub> * 2 = 1.990374<sub>10</sub>: <b>s<sub>-2</sub> = 1</b>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                0.990374<sub>10</sub> * 2 = 1.980748<sub>10</sub>: <b>s<sub>-3</sub> = 1</b>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                0.980748<sub>10</sub> * 2 = 1.961496<sub>10</sub>: <b>s<sub>-4</sub> = 1</b>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                0.961496<sub>10</sub> * 2 = 1.922992<sub>10</sub>: <b>s<sub>-5</sub> = 1</b>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                0.922992<sub>10</sub> * 2 = 1.845984<sub>10</sub>: <b>s<sub>-6</sub> = 1</b>
+            </td>
+        </tr>
+    </table>
+
+    <p>And so on...</p>
+    
+    <p>0.497685<sub>10</sub> = 0.011111...</p>
+
+    <p>Thus to convert 102.497685<sub>10</sub> to binary fixed point with 3 fractional bits.</p>
+
+    <p>Convert 102 to 01100110 and 0.497685<sub>10</sub> to 0.011111</p>
+
+    <p>To give 01100110.011111 and truncate to 3 binary digits</p>
+
+    <p>102.497685<sub>10</sub> to binary fixed point with 3 fractional bits.</p>
+
+    <p>= 01100110.011</p>
+</div>

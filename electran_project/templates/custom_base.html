@@ -112,9 +112,10 @@
                                                 {% endfor %}
                                             </ul>
                                         {% endif %}
-                                      {% block content %}
-                                      {% endblock content %}
-                                    {% block help %}{% block specific %}{% endblock %}{% endblock %}
+                                        {% block content %}{% endblock content %}
+                                        {% block help %}
+                                            {% block specific %}{% endblock %}
+                                        {% endblock %}
                                     </div>
                                 </div>
                             </div>
