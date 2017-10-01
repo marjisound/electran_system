@@ -41,6 +41,9 @@ class Question(BinaryHexBase, InterruptBase):
 
     def test_answer(self, student_answer, correct_answer):
 
+        student_answer['answer_interrupt_response'] = float(student_answer['answer_interrupt_response'])
+        correct_answer['answer_interrupt_response'] = float(correct_answer['answer_interrupt_response'])
+
         diff_list = self.compare_dictionaries(student_answer, correct_answer)
         self.display_correct = diff_list
 
@@ -56,8 +59,8 @@ class Question(BinaryHexBase, InterruptBase):
         :rtype: dict
         """
 
-        student_answer['answer_interrupt_response'] = student_answer['answer_interrupt_response'].replace(' ', '')
-        student_answer['answer_data_rate'] = student_answer['answer_data_rate'].replace(' ', '')
+        student_answer['answer_interrupt_response'] = student_answer['answer_interrupt_response'].replace(' ', '').replace('\t', '')
+        student_answer['answer_data_rate'] = student_answer['answer_data_rate'].replace(' ', '').replace('\t', '')
 
         is_valid_interrupt_response, message_type_interrupt_response = self.is_valid_float(student_answer['answer_interrupt_response'])
         is_valid_data_rate, message_type_data_rate = self.is_valid_int(student_answer['answer_data_rate'])

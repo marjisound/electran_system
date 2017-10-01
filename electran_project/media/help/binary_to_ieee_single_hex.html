@@ -1,0 +1,183 @@
+<div>
+    <h3 class="text-center">Floating Point Numbers</h3>
+
+    <p>As the name indicates the position of the binary point is not fixed in this representation, allowing a very much larger range of numbers to be represented.</p>
+
+    <p>Obviously the most significant bits of the number, called the <i>mantissa</i>, have to be stored and the position of these bits relative to the binary point has to be known and explicitly defined within the n-bits of the representation, reducing the number of bits available for the mantissa.</p>
+
+    <p>Thus the computer form of floating point numbers is just standard scientific notion:-</p>
+
+    <p><b>?M * B <sup>?E</sup></b></p>
+
+    <p>where M is the mantissa and B is the number base.</p>
+
+    <br>
+    <p><strong>IEEE Standard for Floating Point Numbers</strong></p>
+
+    <p>The standard representation of floating point numbers that is used nowadays is has been defined in a Standards Document produced by the IEEE.</p>
+
+    <p>This defines 3 basic formats, <b> single, double</b> and <b>quad</b> precision with bit widths of 32, 64 and 128 bits.</p>
+
+    <p>An IEEE floating point number, X, is formally defined as:-</p>
+
+    <p><b>X = -1<sup>S</sup> *  1.F * 2<sup>E-Bias</sup> : normalised numbers</b></p>
+
+    <p>where S = sign bit (0 or 1) : S = 0 &#8594; -1<sup>0</sup> = 1 &#8594; + ; S = 1 &#8594; -1<sup>1</sup> = -1 &#8594; -</p>
+
+    <p>E = exponent biased by <i>Bias</i> value</p>
+
+    <p>F = fractional mantissa, the full mantissa is 1.F with the leading 1 <i>hidden</i>.</p>
+
+    <p>and</p>
+
+    <p><b>X = -1<sup>S</sup> * 0.F * 2<sup>1-Bias</sup> : un-normalised numbers</b></p>
+
+    <p>where S = sign bit (0 or 1) : S = 0 &#8594; -1<sup>0</sup> = 1 &#8594; + ; S = 1 &#8594; -1<sup>1</sup> = -1 &#8594; -</p>
+
+    <p>E = exponent biased by <i>Bias</i> value</p>
+
+    <p>F = mantissa, with the no <i>hidden bits</i>.</p>
+
+    <p>The format of IEEE floating point number is</p>
+
+    <p>Sign - biased exponent - mantissa</p>
+
+    <p>The mantissa field has the bits after the decimal point in the representation in the left most bit of the mantissa field.</p>
+
+    <p>In IEEE single precision floating point, there are 32-bits, with 1-bit for the sign, 8-bits for the biased exponent, 23-bits for the mantissa, and the bias is 127<sub>10</sub>.</p>
+
+    <p>The bias allows the exponent stored, E, to be unsigned, and has a other advantages discussed below.</p>
+
+    <p>The standard has 3 number forms, <i>normalised, un-normalised</i> and <i>not-a-number (NaN)</i>, with the different distinguished by the value of E, the exponent field.</p>
+
+    <br>
+    <p><strong>Normalised Numbers</strong></p>
+
+    <p>For these numbers, it is required that the mantissa is <b>normalised</b>, so that there are no the mantissa is in the range 1 ? mantissa &lt; 2, so that all <b>normalised</b> mantissa are of the form 1.xxxxx.</p>
+
+    <p>The 1 is not stored, as all mantissas start with 1 in normalisd foms.</p>
+
+    <p>This bit is called the <i>hidden</i> bit.</p>
+
+    <p>The normalised form deals with the majority of numbers, positive and negative, but not zero or very small numbers: the hidden one precludes it from being used for zero.</p>
+
+    <p>Single precision normalised numbers cover all exponent values except E=0 (the non-normalised form) and the maximum value of E=-255, which is used for the NaN form.</p>
+
+    <p>Thus, single precision normalised form has biased exponents in the range: 1 &#8804; E &#8804; 254</p>
+
+    <p>Largest Single precision normalised number = 1.111111111111111111111111 * 2<sup>254 - 127</sup> ? 2 * 2<sup>127</sup></p>
+
+    <p>Smallest +ve Single precision normalised number = 1.00000000000000000000000 * 2<sup>1 - 127</sup> = 1.0 * 2<sup>-126</sup></p>
+
+    <p>Example:</p>
+
+    <table class="table table-condensed help-table">
+        <tr>
+            <td>
+                Turn -12.75<sub>10</sub> into single precision form
+            </td>
+        </tr>
+        <tr>
+            <td>
+                -12.75<sub>10</sub> = -1100.11<sub>2</sub> = -1.10011<sub>2</sub> * 2<sup>3</sup> = -1.10011<sub>2</sub> * 2<sup>130-127</sup>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                sign bit -1, E = 130<sub>10</sub> = 10000010<sub>2</sub>, fractional part F = 10011
+            </td>
+        </tr>
+        <tr>
+            <td>
+                bit pattern:
+                <br>
+                1 10000010 <b>100 11</b>00 0000 0000 0000 0000
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Binary
+                <br>
+                1100 0001 0100 1100 0000 0000 0000 0000
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Hexadecimal C<sub>16</sub> 1<sub>16</sub>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                4<sub>16</sub> C<sub>16</sub> 0<sub>16</sub>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                0<sub>16</sub> 0<sub>16</sub> 0<sub>16</sub>
+            </td>
+        </tr>
+    </table>
+
+    <p>-12.75<sub>10</sub> is represented in single precision IEE form as <b>C14C0000<sub>16</sub></b></p>
+
+    <p>Note that the fractional part appears in the left most part of the mantissa field with 0s added on the right of the number to pad it out to 23 bits.</p>
+
+    <br>
+    <p><strong>Non-Normalised Numbers</strong></p>
+
+    <p>The <i>non-normalised</i> form has an exponent form with E=0 and deals with zero and very small numbers.</p>
+
+    <p>There is no hidden one.</p>
+
+    <p>You can either consider the decimal point:</p>
+
+    <p>As to the left of the bits of the mantissa (as for normalised numbers) with an exponent of <b>2<sup>1-Bias</sup></b></p>
+
+    <p>or yo can consider the decimal point to the right of the leftmost first bit of the mantissa with a exponent of <b>2<sup>0-Bias</sup></b></p>
+
+    <p>[These are mathematically identical statements.]</p>
+
+    <p>A first major advantage is that zero has sign bit S=0, exponent E=0, and mantissa of zero, so that so the representation of 0 is all bits 0. This makes floating point zero identical to integer zero. This makes it easy to set a floating point number to zero and also to test for zero.</p>
+
+    <p>When the mantissa is non-zero, the <i>non-normalised</i> form gives progressively smaller numbers:-</p>
+
+    <table class="table table-condensed help-table">
+        <tr>
+            <td>
+                Turn 31.25<sub>10</sub> 2<sup>-140</sup> into single precision form
+            </td>
+        </tr>
+        <tr>
+            <td>
+                -31.25<sub>10</sub> * 2<sup>-140</sup> = 11111.01<sub>2</sub> * 2<sup>-140</sup> = 0.1111101<sub>2</sub> * 2<sup>-135</sup> = 0.1111101<sub>2</sub> * 2<sup>-9 - 126</sup>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                0.1111101<sub>2</sub> * 2<sup>-9 - 126</sup> = 0.1111101<sub>2</sub> * 2<sup>-9</sup> * 2<sup>-126</sup> = 0.0000000001111101<sub>2</sub> * 2<sup>1 - 127</sup>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                sign bit -0, E = 0 = 00000000<sub>2</sub>, fractional part F = 0000000001111101
+            </td>
+        </tr>
+        <tr>
+            <td>
+                bit pattern: 0 00000000 000 0000 0011 1110 1000 0000
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Binary 0000 0000 0000 0000 0011 1110 1000 0000
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Hexadecimal 0<sub>16</sub> 0<sub>16</sub> 0<sub>6</sub> 0<sub>16</sub> 3<sub>16</sub> E<sub>16</sub> 0<sub>16</sub> 0<sub>16</sub>
+            </td>
+        </tr>
+    </table>
+    
+    <p>31.25 2<sup>-140</sup> is represented in single precision IEE form as <b>0003E00<sub>16</sub></b></p>
+</div>

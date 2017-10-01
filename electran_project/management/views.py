@@ -5,7 +5,7 @@ from django.urls import reverse
 from django.contrib import messages
 from validate_email import validate_email
 from .models import (Question, QuestionCategory, Semester, QuestionSemester, UserSemester, Mark, UserQuestionSemester)
-from .forms import NewSemesterForm, AddUsersToSemesterForm
+from .forms import NewSemesterForm, AddUsersToSemesterForm, UserForm
 from django.views.generic import ListView
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
@@ -67,7 +67,6 @@ def get_questions(semesters=[]):
     for cat in categories:
 
         qus_cat = {'cat': cat, 'qus': []}
-
 
         cat_has_qus = False
         for qus in questions:
@@ -231,7 +230,8 @@ def semester_question_setup(request, pk=None):
 
 @staff_member_required
 def add_users_to_semester(request, pk=None):
-    sem_users = UserSemester.objects.filter(semester_id=pk)
+    sem_users = UserSemester.objects.filter(semester_id=pk).order_by('user__last_name')
+    user_form = UserForm()
     if request.method == 'POST':
         if request.POST.get('hidden_type') == 'upload':
             return upload_users(request, pk, sem_users)
@@ -239,12 +239,26 @@ def add_users_to_semester(request, pk=None):
             reset_password_email(request)
             semester = Semester.objects.get(pk=pk)
             form = AddUsersToSemesterForm()
+        elif request.POST.get('hidden_type') == 'one_user':
+            form = AddUsersToSemesterForm()
+            semester = Semester.objects.get(pk=pk)
+            user_form = UserForm(request.POST)
+            if user_form.is_valid():
+                user_form.save(commit=True)
+                email = user_form.cleaned_data['email']
+                reset_pass_form = ResetPasswordForm({'email': email})
+                if reset_pass_form.is_valid():
+                    reset_pass_form.save(request)
+                messages.success(request, 'User was added successfully!')
+                return HttpResponseRedirect(reverse('management:upload_users', kwargs={'pk': pk}))
+            else:
+                messages.warning(request, 'Please correct the error.')
 
     else:
         semester = Semester.objects.get(pk=pk)
         form = AddUsersToSemesterForm()
     return render(request, 'management/upload_users.html', {'form': form, 'semester': semester,
-                                                            'users': sem_users})
+                                                            'users': sem_users, 'user_form': user_form})
 
 
 def upload_users(request, pk=None, sem_users=None):

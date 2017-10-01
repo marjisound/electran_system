@@ -7,7 +7,7 @@
             <form method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
                 <h2 class="question-title">Binary in K, M, G</h2>
-                <p class="question-paragraph">Express the following in binary K, M or G, e.g 15K, 23M, 507G : </p>
+                <p class="question-paragraph">Express the following in binary K, M or G, using the largest possible unit as a whole number e.g 15K, 23M, 507G : </p>
                 <h3 class="question-random-value">2^{{ random_value.random1 }} + 2^{{ random_value.random2 }} + 2^{{ random_value.random3 }}</h3>
                 <div class="col-md-4 no-padding">
                     <div class="form-group">

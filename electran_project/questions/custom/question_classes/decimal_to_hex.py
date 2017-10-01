@@ -30,6 +30,7 @@ class Question(BinaryHexBase):
     def test_answer(self, student_answer, correct_answer):
         if type(student_answer) == str:
             formatted_answer = student_answer.replace(' ', '')
+            formatted_answer = formatted_answer.replace('\t', '')
             if formatted_answer.startswith('0x') or formatted_answer.startswith('0X'):
                 formatted_answer = formatted_answer[2:]
 

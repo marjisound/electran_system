@@ -63,7 +63,7 @@ class Question(MipsInstructionsBase, BinaryHexBase):
 
     def test_answer(self, student_answer, correct_answer):
         if type(student_answer) == str:
-            formatted_answer = student_answer.replace(' ', '')
+            formatted_answer = student_answer.replace(' ', '').replace('\t', '')
 
             formatted_answer = self.delete_binary_identifier(formatted_answer)
 

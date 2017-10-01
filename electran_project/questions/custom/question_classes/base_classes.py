@@ -1,21 +1,29 @@
+from abc import ABCMeta, abstractmethod
 import random
 import codecs
 import os
 
 
-class QuestionBase:
+class QuestionBase(metaclass=ABCMeta):
     """Common base class for all questions"""
     wrong_answer_message = 'Wrong Answer'
     correct_answer_message = 'Correct Answer'
     wrong_format_message = 'Your answer did not have a correct format. Please try again'
 
+    @abstractmethod
     def generate_random(self):
         return None
 
+    @abstractmethod
     def expected_answer(self, value):
         return None
 
+    @abstractmethod
     def test_answer(self, student_answer, correct_answer):
+        return False
+
+    @abstractmethod
+    def is_valid(self, student_answer):
         return False
 
     def expected_answer_display_format(self, value):
@@ -57,6 +65,18 @@ class BinaryHexBase(QuestionBase):
         '50': 'P',
         '60': 'E'
     }
+
+    def generate_random(self):
+        return None
+
+    def expected_answer(self, value):
+        return None
+
+    def test_answer(self, student_answer, correct_answer):
+        return False
+
+    def is_valid(self, student_answer):
+        return False
 
     @staticmethod
     def delete_binary_identifier(value):
@@ -102,7 +122,7 @@ class BinaryHexBase(QuestionBase):
             return False, 'field'
         else:
             try:
-                hex_num = hex_num.replace(' ', '')
+                hex_num = hex_num.replace(' ', '').replace('\t', '')
                 int(hex_num, 16)
             except ValueError:
                 self.wrong_format_message = 'Your answer did not have a correct binary format. Please try again'
@@ -117,6 +137,7 @@ class BinaryHexBase(QuestionBase):
         else:
             try:
                 binary_num = binary_num.replace(' ', '')
+                binary_num = binary_num.replace('\t', '')
                 int(binary_num, 2)
             except ValueError:
                 self.wrong_format_message = 'Your answer did not have a correct binary format. Please try again'
@@ -131,6 +152,8 @@ class BinaryHexBase(QuestionBase):
         else:
             try:
                 binary_num = octal_num.replace(' ', '')
+                binary_num = binary_num.replace('\t', '')
+
                 int(binary_num, 8)
             except ValueError:
                 self.wrong_format_message = 'Your answer did not have a correct octal format. Please try again'
@@ -145,6 +168,7 @@ class BinaryHexBase(QuestionBase):
         else:
             try:
                 int_num = int_num.replace(' ', '')
+                int_num = int_num.replace('\t', '')
                 int(int_num)
             except ValueError:
                 self.wrong_format_message = 'Your answer did not have a correct decimal format. Please try again'
@@ -159,7 +183,12 @@ class BinaryHexBase(QuestionBase):
         else:
             try:
                 int_num = int_num.replace(' ', '')
-                float(int_num)
+                int_num = int_num.replace('\t', '')
+                if int_num not in ['NaN', 'Inf', '-Inf']:
+                    float(int_num)
+                else:
+                    self.wrong_format_message = 'Your answer did not have a correct real number format. Please try again'
+                    return False, 'format'
             except ValueError:
                 self.wrong_format_message = 'Your answer did not have a correct real number format. Please try again'
                 return False, 'format'
@@ -190,6 +219,18 @@ class BinaryHexBase(QuestionBase):
 
 class MipsInstructionsBase(QuestionBase):
 
+    def generate_random(self):
+        return None
+
+    def expected_answer(self, value):
+        return None
+
+    def test_answer(self, student_answer, correct_answer):
+        return False
+
+    def is_valid(self, student_answer):
+        return False
+
     RTYPE_OP = 0
     RTYPE_SHAMT = 0
 
@@ -212,7 +253,7 @@ class MipsInstructionsBase(QuestionBase):
     }
 
     RTYPE_GROUPS = {
-        'no_shift': ['add', 'addu', 'sub', 'subu', 'and', 'nor', 'or', 'slt', 'sltu'],
+        'no_shift': ['add', 'addu', 'sub', 'subu', 'and', 'nor', 'or', 'slt', 'sltu', 'xor'],
         'no_rs': ['sll', 'srl', 'sra'],
         'no_rt_shift': ['jalr'],
         'no_rt_rd_shift': ['jr'],
@@ -249,7 +290,6 @@ class MipsInstructionsBase(QuestionBase):
         'rs_rt': ['beq', 'bne'],
         'no_rt': ['bgez', 'bgtz', 'blez', 'bltz']
     }
-
 
     JTYPE_VALUES = {
         'j': 0x2,
@@ -664,7 +704,6 @@ class MipsInstructionsBase(QuestionBase):
             memory_dict[hex(fst_memory+i)[2:]] = codecs.encode(os.urandom(1), 'hex').decode()
 
         return memory_dict
-
 
     @staticmethod
     def sign_extend(decimal_num):

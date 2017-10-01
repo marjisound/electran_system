@@ -1,10 +1,9 @@
 from django.test import TestCase, RequestFactory
-from management.views import homePage, semester_create
+from management.views import homePage, semester_create, SemesterListView
 from django.test import Client
 from django.core.urlresolvers import reverse
 from custom_accounts.models import MyUser
-
-
+from django.contrib.auth.models import AnonymousUser
 
 
 class HomePageViewTestCase(TestCase):
@@ -23,6 +22,9 @@ class HomePageViewTestCase(TestCase):
         request = self.factory.get('/')
         with self.assertTemplateUsed('management/index.html'):
             request.user = self.user
+            request.session = {}
             response = homePage(request)
             self.assertEqual(response.status_code, 200)
+
+
 

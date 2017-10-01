@@ -14,7 +14,7 @@ class Question(BinaryHexBase):
         return {'random1': random_value}
 
     def expected_answer(self, value):
-        trimmed_value = value['random1'].replace(' ', '')
+        trimmed_value = value['random1'].replace(' ', '').replace('\t', '')
         length = len(trimmed_value)
         if length > 8:
             extra_bit = length - 8
@@ -38,7 +38,7 @@ class Question(BinaryHexBase):
 
     def test_answer(self, student_answer, correct_answer):
         if type(student_answer) == str:
-            formatted_answer = student_answer.replace(' ', '')
+            formatted_answer = student_answer.replace(' ', '').replace('\t', '')
             formatted_answer = formatted_answer.lower()
             if formatted_answer.startswith('0b'):
                 formatted_answer = formatted_answer[2:]

@@ -51,7 +51,11 @@ def all_questions(request, slug=None, module=None):
 
         # *************** getting the specific question file based on question class name field in db ***********
         question_class_name = current_question.question_class
-        question = __import__('questions.custom.question_classes.' + question_class_name, globals(), locals(), ['Question'], 0)
+        question = __import__('questions.custom.question_classes.' + question_class_name,
+                              globals(),
+                              locals(),
+                              ['Question'],
+                              0)
         question_class = getattr(question, 'Question')
         question_instance = question_class()
 

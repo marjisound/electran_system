@@ -80,6 +80,7 @@ class Question(MipsInstructionsBase, BinaryHexBase):
         new_student_list = student_answer.copy()
 
         pc_value = student_answer['answer_pc_value'].replace(' ', '')
+        pc_value = pc_value.replace('\t', '')
         pc_value = self.delete_hex_identifier(pc_value.lower())
         new_student_list['answer_pc_value'] = '{:0>8}'.format(pc_value)
 

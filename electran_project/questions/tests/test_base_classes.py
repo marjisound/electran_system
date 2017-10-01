@@ -1,8 +1,8 @@
-from django.test import TestCase
+from django.test import TestCase, SimpleTestCase
 from questions.custom.question_classes import base_classes
 
 
-class FixedLength(TestCase):
+class FixedLength(SimpleTestCase):
 
     def setUp(self):
         self.sub_signed_negative_positive = {'val1': 4294906129, 'val2': 536870911}
@@ -161,7 +161,7 @@ class FixedLength(TestCase):
         value = {'val1': int('2b81635a', 16), 'val2': int('2b81635a', 16),
                  'immediate': int('f20', 16), 'pc': '1e6c8820'}
         expected = question.beq_itype(value)
-        correct_result = ('1e6bc270', None)
+        correct_result = ('1e6cc4a4', None)
         self.assertEqual(correct_result, expected)
 
     def test_bne_itype(self):

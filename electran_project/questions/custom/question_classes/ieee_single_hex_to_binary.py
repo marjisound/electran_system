@@ -42,7 +42,7 @@ class Question(BinaryHexBase):
 
     def test_answer(self, student_answer, correct_answer):
         if type(student_answer) == str:
-            formatted_answer = student_answer.replace(' ', '')
+            formatted_answer = student_answer.replace(' ', '').replace('\t', '')
             if formatted_answer.startswith('+'):
                 formatted_answer = formatted_answer[1:]
 
@@ -58,7 +58,7 @@ class Question(BinaryHexBase):
         :type binary_num: binary number string
         :rtype: dict
         """
-        formatted_answer = binary_num.replace(' ', '')
+        formatted_answer = binary_num.replace(' ', '').replace('\t', '')
         formatted_answer = formatted_answer.replace('.', '')
         if formatted_answer.startswith('+'):
             formatted_answer = formatted_answer[1:]

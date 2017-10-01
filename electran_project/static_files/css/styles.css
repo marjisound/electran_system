@@ -164,6 +164,7 @@ body {
 /*********** question content**************/
 .question-help-container {
     margin-top: 20px;
+    display: inline-block;
 }
 
 .answer-input-label, .sem-create-form label{
@@ -320,16 +321,65 @@ body {
     transform: translate(2px,2px);
 }
 
+/********************************/
+/*
+  credit for this goes to https://codepen.io/wizly/pen/BlKxo
+*/
+
+#exTab1 .tab-content {
+  color : white;
+  background-color: rgba(109, 109, 109, 0.87);
+  padding : 5px 15px;
+}
+
+#exTab2 h3 {
+  color : white;
+  background-color: rgba(109, 109, 109, 0.87);
+  padding : 5px 15px;
+}
+
+#exTab1 .nav-pills > li > a {
+  border-radius: 0;
+}
+
+#exTab3 .nav-pills > li > a {
+  border-radius: 4px 4px 0 0 ;
+}
+
+#exTab3 .tab-content {
+  color : white;
+  background-color: rgba(109, 109, 109, 0.87);
+  padding : 5px 15px;
+}
+
+#exTab1 .nav-pills>li.active>a {
+    background-color: rgba(109, 109, 109, 0.87);
+}
+
+/*
+    End of credit
+*/
+
+/*********************************/
+
 
 /*********** end of question content**************/
 .user-upload-form {
     margin-bottom: 25px;
+    margin-top: 25px;
 }
 
-.user-upload-form  .clearablefileinput {
-
+.user-register-form {
+    margin-left: 15px;
+    margin-top: 25px;
+    font-size: 12px;
 }
 
+#oneUserForm label {
+    padding-bottom: 10px;
+    text-align: left;
+    padding-left: 0;
+}
 
 .semester-user-table {
     font-size: 13px;

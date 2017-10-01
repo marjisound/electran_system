@@ -82,11 +82,11 @@ class Question(BinaryHexBase):
 
     def test_answer(self, student_answer, correct_answer):
         if type(student_answer['answer1']) == str:
-            formatted_answer = student_answer['answer1'].replace(' ', '')
+            formatted_answer = student_answer['answer1'].replace(' ', '').replace('\t', '')
             formatted_answer = self.delete_binary_identifier(formatted_answer)
             formatted_answer = self.delete_hex_identifier(formatted_answer)
 
-            formatted_correct_answer = correct_answer['value'].replace(' ', '')
+            formatted_correct_answer = correct_answer['value'].replace(' ', '').replace('\t', '')
             student_answer['answer2'] = False
             if 'answer2' in student_answer:
                 student_answer['answer2'] = True

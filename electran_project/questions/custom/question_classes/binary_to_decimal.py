@@ -17,7 +17,7 @@ class Question(BinaryHexBase):
 
     def test_answer(self, student_answer, correct_answer):
         if type(student_answer) == str:
-            formatted_answer = int(student_answer.replace(' ', ''))
+            formatted_answer = int(student_answer.replace(' ', '').replace('\t', ''))
 
             if formatted_answer == correct_answer:
                 return True

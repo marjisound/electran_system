@@ -1,5 +1,8 @@
 from django import forms
 from .models import Semester, QuestionSemester, Question, QuestionCategory, UserQuestionSemester
+from custom_accounts.models import MyUser
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Layout, Field, ButtonHolder, Submit
 
 
 class NewSemesterForm(forms.ModelForm):
@@ -14,6 +17,21 @@ QUESTION_CHOICES = {}
 class AddUsersToSemesterForm(forms.Form):
 
     file = forms.FileField(label='Upload your Excel file Here')
+
+
+class UserForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super(UserForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper(self)
+        self.helper.form_tag = False
+
+        self.helper.label_class = 'col-sm-5'
+        self.helper.field_class = 'col-sm-7'
+
+    class Meta:
+        model = MyUser
+        fields = ['username', 'first_name', 'last_name', 'student_no', 'email']
 
 
 class UserQuestionSemesterForm(forms.ModelForm):

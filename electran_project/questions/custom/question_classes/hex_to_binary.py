@@ -25,7 +25,7 @@ class Question(BinaryHexBase):
     def test_answer(self, student_answer, correct_answer):
         if type(student_answer) == str:
             answer_lower = student_answer.lower()
-            formatted_answer = answer_lower.replace(' ', '')
+            formatted_answer = answer_lower.replace(' ', '').replace('\t', '')
             if formatted_answer.startswith('0b'):
                 formatted_answer = formatted_answer[2:]
 

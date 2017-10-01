@@ -4,6 +4,8 @@ from django.contrib.auth.models import (
 )
 from django.utils import timezone
 from django.core.validators import RegexValidator
+from django.db.models.signals import post_save
+from django.conf import settings
 
 
 class MyUserManager(BaseUserManager):
@@ -124,3 +126,33 @@ class MyUser(AbstractBaseUser):
         "Is the user a member of staff?"
         # Simplest possible answer: All admins are staff
         return self.is_admin
+
+
+from allauth.account.views import PasswordResetView
+
+from django.conf import settings
+from django.dispatch import receiver
+from django.http import HttpRequest
+from django.middleware.csrf import get_token
+from django.contrib.sites.models import Site
+
+
+@receiver(models.signals.post_save, sender=settings.AUTH_USER_MODEL)
+def send_reset_password_email(sender, instance, created, **kwargs):
+
+    if created:
+
+        # First create a post request to pass to the view
+        request = HttpRequest()
+        request.method = 'POST'
+
+        # add the absolute url to be be included in email
+        site = Site.objects.get(id=settings.SITE_ID).domain
+        request.META['HTTP_HOST'] = site
+
+        # pass the post form data
+        request.POST = {
+            'email': instance.email,
+            'csrfmiddlewaretoken': get_token(HttpRequest())
+        }
+        PasswordResetView.as_view()(request)

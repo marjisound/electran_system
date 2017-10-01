@@ -34,7 +34,7 @@ class Question(BinaryHexBase):
     def test_answer(self, student_answer, correct_answer):
 
         if type(student_answer) == str:
-            formatted_answer = student_answer.replace(' ', '')
+            formatted_answer = student_answer.replace(' ', '').replace('\t', '')
 
             if float(formatted_answer) == correct_answer['result']:
                 return True

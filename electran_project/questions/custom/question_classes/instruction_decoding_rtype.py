@@ -33,9 +33,10 @@ class Question(MipsInstructionsBase, BinaryHexBase):
         elif instruction_type in self.RTYPE_GROUPS['no_rt_rd_shift']:
             rt = 0
             rd = 0
-
-        return {'rs': rs, 'rt': rt, 'rd': rd, 'shift': shift,
+        terured_value = {'rs': rs, 'rt': rt, 'rd': rd, 'shift': shift,
                 'instruction_type': instruction_type, 'instruction_format': 'R'}
+
+        return terured_value
 
     def expected_answer(self, value):
         expected = ''
@@ -60,6 +61,7 @@ class Question(MipsInstructionsBase, BinaryHexBase):
         if type(student_answer) == str:
             formatted_correct_answer = correct_answer.replace(' ', '')
             formatted_answer = student_answer.replace(' ', '')
+            formatted_answer = formatted_answer.replace('\t', '')
             formatted_answer = formatted_answer.lower()
             if formatted_answer == formatted_correct_answer:
                 return True

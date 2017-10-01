@@ -1,6 +1,4 @@
 import random
-import codecs
-import os
 
 
 class InterruptBase:

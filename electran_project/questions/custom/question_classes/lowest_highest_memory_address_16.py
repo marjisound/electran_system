@@ -47,8 +47,8 @@ class Question(BinaryHexBase):
 
     def test_answer(self, student_answer, correct_answer):
 
-        student_answer['answer_lowest_address'] = student_answer['answer_lowest_address'].replace(' ', '')
-        student_answer['answer_highest_address'] = student_answer['answer_highest_address'].replace(' ', '')
+        student_answer['answer_lowest_address'] = student_answer['answer_lowest_address'].replace(' ', '').replace('\t', '')
+        student_answer['answer_highest_address'] = student_answer['answer_highest_address'].replace(' ', '').replace('\t', '')
 
         diff_list = self.compare_dictionaries(student_answer, correct_answer)
 
@@ -65,8 +65,8 @@ class Question(BinaryHexBase):
         :type student_answer: dictionary {answer_lowest_address: value, answer_highest_address: value}
         :rtype: dict
         """
-        student_answer['answer_lowest_address'] = student_answer['answer_lowest_address'].replace(' ', '')
-        student_answer['answer_highest_address'] = student_answer['answer_highest_address'].replace(' ', '')
+        student_answer['answer_lowest_address'] = student_answer['answer_lowest_address'].replace(' ', '').replace('\t', '')
+        student_answer['answer_highest_address'] = student_answer['answer_highest_address'].replace(' ', '').replace('\t', '')
 
         is_valid_lowest, message_type_lowest = self.is_valid_hex(student_answer['answer_lowest_address'])
         is_valid_highest, message_type_highest = self.is_valid_hex(student_answer['answer_highest_address'])

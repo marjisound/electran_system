@@ -7,7 +7,7 @@
             <form method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
                 <h2>Instruction decoding I-Type</h2>
-                <p>Convert the following MIPS instruction in binary into its human readable form:</p>
+                <p>Convert the following MIPS instruction in binary into its human readable form: (The immediate valie should be in Hex including leading 0x)</p>
                 <h3>{{ random_value }}</h3>
                 <div class="col-md-7 no-padding">
                     <div class="form-group">
@@ -25,7 +25,7 @@
                 <a href="{% url 'questions:all_questions' slug=slug %}">Retry the question</a>
             </div>
             <h2>Instruction decoding I-Type</h2>
-            <p>Convert the following MIPS instruction in binary into its human readable form:</p>
+            <p>Convert the following MIPS instruction in binary into its human readable form: The immediate valie should be in Hex including leading 0x</p>
             <h3>{{ random_value }}</h3>
             <div class="col-md-10 no-padding">
                 <p>Your answer was: {{ answer }}</p>

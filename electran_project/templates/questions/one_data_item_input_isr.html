@@ -27,7 +27,7 @@
                 <h3 class="question-random-value">instructions executed in ISR: {{ random_value.isr_instructions }}</h3>
                 <h3 class="question-random-value">average clock cycles per instruction: {{ random_value.instruction_clock_cycle }}</h3>
                 <h3 class="question-random-value">number of bits per data item: {{ random_value.data_item_bits }}</h3>
-                <h3 class="question-random-value">clock frequency: {{ random_value.clock_frequency }}</h3>
+                <h3 class="question-random-value">clock frequency: {{ random_value.clock_frequency }} MHz</h3>
 
                 <div class="col-md-12 no-padding">
                     <div class="form-group">
@@ -101,5 +101,7 @@
 
 {% endblock %}
 {% block specific %}
-    {% include "questions/question_helps/binary_hex_conversion.html" %}
+
+    {{ help_file|safe }}
+
 {% endblock %}

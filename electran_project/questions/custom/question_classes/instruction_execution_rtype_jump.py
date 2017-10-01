@@ -26,7 +26,7 @@ class Question(MipsInstructionsBase, BinaryHexBase):
 
         if instruction_type == 'jalr':
             rd = random.randint(1, 31)
-            random_value = {'rs': rs, 'rd': rd, 'pc': pc,
+            random_value = {'rs': 19, 'rd': 21, 'pc': '11110004',
                             'instruction_type': instruction_type, 'instruction_format': 'R',
                             'registers': register_dict, 'memory_locations': memory_dict}
         elif instruction_type == 'jr':
@@ -74,17 +74,18 @@ class Question(MipsInstructionsBase, BinaryHexBase):
         new_correct_list = correct_answer
 
         pc_value = student_answer['answer_pc_value'].replace(' ', '')
+        pc_value = pc_value.replace('\t', '')
         pc_value = self.delete_hex_identifier(pc_value.lower())
         new_student_list['answer_pc_value'] = '{:0>8}'.format(pc_value)
 
         # check if the instruction type in jalr
         if correct_answer['answer_register'] == 'written':
             new_correct_list['answer_register_value'] = new_correct_list['answer_register_value'].lower()
-            register_value = student_answer['answer_register_value'].replace(' ', '')
+            register_value = student_answer['answer_register_value'].replace(' ', '').replace('\t', '')
             register_value = self.delete_hex_identifier(register_value.lower())
             new_student_list['answer_register_value'] = '{:0>8}'.format(register_value)
 
-            new_student_list['answer_register_num'] = int(new_student_list['answer_register_num'])
+            new_student_list['answer_register_num'] = int(new_student_list['answer_register_num']) if new_student_list['answer_register_num'] != 'None' else None
 
         for key, value in new_student_list.items():
             if value == 'None' or value == '':

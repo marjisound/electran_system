@@ -19,6 +19,7 @@ TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates')
 LOGIN_URL = 'account/login/'
 
 # Global Vriables
+
 STUDENTS_MANDATORY_FIELDS = {
     'first_name': 'First name',
     'last_name': 'Surname',
@@ -68,9 +69,9 @@ SECRET_KEY = '0tk%fl8%r574o6g_u)wx1rastm6%_#t10r_=yosftgrkk3_v3_'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-#Azure
-ALLOWED_HOSTS = ['electransystem.azurewebsites.net']
-# ALLOWED_HOSTS = []
+# Azure
+# ALLOWED_HOSTS = ['electransystem.azurewebsites.net']
+ALLOWED_HOSTS = ['192.168.1.2', '127.0.0.1', 'electransystem.azurewebsites.net']
 
 
 # Application definition
@@ -143,7 +144,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'OPTIONS': {
-            'read_default_file': os.path.join(BASE_DIR, 'electran.cnf'),
+            'read_default_file': os.path.join(BASE_DIR, 'my.cnf'),
         },
     }
 }

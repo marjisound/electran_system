@@ -65,10 +65,12 @@ class Question(MipsInstructionsBase, BinaryHexBase):
 
         new_correct_list['answer_register_value'] = new_correct_list['answer_register_value'].lower()
         register_value = student_answer['answer_register_value'].replace(' ', '')
+        register_value = register_value.replace('\t', '')
         register_value = self.delete_hex_identifier(register_value.lower())
         new_student_list['answer_register_value'] = '{:0>8}'.format(register_value)
 
         pc_value = student_answer['answer_pc_value'].replace(' ', '')
+        pc_value = pc_value.replace('\t', '')
         pc_value = self.delete_hex_identifier(pc_value.lower())
         new_student_list['answer_pc_value'] = '{:0>8}'.format(pc_value)
 

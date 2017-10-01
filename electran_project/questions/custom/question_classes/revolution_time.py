@@ -23,6 +23,7 @@ class Question(BinaryHexBase):
 
         if type(student_answer) == str:
             formatted_answer = student_answer.replace(' ', '')
+            formatted_answer = formatted_answer.replace('\t', '')
 
             if float(formatted_answer) == correct_answer:
                 return True

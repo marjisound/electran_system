@@ -103,17 +103,17 @@ class Question(MipsInstructionsBase, BinaryHexBase):
 
         new_student_list = student_answer.copy()
 
-        pc_value = student_answer['answer_pc_value'].replace(' ', '')
+        pc_value = student_answer['answer_pc_value'].replace(' ', '').replace('\t', '')
         pc_value = self.delete_hex_identifier(pc_value.lower())
         new_student_list['answer_pc_value'] = '{:0>8}'.format(pc_value)
 
         if correct_answer['answer_register'] == 'written':
-            register_value = self.delete_hex_identifier(student_answer['answer_register_value'].replace(' ', '').lower())
+            register_value = self.delete_hex_identifier(student_answer['answer_register_value'].replace(' ', '').replace('\t', '').lower())
             new_student_list['answer_register_value'] = '{:0>8}'.format(register_value)
 
         elif correct_answer['answer_register'] == 'unchanged':
             for i in range(4):
-                memory = self.delete_hex_identifier(student_answer['answer_memory_' + str(i) + '_value'].replace(' ', '').lower())
+                memory = self.delete_hex_identifier(student_answer['answer_memory_' + str(i) + '_value'].replace(' ', '').replace('\t', '').lower())
                 new_student_list['answer_memory_' + str(i) + '_value'] = '{:0>2}'.format(memory)
 
         for key, value in new_student_list.items():
