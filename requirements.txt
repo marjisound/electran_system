@@ -39,7 +39,7 @@ requests-oauthlib==0.8.0
 selenium==3.5.0
 six==1.10.0
 texttable==0.9.1
-urllib3==1.22
+urllib3==1.26.5
 validate-email==1.3
 wrapt==1.10.10
 wfastcgi==3.0.0
